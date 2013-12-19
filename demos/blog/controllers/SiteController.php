@@ -28,4 +28,17 @@ class SiteController extends RController
         $this->setHeaderTitle("Contact");
         $this->render("contact");
     }
+
+    public function actionException(Exception $e)
+    {
+        if ($e instanceof RPageNotFoundException) {
+            $this->renderContent("<h1>404, page not found!</h1>");
+            return;
+        }
+        if (Rays::app()->isDebug()) {
+            print $e;
+        } else {
+            $this->renderContent($e->getCode() + "<br/>" + $e->getMessage());
+        }
+    }
 }
