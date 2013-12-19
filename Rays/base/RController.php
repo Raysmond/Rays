@@ -64,28 +64,36 @@ class RController
             $this->_id = $id;
     }
 
-    public function setId($id)
+    /**
+     * Set the unique ID of the controller
+     * @param string $id
+     */
+    public function setId($id = '')
     {
         $this->_id = $id;
     }
 
+    /**
+     * Get the unique ID of the controller
+     * @return string
+     */
     public function getId()
     {
         return $this->_id;
     }
 
     /**
-     * Get layout file.
-     * @param $layoutName
-     * @return the layout file name or false if the file not exists
+     * Render a view
+     * @param string $view the name of the view used to render the data
+     * @param array/null $data data in array which need to be rendered
+     * @param bool $return whether to return the rendered content or not
+     * @return mixed the rendered content if $return=true or null
      */
-    public function getLayoutFile($layoutName)
+    public function render($view, $data = null, $return = false)
     {
-        $viewFile = Rays::app()->viewPath . "/" . "layout/" . $layoutName . ".php";
-        if (file_exists($viewFile))
-            return $viewFile;
-        else
-            return false;
+        $output = RView::renderData($this->getViewFile($view), $data, true);
+        $layout = $this->getLayoutFile($this->layout);
+        return RView::renderFile($layout, ['content' => $output], $return);
     }
 
     /**
@@ -96,30 +104,8 @@ class RController
      */
     public function renderContent($content = '', $return = false)
     {
-        $output = '';
-        if (($layoutFile = $this->getLayoutFile($this->layout)) !== false)
-            $output = $this->renderFile($layoutFile, array('content' => $content), true);
-        if ($return)
-            return $output;
-        else
-            echo $output;
-    }
-
-    /** Render a view
-     * @param string $view the name of the view used to render the data
-     * @param array/null $data data in array which need to be rendered
-     * @param bool $return whether to return the rendered content or not
-     * @return mixed the rendered content if $return=true or null
-     */
-    public function render($view, $data = null, $return = false)
-    {
-        $output = $this->renderPartial($view, $data, true);
-        if (($layoutFile = $this->getLayoutFile($this->layout)) !== false)
-            $output = $this->renderFile($layoutFile, array('content' => $output), true);
-        if ($return)
-            return $output;
-        else
-            echo $output;
+        $layout = $this->getLayoutFile($this->layout);
+        return RView::renderFile($layout, ['content' => $content], $return);
     }
 
     /**
@@ -131,36 +117,17 @@ class RController
      */
     public function renderPartial($view, $data, $return = false)
     {
-        if (($viewFile = $this->getViewFile($view)) != false) {
-            $content = $this->renderFile($viewFile, $data, true);
-            if ($return)
-                return $content;
-            else
-                echo $content;
-        } else {
-            die("Cannot find the requested view file: " . $viewFile);
-        }
+         return RView::renderData($this->getViewFile($view),$data,$return);
     }
 
     /**
-     * Render data with a view file
-     * @param $fileName the name of the view file
-     * @param $data data to be rendered
-     * @param bool $return whether to return the rendered content or just print it
-     * @return string rendered content if $return=true or null
+     * Get layout file.
+     * @param $layoutName
+     * @return the layout file name or false if the file not exists
      */
-    public function renderFile($fileName, $data, $return = false)
+    public function getLayoutFile($layoutName)
     {
-        if (is_array($data))
-            extract($data);
-
-        if ($return) {
-            ob_start();
-            ob_implicit_flush(false);
-            require($fileName);
-            return ob_get_clean();
-        } else require($fileName);
-
+        return Rays::app()->viewPath . "/layout/$layoutName.php";
     }
 
     /**
@@ -178,10 +145,7 @@ class RController
         else
             $viewFile .=  $this->getId() . "/" . $viewName . ".php";
 
-        if (file_exists($viewFile))
-            return $viewFile;
-        else
-            return false;
+        return $viewFile;
     }
 
     /**
@@ -287,9 +251,7 @@ class RController
     }
 
     /**
-     * Set header title for the page
-     * TODO: remove from framework
-     * <title></title>
+     * Set header title for the page in <title></title>
      * @param $title
      */
     public function setHeaderTitle($title)

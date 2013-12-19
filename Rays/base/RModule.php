@@ -123,16 +123,7 @@ class RModule
     public function render($viewFileName = '', $data = '')
     {
         $viewFile = $this->getModuleDir() . "/" . $viewFileName . ".view.php";
-        if (file_exists($viewFile)) {
-            if (is_array($data))
-                extract($data);
-            ob_start();
-            ob_implicit_flush(false);
-            require($viewFile);
-            return ob_get_clean();
-        } else {
-            die("Module view file not exists: " . $viewFile);
-        }
+        RView::renderFile($viewFile, $data, false);
     }
 
     /**
