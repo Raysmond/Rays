@@ -78,6 +78,21 @@ class RImageHelper
 
 }
 
+// TODO
+class RImage{
+    private $extensions = ['jpg','jpeg','gif','png','bmp'];
+
+    public function __construct(){
+        if(!function_exists('gd_info')){
+            throw new RException("GD library is not supported in current PHP environment.");
+        }
+    }
+
+    public function crop($srcImg,$desImg,$options){
+
+    }
+}
+
 /**
  *
  * 图像处理类

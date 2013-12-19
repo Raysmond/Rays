@@ -27,7 +27,10 @@ class RView
             ob_implicit_flush(false);
             require($file);
             return ob_get_clean();
-        } else require($file);
+        } else {
+            require($file);
+            return null;
+        }
     }
 
     /**
@@ -40,12 +43,7 @@ class RView
     public static function renderData($file, $data, $return = false)
     {
         self::checkFile($file);
-        $content = self::renderFile($file, $data, true);
-        if ($return) {
-            return $content;
-        } else {
-            echo $content;
-        }
+        return self::renderFile($file, $data, $return);
     }
 
     /**
