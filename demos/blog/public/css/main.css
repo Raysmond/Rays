@@ -1,0 +1,68 @@
+/**
+ * Example CSS file
+ *
+ * @author: Raysmond
+ * @created: 2013-12-19
+ */
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.container{
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.container:before, .container:after {
+    display: table;
+    content: " ";
+}
+.container::after{
+    clear: both;
+}
+
+#header{
+
+}
+
+ul.main-menu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.main-menu li{
+    float: left;
+}
+
+ul.main-menu li>a{
+    display: block;
+    padding: 5px 20px;
+    text-decoration: none;
+}
+
+ul.main-menu li>a:link,ul.main-menu li>a:active,ul.main-menu li>a:visited{
+    color: #000;
+}
+
+ul.main-menu li>a:hover{
+    color: #666;
+}
+
+#main-content{
+    padding: 5px 20px;
+}
+
+.clearfix{
+    clear: both;
+}
+
+#footer{
+    position: absolute;
+    width: 960px;
+    bottom: 0;
+    padding-bottom: 20px;
+    color: gray;
+}
