@@ -15,12 +15,14 @@ class RView
      * @param bool $return whether to return the rendered content or just print it
      * @return string rendered content if $return=true or null
      */
-    public static function renderFile($file, $data, $return = false)
+    public static function renderFile($renderer,$file, $data, $return = false)
     {
         self::checkFile($file);
 
         if (is_array($data))
             extract($data);
+
+        $self = $renderer;
 
         if ($return) {
             ob_start();
@@ -40,10 +42,10 @@ class RView
      * @param bool $return whether to return the rendered content or just print it
      * @return string rendered content if param $return is true
      */
-    public static function renderData($file, $data, $return = false)
+    public static function renderData($renderer,$file, $data, $return = false)
     {
         self::checkFile($file);
-        return self::renderFile($file, $data, $return);
+        return self::renderFile($renderer,$file, $data, $return);
     }
 
     /**

@@ -66,3 +66,16 @@ ul.main-menu li>a:hover{
     padding-bottom: 20px;
     color: gray;
 }
+
+/* Post */
+.post-meta{
+    color: gray;
+}
+
+.post-content{
+    margin-top: 10px;
+}
+
+.post-actions{
+    margin-top: 10px;
+}

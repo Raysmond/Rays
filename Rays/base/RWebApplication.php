@@ -190,9 +190,9 @@ class RWebApplication extends RBaseApplication
     /**
      * Show 404 page.
      */
-    public function page404()
+    public function page404($message = "")
     {
-        throw new RPageNotFoundException();
+        throw new RPageNotFoundException($message);
     }
 
     /**
@@ -242,7 +242,7 @@ class RWebApplication extends RBaseApplication
     {
         if ($this->isUserLogin() && !isset($this->user)) {
             $id = $this->getHttpSession()->get("user");
-            $this->user = User::find($id)->join("role")->first();
+            $this->user = User::find($id)->first();
             return $this->user;
         }
         else if (isset($this->user)) {

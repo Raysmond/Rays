@@ -13,7 +13,6 @@ return array(
     'name' => 'Rays blog',
 
     // database configuration
-    /*
     'db' => array(
         'host' => 'localhost',
         'user' => 'root',
@@ -22,7 +21,6 @@ return array(
         'table_prefix' => '',
         'charset' => 'utf8',
     ),
-    */
 
     /*
      * The / at the beginning of the base Path stands for the base path of

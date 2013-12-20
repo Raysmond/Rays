@@ -121,7 +121,7 @@ class RHtmlHelper
         return '<script type="text/javascript" src="'. $scriptPath . '"></script>';
     }
 
-    public static function showFlashMessages(){
+    public static function showFlashMessages($return=true){
         $session = Rays::app()->getHttpSession();
         $messages = '';
         if(($message = $session->getFlash("message"))!=false){
@@ -137,7 +137,10 @@ class RHtmlHelper
             foreach($errors as $error)
                 $messages.='<div class="alert alert-danger">' .$error. '</div>';
         }
-        return $messages;
+        if($return)
+            return $messages;
+        else
+            echo $messages;
     }
 
     public static function parseAttributes($attributes, $defaults = array())

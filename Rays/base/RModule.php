@@ -12,21 +12,6 @@ class RModule
     public $name;
 
     /**
-     * @var string The unique ID of the module
-     */
-    private $_id;
-
-    /**
-     * @var string The path of the module directory
-     */
-    private $_path;
-
-    /**
-     * @var string|null the base uri of the modules path. For example: "http://localhost/FDUGroup/app/modules"
-     */
-    static $moduleBaseUri = null;
-
-    /**
      * @var array  The module shall appear in what pages
      * For example:
      * <code>array('site/about','user/*') </code>
@@ -38,6 +23,26 @@ class RModule
      * @var array  Unlike $access, those pages that match the URI declared here will not see the module
      */
     public $denyAccess = array();
+
+    /**
+     * @var string The unique ID of the module
+     */
+    private $_id;
+
+    /**
+     * @var string The path of the module directory
+     */
+    private $_path;
+
+    /**
+     * @var array the initial parameters/configuration for the module
+     */
+    private $_params = [];
+
+    /**
+     * @var string|null the base uri of the modules path. For example: "http://localhost/FDUGroup/app/modules"
+     */
+    public static $moduleBaseUri = null;
 
     public function __construct($params = array())
     {

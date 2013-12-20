@@ -91,9 +91,9 @@ class RController
      */
     public function render($view, $data = null, $return = false)
     {
-        $output = RView::renderData($this->getViewFile($view), $data, true);
+        $output = RView::renderData($this, $this->getViewFile($view), $data, true);
         $layout = $this->getLayoutFile($this->layout);
-        return RView::renderFile($layout, ['content' => $output], $return);
+        return RView::renderFile($this, $layout, ['content' => $output], $return);
     }
 
     /**
@@ -105,7 +105,7 @@ class RController
     public function renderContent($content = '', $return = false)
     {
         $layout = $this->getLayoutFile($this->layout);
-        return RView::renderFile($layout, ['content' => $content], $return);
+        return RView::renderFile($this, $layout, ['content' => $content], $return);
     }
 
     /**
@@ -117,7 +117,7 @@ class RController
      */
     public function renderPartial($view, $data, $return = false)
     {
-         return RView::renderData($this->getViewFile($view),$data,$return);
+         return RView::renderData($this, $this->getViewFile($view),$data,$return);
     }
 
     /**

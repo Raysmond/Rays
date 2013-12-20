@@ -7,12 +7,38 @@
 
 class RFormValidationHelper
 {
+    /**
+     * Fields array to be validated
+     * @var array
+     */
     protected $_fields = array();
+
+    /**
+     * Labels for fields
+     * @var array
+     */
     protected $_labels = array();
+
+    /**
+     * Rules for fields
+     * @var array
+     */
     protected $_rules = array();
+
+    /**
+     * Validation errors
+     * @var array
+     */
     protected $_errors = array();
 
-    public function __construct($rules = array())
+
+    /**
+     * Data array to be validated
+     * @var array
+     */
+    private $_data = array();
+
+    public function __construct($rules = [])
     {
         foreach ($rules as $rule) {
             if (!isset($rule['field']))
@@ -79,8 +105,19 @@ class RFormValidationHelper
     }
 
 
-    public function run()
+    /**
+     * Run the validation
+     * @param array $data the data to be validated
+     * @return bool
+     */
+    public function run($data=[])
     {
+        // TODO: validate $data instead of $_POST only, currently set data to _POST if it's empty
+        if(empty($data))
+            $data = $_POST;
+
+        $this->_data = $data;
+
         $isValid = true;
         for ($i = 0; $i < count($this->_rules); $i++) {
             $rule = $this->_rules[$i];
@@ -91,7 +128,7 @@ class RFormValidationHelper
                     // $r = array('rule'=>'min_length','param'=>5)
                     if (is_array($r)) {
                         $method = $r['rule'];
-                        if (method_exists($this, $method) && ($this->$method($_POST[$field], $r['param']) == false)) {
+                        if (method_exists($this, $method) && ($this->$method($data[$field], $r['param']) == false)) {
                             $error = array();
                             if (!isset($rule['errors'][$method]))
                                 $error[$method] = $this->getError($method, $rule['label'], $r['param']);
@@ -101,15 +138,17 @@ class RFormValidationHelper
                             if (!isset($this->_errors[$field])) $this->_errors[$field] = array();
                             array_push($this->_errors[$field], $error);
                             $isValid = false;
-                            continue;
+
+                            // skip all other validations for the current field
+                            continue 2;
                         }
                     } else {
                         // The method is not a object method,it's a common php method like 'trim'
                         if (!method_exists($this, $r) && function_exists($r))
-                            $r = $_POST[$field] = $r(@$_POST[$field]);
+                            $r = $data[$field] = $r(@$data[$field]);
 
                         else if (method_exists($this, $r)) {
-                            if($this->$r($_POST[$field]) == true){
+                            if($this->$r($data[$field]) == true){
                                 continue;
                             }
                             //echo '<-yes';
@@ -121,7 +160,9 @@ class RFormValidationHelper
                             if (!isset($this->_errors[$field])) $this->_errors[$field] = array();
                             array_push($this->_errors[$field], $error);
                             $isValid = false;
-                            continue;
+
+                            // skip all other validations for the current field
+                            continue 2;
                         }
                     }
                 }
@@ -150,8 +191,8 @@ class RFormValidationHelper
 
     public function equals($str, $field)
     {
-        if (isset($_POST[$field])){
-            return ($str == $_POST[$field]) ? true : false;
+        if (isset($this->_data[$field])){
+            return ($str == $this->_data[$field]) ? true : false;
         }
         else
             return false;
@@ -192,6 +233,11 @@ class RFormValidationHelper
     }
 
 
+    /**
+     * Check whether the value is a number
+     * @param $val value to be validated
+     * @return bool
+     */
     public function number($val)
     {
         return $this->is_number($val);
@@ -205,6 +251,24 @@ class RFormValidationHelper
     public function getErrors()
     {
         return $this->_errors;
+    }
+
+    /**
+     * Set the data array to be validated
+     * @param array $data
+     */
+    public function setData($data=[])
+    {
+        $this->_data = $data;
+    }
+
+    /**
+     * Get the data
+     * @return array the original data array or the validated data array if it's validated
+     */
+    public function getData()
+    {
+        return $this->_data;
     }
 
 }

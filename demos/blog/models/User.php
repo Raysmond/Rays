@@ -6,23 +6,27 @@
  * @created: 2013-12-19
  */
 
-class User extends RModel
+class User extends Model
 {
 
-    public $id, $roleId, $name, $mail, $password;
+    public $id, $role, $name, $email, $password;
 
     public static $primary_key = "id";
 
-    public static $table = "users";
+    public static $table = "user";
 
     public static $mapping = array(
-        "id" => "u_id",
-        'roleId' => 'u_role_id',
-        "name" => "u_name",
-        "mail" => "u_mail",
-        "password" => "u_password",
-        "region" => "u_region",
-        "mobile" => "u_mobile",
+        "id" => "uid",
+        'role' => 'role',
+        "name" => "name",
+        "email" => "email",
+        "password" => "password",
+    );
+
+    public static $rules = array(
+        "name" => array("label" => "User name", "rules" => "trim|required|min_length[4]|max_length[255]"),
+        "email" => array("apply" => "register", "label" => "Email", "rules" => "trim|required|is_email|max_length[255]"),
+        "password" => array("label" => "Password", "rules" => "trim|required|min_length[4]|max_length[255]"),
     );
 
 }

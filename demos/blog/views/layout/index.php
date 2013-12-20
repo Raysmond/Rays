@@ -7,27 +7,48 @@
     <meta name="language" content="en"/>
     <meta name="description" content=""/>
     <?php $baseUrl = Rays::baseUrl(); ?>
-    <link rel="stylesheet" type="text/css" href="<?=$baseUrl?>/public/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>/public/css/main.css"/>
     <?php
     // link custom css files
     echo RHtmlHelper::linkCssArray(Rays::app()->getClientManager()->css);
     ?>
-    <script type="text/javascript" src="<?=$baseUrl?>/public/js/main.js"></script>
+    <script type="text/javascript" src="<?= $baseUrl ?>/public/js/main.js"></script>
 
 </head>
 
 <body class="index page-<?= Rays::router()->getControllerId() . '-' . Rays::router()->getActionId() ?>">
 <div id="header" class="container">
     <ul class="main-menu">
-        <li><?=RHtmlHelper::linkAction("site","Home","index")?></li>
-        <li><?=RHtmlHelper::linkAction("site","About","about")?></li>
-        <li><?=RHtmlHelper::linkAction("site","Contact","contact")?></li>
+        <li><?= RHtmlHelper::linkAction("site", "Home", "index") ?></li>
+        <?php if (Rays::isLogin()) {
+            ?>
+            <li><?= RHtmlHelper::linkAction("post", "My posts") ?></li>
+        <?php
+        } ?>
+        <li><?= RHtmlHelper::linkAction("site", "About", "about") ?></li>
+        <li><?= RHtmlHelper::linkAction("site", "Contact", "contact") ?></li>
+        <?php
+        if (!Rays::isLogin()) {
+            ?>
+            <li><?= RHtmlHelper::linkAction("user", "Login", "login") ?></li>
+            <li><?= RHtmlHelper::linkAction("user", "Register", "register") ?></li>
+        <?php
+        } else {
+            ?>
+            <li><?= RHtmlHelper::linkAction("user", "Logout", "logout") ?></li> <?php
+        }
+        ?>
     </ul>
 </div>
 
 <div id="main-content" class="container">
+    <hr>
+    <div id="message">
+        <?php RHtmlHelper::showFlashMessages(false); ?>
+    </div>
+    <div class="clearfix"></div>
     <div id="content">
-        <?php if(isset($content)) echo $content; ?>
+        <?php if (isset($content)) echo $content; ?>
     </div>
 </div>
 
@@ -35,7 +56,8 @@
 <div class="container">
     <div id="footer">
         <hr>
-        © Copyright <?=Rays::app()->getName()?> 2013, All Rights Reserved.  by <a href="http://raysmond.com">Raysmond</a>
+        © Copyright <?= Rays::app()->getName() ?> 2013, All Rights Reserved. by <a
+            href="http://raysmond.com">Raysmond</a>
     </div>
 </div>
 

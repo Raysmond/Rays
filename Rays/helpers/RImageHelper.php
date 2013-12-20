@@ -29,8 +29,10 @@ class RImageHelper
         }
 
         // TODO: fix directory settings
-        $dir = Rays::app()->getBaseDir() . '/../' . $options['path'];
-        $srcPath = Rays::app()->getBaseDir() . '/../' . $src;
+//        $dir = Rays::app()->getBaseDir() . '/../' . $options['path'];
+//        $srcPath = Rays::app()->getBaseDir() . '/../' . $src;
+        $dir = Rays::app()->getBaseDir() . DIRECTORY_SEPARATOR . $options['path'];
+        $srcPath = Rays::app()->getBaseDir() . DIRECTORY_SEPARATOR . $src;
         $name = self::getName($srcPath) . self::getExtension($srcPath);
         $styleDir = $dir . '/' . $options['name'];
 
@@ -47,8 +49,8 @@ class RImageHelper
             if (file_exists($stylePath)) {
                 unlink($stylePath);
             }
-            $img = new Img ();
-            return $img->thumb_img($srcPath, $stylePath, $options) ? $targetSrc : $src;
+            $img = new RImage();
+            return $img->crop($srcPath, $stylePath, $options) ? $targetSrc : $src;
         }
 
     }
@@ -78,79 +80,54 @@ class RImageHelper
 
 }
 
-// TODO
-class RImage{
-    private $extensions = ['jpg','jpeg','gif','png','bmp'];
-
-    public function __construct(){
-        if(!function_exists('gd_info')){
-            throw new RException("GD library is not supported in current PHP environment.");
-        }
-    }
-
-    public function crop($srcImg,$desImg,$options){
-
-    }
-}
-
-/**
- *
- * 图像处理类
- * @author FC_LAMP
- * @internal功能包含：水印,缩略图
- */
-class Img
+class RImage
 {
-    //图片格式
-    private $exts = array('jpg', 'jpeg', 'gif', 'bmp', 'png');
+    private static $extensions = ['jpg', 'jpeg','png', 'gif', 'bmp'];
 
-    /**
-     *
-     *
-     * @throws Exception
-     */
     public function __construct()
     {
         if (!function_exists('gd_info')) {
-            throw new Exception ('加载GD库失败！');
+            throw new RException ('GD library is not supported in current PHP environment!');
         }
     }
 
     /**
      *
      * 裁剪压缩
-     * @param $src_img 图片
-     * @param $save_img 生成后的图片
+     * @param $src 图片
+     * @param $des 生成后的图片
      * @param $option 参数选项，包括： $maxwidth  宽  $maxheight 高
      * array('width'=>xx,'height'=>xxx)
      * @internal
      * 我们一般的压缩图片方法，在图片过长或过宽时生成的图片
      * 都会被“压扁”，针对这个应采用先裁剪后按比例压缩的方法
      */
-    public function thumb_img($src_img, $save_img = '', $option)
+    public function crop($src, $des = '', $option)
     {
 
         if (empty ($option ['width']) or empty ($option ['height'])) {
-            return array('flag' => False, 'msg' => '原图长度与宽度不能小于0');
-        }
-        $org_ext = $this->is_img($src_img);
-        if (!$org_ext ['flag']) {
-            return $org_ext;
+            return false;
         }
 
+        if(!self::isImg($src)){
+            return false;
+        }
+
+        $originalExtension = self::getExtension($src);
+
         //如果有保存路径，则确定路径是否正确
-        if (!empty ($save_img)) {
-            $f = $this->check_dir($save_img);
+        if (!empty ($des)) {
+            $f = $this->check_dir($des);
             if (!$f ['flag']) {
                 return $f;
             }
         }
 
         //获取出相应的方法
-        $org_funcs = $this->get_img_funcs($org_ext ['msg']);
+        $org_funcs = $this->get_img_funcs($originalExtension);
 
         //获取原大小
-        $source = $org_funcs ['create_func'] ($src_img);
+        $source = $org_funcs ['create_func'] ($src);
         $src_w = imagesx($source);
         $src_h = imagesy($source);
 
@@ -182,9 +159,9 @@ class Img
         imagedestroy($croped);
 
         //输出(保存)图片
-        if (!empty ($save_img)) {
+        if (!empty ($des)) {
 
-            $org_funcs ['save_func'] ($target, $save_img);
+            $org_funcs ['save_func'] ($target, $des);
         } else {
             header($org_funcs ['header']);
             $org_funcs ['save_func'] ($target);
@@ -197,27 +174,27 @@ class Img
      *
      * 等比例缩放图像
      * @param $src_img 原图片
-     * @param $save_img 需要保存的地方
+     * @param $des 需要保存的地方
      * @param $option 参数设置 array('width'=>xx,'height'=>xxx)
      *
      */
-    function resize_image($src_img, $save_img = '', $option)
+    function resize_image($src_img, $des = '', $option)
     {
-        $org_ext = $this->is_img($src_img);
-        if (!$org_ext ['flag']) {
-            return $org_ext;
+        $originalExtension = $this->is_img($src_img);
+        if (!$originalExtension ['flag']) {
+            return $originalExtension;
         }
 
         //如果有保存路径，则确定路径是否正确
-        if (!empty ($save_img)) {
-            $f = $this->check_dir($save_img);
+        if (!empty ($des)) {
+            $f = $this->check_dir($des);
             if (!$f ['flag']) {
                 return $f;
             }
         }
 
         //获取出相应的方法
-        $org_funcs = $this->get_img_funcs($org_ext ['msg']);
+        $org_funcs = $this->get_img_funcs($originalExtension ['msg']);
 
         //获取原大小
         $source = $org_funcs ['create_func'] ($src_img);
@@ -259,9 +236,9 @@ class Img
             }
         }
         //输出(保存)图片
-        if (!empty ($save_img)) {
+        if (!empty ($des)) {
 
-            $org_funcs ['save_func'] ($newim, $save_img);
+            $org_funcs ['save_func'] ($newim, $des);
         } else {
             header($org_funcs ['header']);
             $org_funcs ['save_func'] ($newim);
@@ -275,33 +252,33 @@ class Img
      * 生成水印图片
      * @param  $org_img 原图像
      * @param  $mark_img 水印标记图像
-     * @param  $save_img 当其目录不存在时，会试着创建目录
+     * @param  $des 当其目录不存在时，会试着创建目录
      * @param array $option 为水印的一些基本设置包含：
      * x:水印的水平位置,默认为减去水印图宽度后的值
      * y:水印的垂直位置,默认为减去水印图高度后的值
      * alpha:alpha值(控制透明度),默认为50
      */
-    public function water_mark($org_img, $mark_img, $save_img = '', $option = array())
+    public function water_mark($org_img, $mark_img, $des = '', $option = array())
     {
         //检查图片
-        $org_ext = $this->is_img($org_img);
-        if (!$org_ext ['flag']) {
-            return $org_ext;
+        $originalExtension = $this->is_img($org_img);
+        if (!$originalExtension ['flag']) {
+            return $originalExtension;
         }
         $mark_ext = $this->is_img($mark_img);
         if (!$mark_ext ['flag']) {
             return $mark_ext;
         }
         //如果有保存路径，则确定路径是否正确
-        if (!empty ($save_img)) {
-            $f = $this->check_dir($save_img);
+        if (!empty ($des)) {
+            $f = $this->check_dir($des);
             if (!$f ['flag']) {
                 return $f;
             }
         }
 
         //获取相应画布
-        $org_funcs = $this->get_img_funcs($org_ext ['msg']);
+        $org_funcs = $this->get_img_funcs($originalExtension ['msg']);
         $org_img_im = $org_funcs ['create_func'] ($org_img);
 
         $mark_funcs = $this->get_img_funcs($mark_ext ['msg']);
@@ -333,9 +310,9 @@ class Img
         imagecopymerge($org_img_im, $mark_img_im, $org_img_im_x, $org_img_im_y, $mark_img_im_x, $mark_img_im_y, $mark_img_w, $mark_img_h, $alpha);
 
         //输出(保存)图片
-        if (!empty ($save_img)) {
+        if (!empty ($des)) {
 
-            $org_funcs ['save_func'] ($org_img_im, $save_img);
+            $org_funcs ['save_func'] ($org_img_im, $des);
         } else {
             header($org_funcs ['header']);
             $org_funcs ['save_func'] ($org_img_im);
@@ -347,12 +324,6 @@ class Img
 
     }
 
-    /**
-     *
-     * 检查图片
-     * @param unknown_type $img_path
-     * @return array('flag'=>true/false,'msg'=>ext/错误信息)
-     */
     private function is_img($img_path)
     {
         if (!file_exists($img_path)) {
@@ -360,10 +331,27 @@ class Img
         }
         $ext = explode('.', $img_path);
         $ext = strtolower(end($ext));
-        if (!in_array($ext, $this->exts)) {
+        if (!in_array($ext, self::$extensions)) {
             return array('flag' => False, 'msg' => "图片 $img_path 格式不正确！");
         }
         return array('flag' => True, 'msg' => $ext);
+    }
+
+    /**
+     * Check whether the given file is of image type
+     * @param string $file file path
+     * @return bool
+     */
+    public static function isImg($file){
+        if(!file_exists($file)){
+            return false;
+        }
+        return in_array(self::getExtension($file),self::$extensions)? true: false;
+    }
+
+    public static function getExtension($file)
+    {
+        return strtolower(end(explode('.', $file)));
     }
 
     /**
@@ -406,11 +394,11 @@ class Img
     /**
      *
      * 检查并试着创建目录
-     * @param $save_img
+     * @param $des
      */
-    private function check_dir($save_img)
+    private function check_dir($des)
     {
-        $dir = dirname($save_img);
+        $dir = dirname($des);
         if (!is_dir($dir)) {
             if (!mkdir($dir, 0777, true)) {
                 return array('flag' => False, 'msg' => "图片保存目录 $dir 无法创建！");
