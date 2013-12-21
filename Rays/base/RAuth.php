@@ -26,7 +26,7 @@ class RAuth
     /**
      * The SESSION key for user
      */
-    const AUTH_KEY = "rays_user";
+    const AUTH_KEY = "Rays_User";
 
     /**
      * Get the unique identifier of the User
@@ -50,6 +50,10 @@ class RAuth
     public function getUser()
     {
         if (!isset($this->_user) && $this->isLogin()) {
+            if (!$this->isSetAuthProvider()){
+                throw new RException("Auth provider is not set! ");
+            }
+
             $provider = $this->_authProvider;
             $provider = new $provider();
             if ($provider instanceof RAuthProvider) {
@@ -73,9 +77,14 @@ class RAuth
     /**
      * Check whether the current user has the authority
      * @param $authority
+     * @return bool
      */
     public function hasAuthority($authority = null)
     {
+        // if no auth provide then it'll return true for all authority requirements
+        if (!$this->isSetAuthProvider())
+            return true;
+
         $user = $this->getUser();
         if ($user === null) {
             $provider = $this->_authProvider;
@@ -114,6 +123,14 @@ class RAuth
     public function isLogin()
     {
         return Rays::app()->getHttpSession()->get(self::AUTH_KEY) !== false;
+    }
+
+    /**
+     * Check whether the auth provider class is set
+     */
+    private function isSetAuthProvider()
+    {
+        return isset($this->_authProvider) && !empty($this->_authProvider);
     }
 
 }
