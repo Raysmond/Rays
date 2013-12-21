@@ -32,6 +32,7 @@ class SiteController extends RController
     public function actionException(Exception $e)
     {
         if ($e instanceof RPageNotFoundException) {
+            $this->setHeaderTitle("404");
             $this->renderContent("<h1>404, page not found!</h1>");
             return;
         }

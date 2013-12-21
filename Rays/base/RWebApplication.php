@@ -86,6 +86,11 @@ class RWebApplication extends RBaseApplication
     public $user;
 
     /**
+     * @var RAuth the auth object
+     */
+    private $_auth;
+
+    /**
      * @var array the flash messages array
      */
     public $flashMessage;
@@ -103,11 +108,11 @@ class RWebApplication extends RBaseApplication
 
         // Initialize app directories
         $dir = $this->getBaseDir();
-        $this->modelPath = $dir.'/models';
-        $this->controllerPath =$dir.'/controllers';
-        $this->viewPath = $dir.'/views';
-        $this->layoutPath = $dir.'/views/layout';
-        $this->modulePath = $dir.'/modules';
+        $this->modelPath = $dir . '/models';
+        $this->controllerPath = $dir . '/controllers';
+        $this->viewPath = $dir . '/views';
+        $this->layoutPath = $dir . '/views/layout';
+        $this->modulePath = $dir . '/modules';
 
         if (isset($config['defaultController']))
             $this->defaultController = $config['defaultController'];
@@ -132,6 +137,11 @@ class RWebApplication extends RBaseApplication
         $this->httpRequestHandler = new RHttpRequest();
         $this->router = new RRouter();
 
+        $this->_auth = new RAuth();
+        $config = $this->getConfig();
+        if (isset($config["authProvider"]))
+            $this->_auth->setAuthProviderClass($config["authProvider"]);
+
         $this->httpRequestHandler->normalizeRequest();
         $this->runController($this->router->getRouteUrl());
     }
@@ -142,7 +152,7 @@ class RWebApplication extends RBaseApplication
      * @param array $route array router information
      * @throws RPageNotFoundException
      */
-    public function runController($route=array())
+    public function runController($route = array())
     {
         $_controller = '';
         if (isset($route['controller']) && $route['controller'] != '') {
@@ -174,15 +184,15 @@ class RWebApplication extends RBaseApplication
      *
      * @param array $params
      */
-    public function runControllerAction($controllerAction,$params = array()){
+    public function runControllerAction($controllerAction, $params = array())
+    {
         $route = $this->router->getRouteUrl($controllerAction);
-        if(!is_array($params)){
+        if (!is_array($params)) {
             $params = array($params);
         }
-        if(isset($route['params'])){
+        if (isset($route['params'])) {
             $route['params'] = array_merge($route['params'], $params);
-        }
-        else
+        } else
             $route['params'] = $params;
         self::runController($route);
     }
@@ -234,23 +244,18 @@ class RWebApplication extends RBaseApplication
         return $this->httpSession;
     }
 
+    public function getAuth()
+    {
+        return $this->_auth;
+    }
+
     /**
      * Return current login user
      * @return bool login user or false
      */
     public function getLoginUser()
     {
-        if ($this->isUserLogin() && !isset($this->user)) {
-            $id = $this->getHttpSession()->get("user");
-            $this->user = User::find($id)->first();
-            return $this->user;
-        }
-        else if (isset($this->user)) {
-            return $this->user;
-        }
-        else {
-            return null;
-        }
+        return $this->_auth->getUser();
     }
 
     /**
@@ -259,7 +264,24 @@ class RWebApplication extends RBaseApplication
      */
     public function isUserLogin()
     {
-        return $this->getHttpSession()->get("user") != false;
+        return $this->_auth->isLogin();
+    }
+
+    /**
+     * User login
+     * @param RAuthProvider $user
+     */
+    public function login(RAuthProvider $user)
+    {
+        $this->_auth->login($user);
+    }
+
+    /**
+     * User logout
+     */
+    public function logout()
+    {
+        $this->_auth->logout();
     }
 
     /**
@@ -275,7 +297,8 @@ class RWebApplication extends RBaseApplication
      * Get the current controller who is handling the HTTP request
      * @return Object
      */
-    public function getController(){
+    public function getController()
+    {
         return $this->controller;
     }
 

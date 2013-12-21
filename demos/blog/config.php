@@ -55,6 +55,8 @@ return array(
      */
     'debug' =>true,
 
+    'authProvider' => 'User'
+
     /*
     'cache' => array(
         'cache_dir' => '/cache',

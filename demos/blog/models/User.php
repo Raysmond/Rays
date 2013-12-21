@@ -6,7 +6,7 @@
  * @created: 2013-12-19
  */
 
-class User extends Model
+class User extends Model implements RAuthProvider
 {
 
     public $id, $role, $name, $email, $password;
@@ -50,4 +50,41 @@ class User extends Model
         return $rules;
     }
 
+    /**
+     * Implement identifier() method
+     */
+    public function identifier()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Implement authority() method
+     */
+    public function authority()
+    {
+        return $this->role;
+    }
+
+    /**
+     * Implement isAuthorized() method
+     */
+    public function isAuthorized($requiredAuthority = null)
+    {
+        if ($requiredAuthority == null || $this->authority() == self::ANONYMOUS || $requiredAuthority == $this->authority())
+            return true;
+        if ($this->authority() == self::ADMIN)
+            return true;
+        return false;
+    }
+
+    /**
+     * Implement getAuthorizedUser() method
+     * @param $identifier
+     * @return User|null
+     */
+    public function getAuthorizedUser($identifier)
+    {
+        return User::get($identifier);
+    }
 }

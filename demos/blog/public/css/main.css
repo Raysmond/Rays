@@ -79,3 +79,10 @@ ul.main-menu li>a:hover{
 .post-actions{
     margin-top: 10px;
 }
+
+.post-list table tr{
+    border-bottom: 1px #ccc dashed;
+}
+.post-list table tr td{
+    padding: 3px 5px;
+}

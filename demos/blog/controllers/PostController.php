@@ -8,12 +8,15 @@
 
 class PostController extends RController
 {
+    /**
+     * @var array access array for actions
+     */
+    public $access = array(
+        User::AUTHENTICATED => ["index","new","edit","delete"]
+    );
+
     public function actionIndex()
     {
-        if (!Rays::isLogin()) {
-            $this->flash("message", "Please login first!");
-            $this->redirect(Rays::baseUrl());
-        }
         $posts = Post::find("uid", Rays::user()->id)->all();
         $this->setHeaderTitle("My posts");
         $this->render("index", ["posts" => $posts]);
@@ -32,10 +35,10 @@ class PostController extends RController
     public function actionEdit($pid)
     {
         $post = null;
-        if (!is_numeric($pid) || ($post = Post::get($pid)) === null) {
+        if (($post = Post::get($pid)) === null) {
             Rays::app()->page404("Post not found!");
         }
-        if (!Rays::isLogin() || !Rays::user()->id == $post->id || !Rays::user()->role == "admin") {
+        if (!Rays::user()->id == $post->id || !Rays::user()->role == "admin") {
             $this->flash("error", "Permission denied! You don't have the permission to edit the post!");
             $this->redirectAction("post", "view", $post->id);
         }
@@ -56,10 +59,6 @@ class PostController extends RController
 
     public function actionNew()
     {
-        if (!Rays::isLogin()) {
-            $this->flash("message", "Please login first!");
-            $this->redirect(Rays::baseUrl());
-        }
         if (Rays::isPost()) {
             $post = new Post($_POST);
             $post->uid = Rays::user()->id;
@@ -77,7 +76,7 @@ class PostController extends RController
     public function actionDelete($postId)
     {
         if (($post = Post::get($postId)) !== null) {
-            if (Rays::isLogin() && (Rays::user()->id == $postId || Rays::user()->role == "admin")) {
+            if ((Rays::user()->id == $postId || Rays::user()->role == "admin")) {
                 $post->delete();
                 $this->flash("message", "Post " . $post->title . " was deleted successfully!");
                 $this->redirectAction("post", "index");

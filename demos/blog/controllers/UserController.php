@@ -8,6 +8,13 @@
 
 class UserController extends RController
 {
+    /**
+     * @var array access array for actions
+     */
+    public $access = array(
+        User::AUTHENTICATED => ["logout"]
+    );
+
     public function actionLogin()
     {
         if (Rays::isLogin()) {
@@ -17,9 +24,9 @@ class UserController extends RController
         if (Rays::isPost()) {
             $user = new User($_POST);
             if ($user->validate("login")) {
-                $loginUser = User::find("name", $user->name)->first();
-                if ($loginUser != null && $loginUser->password == $_POST["password"]) {
-                    Rays::app()->getHttpSession()->set("user", $loginUser->id);
+                $login = User::find("name", $user->name)->first();
+                if ($login != null && $login->password == $_POST["password"]) {
+                    Rays::app()->login($login);
                     $this->redirect(Rays::baseUrl());
                 } else {
                     $this->flash("error", "User name and password aren't matched.");
@@ -57,9 +64,17 @@ class UserController extends RController
 
     public function actionLogout()
     {
-        if (Rays::isLogin()) {
-            Rays::app()->getHttpSession()->deleteSession("user");
-        }
+        Rays::app()->logout();
         $this->redirect(Rays::baseUrl());
+    }
+
+    public function actionView($uid)
+    {
+        $user = User::get($uid);
+        if ($user === null) {
+            Rays::app()->page404();
+        }
+
+        $this->render("view", ["user" => $user, "posts" => Post::find("uid", $user->id)->range(0, 10)]);
     }
 } 

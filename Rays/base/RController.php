@@ -58,7 +58,7 @@ class RController
      * Construction method
      * @param string $id the unique id of the controller
      */
-    public function __construct($id='')
+    public function __construct($id = '')
     {
         if ($id != null)
             $this->_id = $id;
@@ -85,7 +85,7 @@ class RController
     /**
      * Render a view
      * @param string $view the name of the view used to render the data
-     * @param array/null $data data in array which need to be rendered
+     * @param array /null $data data in array which need to be rendered
      * @param bool $return whether to return the rendered content or not
      * @return mixed the rendered content if $return=true or null
      */
@@ -117,7 +117,7 @@ class RController
      */
     public function renderPartial($view, $data, $return = false)
     {
-         return RView::renderData($this, $this->getViewFile($view),$data,$return);
+        return RView::renderData($this, $this->getViewFile($view), $data, $return);
     }
 
     /**
@@ -140,10 +140,10 @@ class RController
     public function getViewFile($viewName)
     {
         $viewFile = Rays::app()->viewPath . "/";
-        if(strpos($viewName, ".")>0)
-            $viewFile .= str_replace("." , "/" , $viewName) . ".php";
+        if (strpos($viewName, ".") > 0)
+            $viewFile .= str_replace(".", "/", $viewName) . ".php";
         else
-            $viewFile .=  $this->getId() . "/" . $viewName . ".php";
+            $viewFile .= $this->getId() . "/" . $viewName . ".php";
 
         return $viewFile;
     }
@@ -176,14 +176,31 @@ class RController
     }
 
     /**
+     * Check whether the user has the authority to access the action
+     */
+    public function isAuthorizedUser()
+    {
+        $authority = null;
+        $action = $this->getCurrentAction();
+        if (!empty($this->access)) {
+            foreach ($this->access as $_authority => $actions) {
+                $actions = (!is_array($actions)) ? [$actions] : $actions;
+                if (in_array($action, $actions))
+                    $authority = $_authority;
+            }
+        }
+        return Rays::app()->getAuth()->hasAuthority($authority);
+    }
+
+    /**
      * Run an action, handle the parameters(usually GET or POST method), interact with the data models
      * and decide whether to rendering a page in HTML or just return some content
      * @param $action string action ID
      * @param $params array parameters
      */
-    public function runAction($action='', $params=array())
+    public function runAction($action = '', $params = array())
     {
-        if($action=='')
+        if ($action == '')
             $action = $this->defaultAction;
 
         $this->setCurrentAction($action);
@@ -193,7 +210,8 @@ class RController
             return false;
         }
 
-        if(!$this->userCanAccessAction()){
+        // TODO remove userCanAccessAction()
+        if (!$this->isAuthorizedUser() || !$this->userCanAccessAction()) {
             throw new RPageNotFoundException("Sorry, you're not authorized to view the requested page.");
         }
 
@@ -213,20 +231,20 @@ class RController
      * @return mixed
      * @throws RException
      */
-    public function dispatchAction($actionId,$actionPath = ''){
-        if($actionPath!==''){
-            $className = end(explode(".",$actionPath));
+    public function dispatchAction($actionId, $actionPath = '')
+    {
+        if ($actionPath !== '') {
+            $className = end(explode(".", $actionPath));
             Rays::import($actionPath);
-            if(class_exists($className)){
-                $action = new $className($this,$actionId,$this->getActionParams());
-                if(method_exists($action,"run")){
+            if (class_exists($className)) {
+                $action = new $className($this, $actionId, $this->getActionParams());
+                if (method_exists($action, "run")) {
                     return $action->run();
-                }else{
+                } else {
                     throw new RException("An action class must implements \'run\' method!");
                 }
-            }
-            else{
-                $file = Rays::app()->getBaseDir().str_replace(".","/",$actionPath).".php";
+            } else {
+                $file = Rays::app()->getBaseDir() . str_replace(".", "/", $actionPath) . ".php";
                 throw new RException("Class ($className) not exists. Class file: $file");
             }
         }
@@ -260,7 +278,8 @@ class RController
         Rays::app()->getClientManager()->setHeaderTitle($title);
     }
 
-    public function getHeaderTitle(){
+    public function getHeaderTitle()
+    {
         return $this->_headerTitle;
     }
 
@@ -380,9 +399,9 @@ class RController
      * @param $key "message","warinng","error"
      * @param $message
      */
-    public function flash($key,$message)
+    public function flash($key, $message)
     {
-        $this->getSession()->flash($key,$message);
+        $this->getSession()->flash($key, $message);
     }
 
     /**
