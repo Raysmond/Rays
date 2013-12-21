@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`uid`, `role`, `name`, `email`, `password`) VALUES
-(1, 'admin', 'admin', 'admin@example.com', '111111');
+(1, 'admin', 'admin', 'admin@example.com', '96e79218965eb72c92a549dd5a330112');
 
 --
 -- 限制导出的表

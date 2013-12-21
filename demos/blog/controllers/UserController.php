@@ -25,7 +25,7 @@ class UserController extends RController
             $user = new User($_POST);
             if ($user->validate("login")) {
                 $login = User::find("name", $user->name)->first();
-                if ($login != null && $login->password == $_POST["password"]) {
+                if ($login != null && $login->password == md5($_POST["password"])) {
                     Rays::app()->login($login);
                     $this->redirect(Rays::baseUrl());
                 } else {
@@ -51,6 +51,7 @@ class UserController extends RController
             if ($validation->run($_POST)) {
                 $user = new User($_POST);
                 $user->id = null;
+                $user->password = md5($user->password);
                 $user->save();
                 if (isset($user->id)) {
                     $this->flash("message", "Register successfully. Your username is " . $user->name . ".");
