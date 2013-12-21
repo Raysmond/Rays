@@ -91,17 +91,6 @@ class RImage
         }
     }
 
-    /**
-     *
-     * 裁剪压缩
-     * @param $src 图片
-     * @param $des 生成后的图片
-     * @param $option 参数选项，包括： $maxwidth  宽  $maxheight 高
-     * array('width'=>xx,'height'=>xxx)
-     * @internal
-     * 我们一般的压缩图片方法，在图片过长或过宽时生成的图片
-     * 都会被“压扁”，针对这个应采用先裁剪后按比例压缩的方法
-     */
     public function crop($src, $des = '', $option)
     {
 

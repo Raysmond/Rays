@@ -8,12 +8,22 @@
 body{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
+    line-height: 1.6;
+}
+.content{width: 100%; height: auto; background-color: #FFF; padding: 0;}
+.note {
+    background-color: #ffffff;
+    padding: 10px 0;
+    color: #333333;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .container{
-    width: 960px;
-    margin-left: auto;
-    margin-right: auto;
 }
 .container:before, .container:after {
     display: table;
@@ -24,7 +34,8 @@ body{
 }
 
 #header{
-
+    background: #EBEAE8;
+    padding: 15px 0;
 }
 
 ul.main-menu{
@@ -52,7 +63,7 @@ ul.main-menu li>a:hover{
 }
 
 #main-content{
-    padding: 5px 20px;
+    min-height: 500px;
 }
 
 .clearfix{
@@ -60,9 +71,6 @@ ul.main-menu li>a:hover{
 }
 
 #footer{
-    position: absolute;
-    width: 960px;
-    bottom: 0;
     padding-bottom: 20px;
     color: gray;
 }
@@ -85,4 +93,24 @@ ul.main-menu li>a:hover{
 }
 .post-list table tr td{
     padding: 3px 5px;
+}
+
+/* Pagination */
+ul.pagination{
+    list-style: none;
+    margin: 10px 0;
+    padding: 0;
+}
+
+ul.pagination>li{
+    float: left;
+}
+
+ul.pagination>li>a{
+    display: block;
+    padding: 5px;
+}
+
+ul.pagination>li.active>a{
+    color: red;
 }

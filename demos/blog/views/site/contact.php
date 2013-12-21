@@ -1,2 +1,18 @@
 <h1>Contact</h1>
-<p>This is contact page.</p>
+<?=RFormHelper::openForm("site/contact")?>
+<?=RFormHelper::label("Your name","name")?>
+<?=RFormHelper::input("name",isset($form["name"])?$form["name"]:"")?>
+
+<br/>
+
+<?=RFormHelper::label("Your email","email")?>
+<?=RFormHelper::input("email",isset($form["email"])?$form["email"]:"")?>
+
+<br/>
+<?=RFormHelper::label("Content","content")?>
+<br/>
+<textarea name="content" cols="70" rows="7"><?=(isset($form["content"])?$form['content']:"")?></textarea>
+
+<br/>
+<?=RFormHelper::input(array('type'=>'submit','value'=>'Save'))?>
+<?=RFormHelper::endForm()?>
