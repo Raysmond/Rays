@@ -54,7 +54,7 @@ class Model extends RModel
             } else {
                 if (is_array($rule['apply']) && in_array($apply, $rule['apply'])) {
                     $rules[] = $rule;
-                } else if (!empty($rules["apply"]) && $rules["apply"] == $apply) {
+                } else if (!empty($rule["apply"]) && $rule["apply"] == $apply) {
                     $rules[] = $rule;
                 }
             }

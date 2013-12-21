@@ -31,6 +31,30 @@ class UserController extends RController
         $this->render("login");
     }
 
+    public function actionRegister()
+    {
+        if (Rays::isLogin()) {
+            $this->redirect(Rays::baseUrl());
+        }
+
+        $data = [];
+        if (Rays::isPost()) {
+            $data["form"] = $_POST;
+            $validation = new RFormValidationHelper(User::getRegisterRules());
+            if ($validation->run($_POST)) {
+                $user = new User($_POST);
+                $user->id = null;
+                $user->save();
+                if (isset($user->id)) {
+                    $this->flash("message", "Register successfully. Your username is " . $user->name . ".");
+                    $this->redirectAction("user", "login");
+                }
+            }
+            $data["errors"] = $validation->getErrors();
+        }
+        $this->render("register", $data);
+    }
+
     public function actionLogout()
     {
         if (Rays::isLogin()) {
