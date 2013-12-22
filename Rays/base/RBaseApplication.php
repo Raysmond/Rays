@@ -93,9 +93,13 @@ class RBaseApplication
 
     private $debug = true;
 
-    public function __construct($config = null)
+    public function __construct($defaultConfig = null, $config = null)
     {
         $this->init($config);
+
+        $_config = new RConfig();
+        $_config->setDefault($defaultConfig);
+        $_config->load($config);
     }
 
     /**

@@ -69,7 +69,8 @@ class RaysFramework
         self::$startTime = microtime(true);
         self::$logger = new RLog();
 
-        return new RWebApplication($config);
+        $defaultConfig = SYSTEM_PATH."/AppConfig.php";
+        return new RWebApplication($defaultConfig, $config);
     }
 
     /**
