@@ -414,11 +414,19 @@ abstract class RModel {
      */
     private static $connection = null;
 
-    public static $rules = array();
     public static $primary_key = "id";
     public static $table = '';
     public static $relation = array();
     public static $mapping = array();
+
+    /**
+     * @var array validation rules
+     */
+    public static $rules = array();
+
+    /**
+     * @var array validation errors
+     */
     private $errors = array();
 
     /**
@@ -469,6 +477,14 @@ abstract class RModel {
         $this->assign($assignments);
     }
 
+    /**
+     * Massive data assignment
+     * For example:
+     * <code>
+     * $user = new User(array("name"=>"Raysmond","email"=>"jiankunlei@126.com"));
+     * </code>
+     * @param array $assignments
+     */
     public function assign($assignments = array())
     {
         if (!empty($assignments)) {
@@ -610,7 +626,7 @@ abstract class RModel {
      * @param array $args
      * @return mixed
      */
-    public function deleteAll($constraint = "", $args = array())
+    public static function deleteAll($constraint = "", $args = array())
     {
         return self::where($constraint, $args)->delete();
     }

@@ -8,8 +8,8 @@
 
 class SiteController extends RController
 {
-    public $defaultAction = "index";
-    public $layout = "index";
+    // public $defaultAction = "index";
+    // public $layout = "index";
 
     public function actionIndex()
     {
@@ -21,7 +21,7 @@ class SiteController extends RController
         $posts = Post::find()->join("user")->order_desc("id")->range(($page - 1) * $pageSize, $pageSize);
 
         // user pager helper to generate pager HTML
-        $pager = new RPagerHelper("page", $count, $pageSize, RHtmlHelper::siteUrl("site/index"), $page, array('class'=>'pagin'));
+        $pager = new RPagerHelper("page", $count, $pageSize, RHtmlHelper::siteUrl("site/index"), $page, array('class' => 'pagin'));
 
         $data = array(
             'title' => Rays::app()->getName(),
@@ -40,14 +40,18 @@ class SiteController extends RController
 
     public function actionContact()
     {
-        if(Rays::isPost()){
+        if (Rays::isPost()) {
             // do some thing
-            $this->flash("message","Thanks for your contact!");
+            $this->flash("message", "Thanks for your contact!");
         }
         $this->setHeaderTitle("Contact");
         $this->render("contact");
     }
 
+    /**
+     * Exception handling
+     * @param Exception $e
+     */
     public function actionException(Exception $e)
     {
         if ($e instanceof RPageNotFoundException) {
