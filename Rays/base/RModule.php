@@ -128,7 +128,7 @@ class RModule
     public function render($viewFileName = '', $data = '')
     {
         $viewFile = $this->getModuleDir() . "/" . $viewFileName . ".view.php";
-        RView::renderFile($viewFile, $data, false);
+        RView::renderFile($this, $viewFile, $data, false);
     }
 
     /**

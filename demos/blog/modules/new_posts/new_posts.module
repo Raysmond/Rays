@@ -1,0 +1,19 @@
+<?php
+/**
+ * New posts module
+ *
+ * @author: Raysmond
+ * @created: 2013-12-23
+ */
+
+class new_posts_module extends RModule
+{
+    // public $access = array();
+
+    public $denyAccess = array("user/login", "user/register");
+
+    public function module_content()
+    {
+        return $this->render("new_posts", array("posts" => Post::find()->join("user")->order_desc("id")->range(0, 10)));
+    }
+}

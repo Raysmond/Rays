@@ -47,16 +47,20 @@
 
     <div class="grid">
         <div id="main-content" class="container g960 space-bot">
-            <hr>
-            <div id="message">
-                <?php RHtmlHelper::showFlashMessages(false); ?>
+            <div class="c9 first">
+                <div id="message">
+                    <?php RHtmlHelper::showFlashMessages(false); ?>
+                </div>
+                <div class="clearfix"></div>
+                <div id="content">
+                    <?php if (isset($content)) echo $content; ?>
+                </div>
             </div>
-            <div class="clearfix"></div>
-            <div id="content">
-                <?php if (isset($content)) echo $content; ?>
+            <div class="c3 last">
+                <?php $self->module("new_posts"); ?>
             </div>
-        </div>
 
+        </div>
 
         <div class="container g960">
             <div id="footer">
