@@ -1,5 +1,5 @@
 <h1>Contact</h1>
-<?=RFormHelper::openForm("site/contact",['class'=>'vform','style'=>'max-width: 600px;'])?>
+<?=RFormHelper::openForm("site/contact",array('class'=>'vform','style'=>'max-width: 600px;'))?>
 <?=RFormHelper::label("Your name","name")?>
 <?=RFormHelper::input("name",isset($form["name"])?$form["name"]:"")?>
 

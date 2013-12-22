@@ -12,7 +12,7 @@ class UserController extends RController
      * @var array access array for actions
      */
     public $access = array(
-        User::AUTHENTICATED => ["logout"]
+        User::AUTHENTICATED => array("logout")
     );
 
     public function actionLogin()
@@ -32,7 +32,7 @@ class UserController extends RController
                     $this->flash("error", "User name and password aren't matched.");
                 }
             }
-            $this->render("login", ["errors" => $user->getErrors(), "form" => $_POST]);
+            $this->render("login", array("errors" => $user->getErrors(), "form" => $_POST));
             return;
         }
         $this->render("login");
@@ -44,7 +44,7 @@ class UserController extends RController
             $this->redirect(Rays::baseUrl());
         }
 
-        $data = [];
+        $data = array();
         if (Rays::isPost()) {
             $data["form"] = $_POST;
             $validation = new RFormValidationHelper(User::getRegisterRules());
@@ -76,6 +76,6 @@ class UserController extends RController
             Rays::app()->page404();
         }
 
-        $this->render("view", ["user" => $user, "posts" => Post::find("uid", $user->id)->range(0, 10)]);
+        $this->render("view", array("user" => $user, "posts" => Post::find("uid", $user->id)->range(0, 10)));
     }
 } 

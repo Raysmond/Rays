@@ -27,9 +27,9 @@ class Post extends Model
     );
 
     public static $rules = array(
-        'uid' => ["label" => "Author ID", "rules" => "trim|required|number"],
-        "title" => ["label" => "Title", "rules" => "trim|required|min_length[5]|max_length[255]"],
-        "content" => ["label" => "Content", "rules" => "trim|required|max_length[65535]"]
+        'uid' => array("label" => "Author ID", "rules" => "trim|required|number"),
+        "title" => array("label" => "Title", "rules" => "trim|required|min_length[5]|max_length[255]"),
+        "content" => array("label" => "Content", "rules" => "trim|required|max_length[65535]")
     );
 
     public function save()

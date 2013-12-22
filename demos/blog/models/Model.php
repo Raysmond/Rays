@@ -27,8 +27,8 @@ class Model extends RModel
     public function assign($assignments = array())
     {
         if (!empty($assignments)) {
-            $class = get_called_class();
-            foreach ($class::$mapping as $objCol => $dbCol) {
+            $vars = get_class_vars(get_called_class());
+            foreach ($vars['mapping'] as $objCol => $dbCol) {
                 if (isset($assignments[$objCol])) {
                     $this->$objCol = $assignments[$objCol];
                 }
@@ -43,12 +43,12 @@ class Model extends RModel
      */
     public static function getRules($apply = '')
     {
-        $class = get_called_class();
+        $vars = get_class_vars(get_called_class());
         if ($apply === '') {
-            return $class::$rules;
+            return $vars['rules'];
         }
         $rules = array();
-        foreach ($class::$rules as $field => $rule) {
+        foreach ($vars['rules'] as $field => $rule) {
             $rule["field"] = $field;
             if (!isset($rule['apply'])) {
                 $rules[] = $rule;
@@ -102,8 +102,8 @@ class Model extends RModel
     public function getDataArray()
     {
         $data = array();
-        $class = get_called_class();
-        foreach ($class::$mapping as $objCol => $dbCol) {
+        $vars = get_class_vars(get_called_class());
+        foreach ($vars['rules'] as $objCol => $dbCol) {
             $data[$objCol] = $this->$objCol;
         }
         return $data;

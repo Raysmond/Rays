@@ -16,7 +16,7 @@ if(isset($errors) && !empty($errors)){
 <br/>
 
 <?=RFormHelper::label("Password","password")?>
-<?=RFormHelper::input(['type'=>"password","name"=>"password"],isset($form)?$form["password"]:"")?>
+<?=RFormHelper::input(array('type'=>"password","name"=>"password"),isset($form)?$form["password"]:"")?>
 
 <br/>
 <button type="submit">Login</button>

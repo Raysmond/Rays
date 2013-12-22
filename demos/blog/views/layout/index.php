@@ -22,7 +22,7 @@
     <div id="header" class="container row">
         <div class="g960">
         <ul class="main-menu">
-            <li><?= RHtmlHelper::linkAction("site", "Rays Blog", "index", null, ["style" => 'font-weight:bold;']) ?></li>
+            <li><?= RHtmlHelper::linkAction("site", "Rays Blog", "index", null, array("style" => 'font-weight:bold;')) ?></li>
             <?php if (Rays::isLogin()) {
                 ?>
                 <li><?= RHtmlHelper::linkAction("post", "My posts") ?></li>
