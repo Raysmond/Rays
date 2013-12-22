@@ -23,17 +23,18 @@ class _RModelQueryer {
 
     private function _select_fields()
     {
-        $model = $this->model;
+        $model = get_class_vars($this->model);
         $fields = "";
         /* Add fields from self */
-        foreach ($model::$mapping as $member => $db_member) {
-            $fields .= Rays::app()->getDBPrefix().$model::$table.".{$model::$mapping[$member]},";
+        foreach ($model['mapping'] as $member => $db_member) {
+            $fields .= Rays::app()->getDBPrefix().$model['table'].".{$model['mapping'][$member]},";
         }
         /* Add fields from joined members */
         foreach ($this->query_join as $rel_member) {
-            list($m, $constraint) = $model::$relation[$rel_member];
-            foreach ($m::$mapping as $member => $db_member) {
-                $fields .= Rays::app()->getDBPrefix().$m::$table.".{$m::$mapping[$member]},";
+            list($m, $constraint) = $model['relation'][$rel_member];
+            $mVars = get_class_vars($m);
+            foreach ($mVars['mapping'] as $member => $db_member) {
+                $fields .= Rays::app()->getDBPrefix().$mVars['table'].".{$mVars['mapping'][$member]},";
             }
         }
         return rtrim($fields, ",");
@@ -41,12 +42,13 @@ class _RModelQueryer {
 
     private function _join_clause()
     {
-        $model = $this->model;
+        $model = get_class_vars($this->model);
         $clause = "";
         foreach ($this->query_join as $member) {
-            list($m, $constraint) = $model::$relation[$member];
-            $modeltable = Rays::app()->getDBPrefix().$model::$table;
-            $mtable = Rays::app()->getDBPrefix().$m::$table;
+            list($m, $constraint) = $model['relation'][$member];
+            $modeltable = Rays::app()->getDBPrefix().$model['table'];
+            $mVars = get_class_vars($m);
+            $mtable = Rays::app()->getDBPrefix().$mVars['table'];
             $clause = "$clause LEFT JOIN $mtable ON " . $this->_substitute($constraint);
         }
         return $clause;
@@ -54,8 +56,8 @@ class _RModelQueryer {
 
     private function _select($suffix = "")
     {
-        $model = $this->model;
-        $modeltable = Rays::app()->getDBPrefix().$model::$table;
+        $model = get_class_vars($this->model);
+        $modeltable = Rays::app()->getDBPrefix().$model['table'];
         $fields = $this->_select_fields();
         $join = $this->_join_clause();
         $sql = "SELECT $fields FROM $modeltable $join $this->query_where $this->query_order $suffix";
@@ -72,16 +74,18 @@ class _RModelQueryer {
              * We use indices here because we EXPLICITLY specified the fields.
              * To make things correct we MUST iterate all fields using same order here and in _select_fields()
              */
-            $obj = new $model();
+            $class = $this->model;
+            $obj = new $class();
             $i = 0;
-            foreach ($model::$mapping as $member => $db_member) {
+            foreach ($model['mapping'] as $member => $db_member) {
                 $obj->$member = $row[$i++];
             }
             /* Construct joined member objects */
             foreach ($this->query_join as $rel_member) {
-                list($m, $constraint) = $model::$relation[$rel_member];
+                list($m, $constraint) = $model['relation'][$rel_member];
+                $mVars = get_class_vars($m);
                 $obj->$rel_member = new $m();
-                foreach ($m::$mapping as $member => $db_member) {
+                foreach ($mVars['mapping'] as $member => $db_member) {
                     $obj->$rel_member->$member = $row[$i++];
                 }
             }
@@ -96,8 +100,8 @@ class _RModelQueryer {
      */
     public function count()
     {
-        $model = $this->model;
-        $stmt = RModel::getConnection()->prepare("SELECT COUNT(*) FROM ".Rays::app()->getDBPrefix().$model::$table." $this->query_where");
+        $model = get_class_vars($this->model);
+        $stmt = RModel::getConnection()->prepare("SELECT COUNT(*) FROM ".Rays::app()->getDBPrefix().$model['table']." $this->query_where");
         $stmt->execute($this->_args());
         $row = $stmt->fetch();
         return $row[0];
@@ -139,8 +143,8 @@ class _RModelQueryer {
      */
     public function delete()
     {
-        $model = $this->model;
-        $stmt = RModel::getConnection()->prepare("DELETE FROM ".Rays::app()->getDBPrefix().$model::$table." $this->query_where $this->query_order");
+        $model = get_class_vars($this->model);
+        $stmt = RModel::getConnection()->prepare("DELETE FROM ".Rays::app()->getDBPrefix().$model['table']." $this->query_where $this->query_order");
         $stmt->execute($this->_args());
     }
 
@@ -149,27 +153,35 @@ class _RModelQueryer {
      */
     public function update($update, $args = array())
     {
-        $model = $this->model;
+        $model = get_class_vars($this->model);
         $update = $this->_substitute($update);
-        $stmt = RModel::getConnection()->prepare("UPDATE ".Rays::app()->getDBPrefix().$model::$table." SET $update $this->query_where");
+        $stmt = RModel::getConnection()->prepare("UPDATE ".Rays::app()->getDBPrefix().$model['table']." SET $update $this->query_where");
         $stmt->execute(array_merge($args, $this->_args()));
     }
 
     private function _substitute($constraint)
     {
         /* Substitute [member]s */
-        return preg_replace_callback('/\[(.+?)\]/', function ($matches) {
-            $s = explode(".", $matches[1]);
-            if (count($s) == 1) {
-                $model = $this->model;
-                $member = $s[0];
-            }
-            else {
-                $model = $s[0];
-                $member = $s[1];
-            }
-            return Rays::app()->getDBPrefix() . $model::$table . "." . $model::$mapping[$member];
-        }, $constraint);
+        return preg_replace_callback('/\[(.+?)\]/', array($this, '_replace_callback'), $constraint);
+    }
+
+    /**
+     * Used in _substitute() for preg_replace_callback(), so it can support PHP 5.2
+     * @param $matches
+     * @return string
+     */
+    private function _replace_callback($matches)
+    {
+        $s = explode(".", $matches[1]);
+        if (count($s) == 1) {
+            $model = get_class_vars($this->model);
+            $member = $s[0];
+        }
+        else {
+            $model = get_class_vars($s[0]);
+            $member = $s[1];
+        }
+        return Rays::app()->getDBPrefix() . $model['table'] . "." . $model['mapping'][$member];
     }
 
     /**
@@ -198,7 +210,7 @@ class _RModelQueryer {
 
     private function _find($constraints)
     {
-        $model = $this->model;
+        $model = get_class_vars($this->model);
         $constraint = "";
         $args = array();
         for ($i = 0; $i < count($constraints); $i += 2) {
@@ -225,8 +237,8 @@ class _RModelQueryer {
                 return $this->_find($memberName);
             }
             else {
-                $model = $this->model;
-                return $this->_find(array($model::$primary_key, $memberName));
+                $model = get_class_vars($this->model);
+                return $this->_find(array($model['primary_key'], $memberName));
             }
         }
         else {
@@ -281,7 +293,6 @@ class _RModelQueryer {
      */
     public function order_asc($memberName)
     {
-        $model = $this->model;
         return $this->order("ASC", "[$memberName]");
     }
 
@@ -292,7 +303,6 @@ class _RModelQueryer {
      */
     public function order_desc($memberName)
     {
-        $model = $this->model;
         return $this->order("DESC", "[$memberName]");
     }
 
@@ -431,20 +441,23 @@ abstract class RModel {
      */
     public static function get($id)
     {
-        $model = get_called_class();
-        return (new _RModelQueryer(get_called_class()))->find($model::$primary_key, $id)->first();
+        $model = get_class_vars(get_called_class());
+        $query = new _RModelQueryer(get_called_class());
+        return $query->find($model['primary_key'], $id)->first();
     }
 
     public static function find($memberName = null, $memberValue = null)
     {
         if ($memberName == null)
             return new _RModelQueryer(get_called_class());
-        return (new _RModelQueryer(get_called_class()))->find($memberName, $memberValue);
+        $query = new _RModelQueryer(get_called_class());
+        return $query->find($memberName, $memberValue);
     }
 
     public static function where($constraint, $args = array())
     {
-        return (new _RModelQueryer(get_called_class()))->where($constraint, $args);
+        $query = new _RModelQueryer(get_called_class());
+        return $query->where($constraint, $args);
     }
 
     /**
@@ -474,33 +487,33 @@ abstract class RModel {
      */
     public function save()
     {
-        $model = get_called_class();
+        $model = get_class_vars(get_called_class());
         /* Build SQL statement */
         $columns = "";
         $values = "";
         $delim = "";
-        $primary_key = $model::$primary_key;
+        $primary_key = $model['primary_key'];
         if (isset($this->$primary_key)) {
             $primary_key = "";
         }
-	    foreach ($model::$mapping as $member => $column) {
+	    foreach ($model['mapping'] as $member => $column) {
             if ($member != $primary_key) {
                 $columns = "$columns$delim$column";
                 $values = "$values$delim?";
                 $delim = ", ";
             }
         }
-        $sql = (isset($this->{$model::$primary_key})?"REPLACE":"INSERT")." INTO ".Rays::app()->getDBPrefix().$model::$table." ($columns) VALUES ($values)";
+        $sql = (isset($this->{$model['primary_key']})?"REPLACE":"INSERT")." INTO ".Rays::app()->getDBPrefix().$model['table']." ($columns) VALUES ($values)";
         /* Now prepare SQL statement */
         $stmt = RModel::getConnection()->prepare($sql);
         $args = array();
-        foreach ($model::$mapping as $member => $column) {
+        foreach ($model['mapping'] as $member => $column) {
             if ($member != $primary_key) {
                 $args[] = $this->$member;
             }
         }
         $stmt->execute($args);
-        $primary_key = $model::$primary_key;
+        $primary_key = $model['primary_key'];
         if (!isset($this->$primary_key)) {
             $this->$primary_key = RModel::getConnection()->lastInsertId();
         }
@@ -512,9 +525,9 @@ abstract class RModel {
      */
     public function delete()
     {
-        $model = get_called_class();
-        $primary_key = $model::$primary_key;
-        $sql = "DELETE FROM ".Rays::app()->getDBPrefix().$model::$table." WHERE {$model::$mapping[$primary_key]} = {$this->$primary_key}";
+        $model = get_class_vars(get_called_class());
+        $primary_key = $model['primary_key'];
+        $sql = "DELETE FROM ".Rays::app()->getDBPrefix().$model['table']." WHERE {$model['mapping'][$primary_key]} = {$this->$primary_key}";
         RModel::getConnection()->exec($sql);
     }
 
