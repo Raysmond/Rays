@@ -37,7 +37,7 @@ class RModule
     /**
      * @var array the initial parameters/configuration for the module
      */
-    private $_params = [];
+    private $_params = array();
 
     /**
      * @var string|null the base uri of the modules path. For example: "http://localhost/FDUGroup/app/modules"
