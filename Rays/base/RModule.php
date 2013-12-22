@@ -44,6 +44,8 @@ class RModule
      */
     public static $moduleBaseUri = null;
 
+    const MODULE_FILE_EXTENSION = ".module";
+
     public function __construct($params = array())
     {
         if (isset($params['id']))
@@ -200,6 +202,11 @@ class RModule
     public function getName()
     {
         return $this->name;
+    }
+
+    public static function moduleClass($id)
+    {
+        return $id."_module";
     }
 
 }

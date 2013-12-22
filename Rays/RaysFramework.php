@@ -39,12 +39,6 @@ class RaysFramework
     public static $classMap = array();
 
     /**
-     * Module file map
-     * @var array
-     */
-    public static $moduleMap = array();
-
-    /**
      * Auto-import files
      * @var array
      */
@@ -109,10 +103,9 @@ class RaysFramework
      */
     public static function importModule($moduleId)
     {
-        if (!isset(self::$moduleMap[$moduleId])) {
-            $path = self::app()->modulePath . "/" . $moduleId . "/" . $moduleId . RWebApplication::MODULE_FILE_EXTENSION;
+        if (!class_exists(RModule::moduleClass($moduleId))) {
+            $path = self::app()->modulePath . "/$moduleId/$moduleId" . RModule::MODULE_FILE_EXTENSION;
             if (is_file($path) && file_exists($path)) {
-                self::$moduleMap[$moduleId] = $path;
                 require($path);
             } else
                 throw new RException("Module class (" . $moduleId . "_module) file ($path) not exist.");

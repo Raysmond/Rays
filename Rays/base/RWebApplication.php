@@ -17,8 +17,6 @@ class RWebApplication extends RBaseApplication
      */
     public $layout = 'main';
 
-    const MODULE_FILE_EXTENSION = ".module";
-
     /**
      * Whether or not user clean uri
      * For example:
