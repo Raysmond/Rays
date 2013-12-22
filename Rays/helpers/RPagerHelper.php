@@ -24,6 +24,9 @@ class RPagerHelper
     // Current page
     private $curPage;
 
+    // Attributes for pager
+    private $pagerAttributes = [];
+
 
     public $pagerText = array(
         'first' => "First",
@@ -39,8 +42,9 @@ class RPagerHelper
      * @param int $rowsInPage how many rows in a page
      * @param string $url page URL
      * @param int $curPage current page
+     * @param array $pagerAttributes
      */
-    public function __construct($pageId, $rowSum, $rowsInPage = 10, $url = '',$curPage=1)
+    public function __construct($pageId, $rowSum, $rowsInPage = 10, $url = '', $curPage = 1, $pagerAttributes = [])
     {
         $this->pageId = trim($pageId);
         $this->rowSum = $rowSum;
@@ -48,6 +52,9 @@ class RPagerHelper
         $this->url = $url;
         $this->pageSum = ceil($rowSum / $rowsInPage);
         $this->curPage = $curPage;
+        if (!isset($pagerAttributes["class"]))
+            $pagerAttributes["class"] = "pagination";
+        $this->pagerAttributes = $pagerAttributes;
     }
 
     /**
@@ -61,27 +68,27 @@ class RPagerHelper
      */
     public function showPager($showPrev = true, $showNext = true, $showFirst = true, $showLast = true, $pagesViewNum = 4)
     {
-        $pager = '<ul id="pager-'.$this->pageId.'" class="pagination">';
+        $pager = '<ul id="pager-' . $this->pageId . '" ' . RHtmlHelper::parseAttributes($this->pagerAttributes) . ' >';
         $isOdd = $pagesViewNum % 2 > 0 ? true : false;
         $curPage = 1;
         if (isset($_GET[$this->pageId]))
             $curPage = $_GET[$this->pageId];
 
         $appendStr = '?';
-        if(strpos($this->url,'?')>0)
+        if (strpos($this->url, '?') > 0)
             $appendStr = '&&';
 
-        $pageSize = "&&pagesize=".$this->rowsInPage;
+        $pageSize = "&&pagesize=" . $this->rowsInPage;
 
-        $prevStyle = ($curPage > 1) ? '': ' disabled';
-        $nextStyle = ($curPage < $this->pageSum) ? '': ' disabled';
+        $prevStyle = ($curPage > 1) ? '' : ' disabled';
+        $nextStyle = ($curPage < $this->pageSum) ? '' : ' disabled';
 
         if ($showFirst) {
-            $pager .= '<li class="pager-item' . $prevStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=1'.$pageSize.'">' . $this->pagerText['first'] . '</a></li>';
+            $pager .= '<li' . $prevStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=1' . $pageSize . '">' . $this->pagerText['first'] . '</a></li>';
         }
         if ($showPrev) {
             $num = $curPage == 1 ? 1 : ($curPage - 1);
-            $pager .= '<li class="pager-item' . $prevStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=' . $num.$pageSize . '">' . $this->pagerText['prev'] . '</a></li>';
+            $pager .= '<li' . $prevStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=' . $num . $pageSize . '">' . $this->pagerText['prev'] . '</a></li>';
         }
 
         $current = $curPage;
@@ -93,25 +100,26 @@ class RPagerHelper
             $beginPage = $endPage = 1;
         }
         if ($beginPage > 1) {
-            $pager .= '<li class="pager-item"><a href="' . $this->url . $appendStr . $this->pageId . '=' . ($beginPage - 1).$pageSize . '">...</a></li>';
+            $pager .= '<li><a href="' . $this->url . $appendStr . $this->pageId . '=' . ($beginPage - 1) . $pageSize . '">...</a></li>';
         }
         for ($i = $beginPage; $i <= $endPage; $i++) {
-            $pager .= '<li class="pager-item '.(($i==$this->curPage)?'active':'').'"><a href="' . $this->url . $appendStr . $this->pageId . '=' . ($i).$pageSize . '">' . ($i) . '</a></li>';
+            $active = ($i == $this->curPage) ? 'active' : '';
+            $pager .= '<li ' . (($i == $this->curPage) ? 'active' : '') . '"><a class="'.$active.'" href="' . $this->url . $appendStr . $this->pageId . '=' . ($i) . $pageSize . '">' . ($i) . '</a></li>';
         }
         if ($endPage < $this->pageSum) {
-            $pager .= '<li class="pager-item"><a href="' . $this->url . $appendStr . $this->pageId . '=' . ($endPage + 1) .$pageSize. '">...</a></li>';
+            $pager .= '<li><a href="' . $this->url . $appendStr . $this->pageId . '=' . ($endPage + 1) . $pageSize . '">...</a></li>';
         }
 
         if ($showNext) {
             $num = ($curPage == $this->pageSum ? $this->pageSum : ($curPage + 1));
-            $pager .= '<li class="pager-item' . $nextStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=' . $num .$pageSize. '">' . $this->pagerText['next'] . '</a></li>';
+            $pager .= '<li' . $nextStyle . '"><a '.$nextStyle.' href="' . $this->url . $appendStr . $this->pageId . '=' . $num . $pageSize . '">' . $this->pagerText['next'] . '</a></li>';
         }
 
 
         if ($showLast) {
-            $pager .= '<li class="pager-item' . $nextStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=' . $this->pageSum .$pageSize. '">' . $this->pagerText['last'] . '</a></li>';
+            $pager .= '<li' . $nextStyle . '"><a '.$nextStyle.' href="' . $this->url . $appendStr . $this->pageId . '=' . $this->pageSum . $pageSize . '">' . $this->pagerText['last'] . '</a></li>';
         }
-        $pager.="</ul>";
+        $pager .= "</ul>";
         return $pager;
     }
 }

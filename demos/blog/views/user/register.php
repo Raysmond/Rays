@@ -8,7 +8,7 @@ if(isset($errors) && !empty($errors)){
     echo '</div>';
 }
 ?>
-<?=RFormHelper::openForm("user/register")?>
+<?=RFormHelper::openForm("user/register",['class'=>'vform'])?>
 
 <?=RFormHelper::label("Username","name")?>
 <?=RFormHelper::input("name",isset($form["name"])?$form["name"]:"")?>
@@ -30,6 +30,6 @@ if(isset($errors) && !empty($errors)){
 
 <br/>
 
-<?=RFormHelper::input(["value"=>"Register","type"=>"submit"])?>
+<button type="submit">Register</button>
 
 <?=RFormHelper::endForm()?>

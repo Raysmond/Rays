@@ -1,5 +1,5 @@
 <h1>Contact</h1>
-<?=RFormHelper::openForm("site/contact")?>
+<?=RFormHelper::openForm("site/contact",['class'=>'vform','style'=>'max-width: 600px;'])?>
 <?=RFormHelper::label("Your name","name")?>
 <?=RFormHelper::input("name",isset($form["name"])?$form["name"]:"")?>
 
@@ -14,5 +14,5 @@
 <textarea name="content" cols="70" rows="7"><?=(isset($form["content"])?$form['content']:"")?></textarea>
 
 <br/>
-<?=RFormHelper::input(array('type'=>'submit','value'=>'Save'))?>
+<button type="submit">Save</button>
 <?=RFormHelper::endForm()?>

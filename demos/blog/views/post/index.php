@@ -1,6 +1,6 @@
 <h1>My posts</h1>
 <div style="margin-bottom: 20px;">
-    <?= RHtmlHelper::linkAction("post", "New post", "new") ?> &nbsp;
+    <a href="<?=RHtmlHelper::siteUrl("post/new")?>"><button>New post</button></a>
 </div>
 
 <div class="post-list">

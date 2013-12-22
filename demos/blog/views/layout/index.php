@@ -63,6 +63,9 @@
                 <hr>
                 © Copyright <?= Rays::app()->getName() ?> 2013, All Rights Reserved. by <a
                     href="http://raysmond.com">Raysmond</a>
+                    <span style="float: right;"> Powered by <a href="https://github.com/Raysmond/Rays">Rays</a> framework!</span>
+                <br/>
+                <span style="color: gray;">Page generated in <?=sprintf("%.2f", (microtime(true)-Rays::$startTime) * 1000); ?> ms</span>
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@ if(isset($errors) && !empty($errors)){
     echo '</div>';
 }
 ?>
-<?=RFormHelper::openForm("user/login")?>
+<?=RFormHelper::openForm("user/login",array('class'=>'vform'))?>
 
 <?=RFormHelper::label("Username","name")?>
 <?=RFormHelper::input("name",isset($form)?$form["name"]:"")?>
@@ -19,6 +19,6 @@ if(isset($errors) && !empty($errors)){
 <?=RFormHelper::input(['type'=>"password","name"=>"password"],isset($form)?$form["password"]:"")?>
 
 <br/>
-<?=RFormHelper::input(["value"=>"Login","type"=>"submit"])?>
+<button type="submit">Login</button>
 
 <?=RFormHelper::endForm()?>

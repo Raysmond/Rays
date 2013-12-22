@@ -6,25 +6,32 @@ if (isset($errors)) {
 ?>
 
 <?php
-if (!isset($post))
-    echo RFormHelper::openForm("post/new");
-else
-    echo RFormHelper::openForm("post/edit/" . $post->id);
+if (!isset($post)){
+    echo RFormHelper::openForm("post/new", ['class'=>'vform','style'=>'max-width: 600px;']);
+    $self->setHeaderTitle("New post");
+}
+else{
+    echo RFormHelper::openForm("post/edit/" . $post->id,['class'=>'vform','style'=>'max-width: 600px;']);
+    $self->setHeaderTitle("Edit : ".$post->title);
+}
 ?>
 
 <?=(isset($post)? RFormHelper::hidden("id", $post->id) : "")?>
 
-<?= RFormHelper::label("Title", "title") ?>
-<?= RFormHelper::input("title", isset($form['title']) ? $form["title"] : (isset($post) ? $post->title : "")) ?>
+<?= RFormHelper::input([
+    'name'=>'title',
+    'value'=>isset($form['title']) ? $form["title"] : (isset($post) ? $post->title : ""),
+    'placeholder'=>'Post title']
+) ?>
 
 <br/>
 
 <?= RFormHelper::label("Content", "content") ?>
 <br/>
 
-<textarea cols="70" rows="7" name="content"><?= (isset($form["content"]) ? $form["content"] : (isset($post) ? $post->content : "")) ?></textarea>
+<textarea style="height: 240px;" name="content" placeholder="Post content"><?= (isset($form["content"]) ? $form["content"] : (isset($post) ? $post->content : "")) ?></textarea>
 
 <br/>
-<?= RFormHelper::input(["value" => "Save", "type" => "submit"]) ?>
+<button type="submit">Save</button>
 
 <?= RFormHelper::endForm() ?>
