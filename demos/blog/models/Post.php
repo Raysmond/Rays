@@ -31,12 +31,4 @@ class Post extends RModel
         "title" => array("label" => "Title", "rules" => "trim|required|min_length[5]|max_length[255]"),
         "content" => array("label" => "Content", "rules" => "trim|required|max_length[65535]")
     );
-
-    public function save()
-    {
-        if (!isset($this->createdTime) && !isset($this->id)) {
-            $this->createdTime = date('Y-m-d H:i:s');
-        }
-        return parent::save();
-    }
 } 

@@ -45,6 +45,11 @@ class PostController extends RController
 
         $data = array('post' => $post, 'form' => $_POST);
         if (Rays::isPost()) {
+            $protected = array("id", "uid");
+            foreach ($_POST as $key => $value) {
+                if (in_array($key, $protected))
+                    unset($_POST[$key]);
+            }
             $post->assign($_POST);
             if ($post->validate_save("edit") !== false) {
                 $this->flash("message", "Post edit successfully.");
