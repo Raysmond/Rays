@@ -93,7 +93,7 @@ class RController
     {
         $output = RView::renderData($this, $this->getViewFile($view), $data, true);
         $layout = $this->getLayoutFile($this->layout);
-        return RView::renderFile($this, $layout, ['content' => $output], $return);
+        return RView::renderFile($this, $layout, array('content' => $output), $return);
     }
 
     /**
@@ -105,7 +105,7 @@ class RController
     public function renderContent($content = '', $return = false)
     {
         $layout = $this->getLayoutFile($this->layout);
-        return RView::renderFile($this, $layout, ['content' => $content], $return);
+        return RView::renderFile($this, $layout, array('content'=> $content), $return);
     }
 
     /**
@@ -184,7 +184,7 @@ class RController
         $action = $this->getCurrentAction();
         if (!empty($this->access)) {
             foreach ($this->access as $_authority => $actions) {
-                $actions = (!is_array($actions)) ? [$actions] : $actions;
+                $actions = (!is_array($actions)) ? array($actions) : $actions;
                 if (in_array($action, $actions))
                     $authority = $_authority;
             }

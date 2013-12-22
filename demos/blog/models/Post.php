@@ -23,7 +23,7 @@ class Post extends Model
     );
 
     public static $relation = array(
-        'user' => ['User', "[uid] = [User.id]"]
+        'user' => array('User', "[uid] = [User.id]")
     );
 
     public static $rules = array(

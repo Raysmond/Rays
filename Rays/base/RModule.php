@@ -57,12 +57,12 @@ class RModule
 
     public static function getModuleBasePath()
     {
-        if (static::$moduleBaseUri === null) {
+        if (self::$moduleBaseUri === null) {
             $basePath = substr(Rays::app()->getBasePath(), 1);
             $pos = strpos(Rays::app()->modulePath, $basePath) + strlen($basePath) + 1;
-            static::$moduleBaseUri = Rays::app()->getBaseUrl() . '/' . substr(Rays::app()->modulePath, $pos);
+            self::$moduleBaseUri = Rays::app()->getBaseUrl() . '/' . substr(Rays::app()->modulePath, $pos);
         }
-        return static::$moduleBaseUri;
+        return self::$moduleBaseUri;
     }
 
     /**
@@ -116,7 +116,7 @@ class RModule
      */
     public function getModulePath()
     {
-        return static::getModuleBasePath() . '/' . $this->getId();
+        return self::getModuleBasePath() . '/' . $this->getId();
     }
 
     /**

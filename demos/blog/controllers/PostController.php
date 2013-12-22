@@ -29,7 +29,7 @@ class PostController extends RController
             Rays::app()->page404("Post not found!");
         }
 
-        $this->render("view", ['post' => $post]);
+        $this->render("view", array('post' => $post));
     }
 
     public function actionEdit($pid)
@@ -43,7 +43,7 @@ class PostController extends RController
             $this->redirectAction("post", "view", $post->id);
         }
 
-        $data = ['post' => $post, 'form' => $_POST];
+        $data = array('post' => $post, 'form' => $_POST);
         if (Rays::isPost()) {
             $post->assign($_POST);
             if ($post->validate_save("edit") !== false) {
@@ -70,7 +70,7 @@ class PostController extends RController
             $this->redirectAction("post", "view", $post->id);
         }
 
-        $this->render("edit", ['isNew' => true]);
+        $this->render("edit", array('isNew' => true));
     }
 
     public function actionDelete($postId)

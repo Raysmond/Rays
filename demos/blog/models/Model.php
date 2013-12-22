@@ -8,26 +8,27 @@
 
 class Model extends RModel
 {
-    public static $rules = [];
+    public static $rules = array();
     public static $primary_key = "id";
     public static $table = '';
-    public static $relation = [];
-    public static $mapping = [];
-    private $errors = [];
+    public static $relation = array();
+    public static $mapping = array();
+    private $errors = array();
 
     /**
      * Support massive data assignments
      * @param array $assignments
      */
-    public function __construct($assignments = [])
+    public function __construct($assignments = array())
     {
         $this->assign($assignments);
     }
 
-    public function assign($assignments = [])
+    public function assign($assignments = array())
     {
         if (!empty($assignments)) {
-            foreach ($this::$mapping as $objCol => $dbCol) {
+            $class = get_called_class();
+            foreach ($class::$mapping as $objCol => $dbCol) {
                 if (isset($assignments[$objCol])) {
                     $this->$objCol = $assignments[$objCol];
                 }
@@ -46,7 +47,7 @@ class Model extends RModel
         if ($apply === '') {
             return $class::$rules;
         }
-        $rules = [];
+        $rules = array();
         foreach ($class::$rules as $field => $rule) {
             $rule["field"] = $field;
             if (!isset($rule['apply'])) {
@@ -100,8 +101,9 @@ class Model extends RModel
      */
     public function getDataArray()
     {
-        $data = [];
-        foreach ($this::$mapping as $objCol => $dbCol) {
+        $data = array();
+        $class = get_called_class();
+        foreach ($class::$mapping as $objCol => $dbCol) {
             $data[$objCol] = $this->$objCol;
         }
         return $data;
@@ -113,7 +115,7 @@ class Model extends RModel
      * @param array $args
      * @return mixed
      */
-    public function deleteAll($constraint = "", $args = [])
+    public function deleteAll($constraint = "", $args = array())
     {
         return self::where($constraint, $args)->delete();
     }

@@ -46,7 +46,7 @@ class User extends Model implements RAuthProvider
     public static function getRegisterRules()
     {
         $rules = User::getRules("register");
-        $rules[] = ["field" => "password-confirm", "label" => "Password confirm", "rules" => "trim|required|min_length[4]|max_length[255]|equals[password]"];
+        $rules[] = array("field" => "password-confirm", "label" => "Password confirm", "rules" => "trim|required|min_length[4]|max_length[255]|equals[password]");
         return $rules;
     }
 

@@ -7,11 +7,11 @@ if (isset($errors)) {
 
 <?php
 if (!isset($post)){
-    echo RFormHelper::openForm("post/new", ['class'=>'vform','style'=>'max-width: 600px;']);
+    echo RFormHelper::openForm("post/new", array('class'=>'vform','style'=>'max-width: 600px;'));
     $self->setHeaderTitle("New post");
 }
 else{
-    echo RFormHelper::openForm("post/edit/" . $post->id,['class'=>'vform','style'=>'max-width: 600px;']);
+    echo RFormHelper::openForm("post/edit/" . $post->id,array('class'=>'vform','style'=>'max-width: 600px;'));
     $self->setHeaderTitle("Edit : ".$post->title);
 }
 ?>

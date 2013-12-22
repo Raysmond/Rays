@@ -62,7 +62,7 @@ class RaysFramework
      */
     public static function app()
     {
-        return static::$app;
+        return self::$app;
     }
 
     /**
@@ -72,8 +72,8 @@ class RaysFramework
      */
     public static function newApp($config)
     {
-        static::$startTime = microtime(true);
-        static::$logger = new RLog();
+        self::$startTime = microtime(true);
+        self::$logger = new RLog();
 
         return new RWebApplication($config);
     }
@@ -84,9 +84,9 @@ class RaysFramework
      */
     public static function setApp($_app)
     {
-        if (static::$app === null && $_app != null) {
-            static::$app = $_app;
-            static::initPath();
+        if (self::$app === null && $_app != null) {
+            self::$app = $_app;
+            self::initPath();
         } else {
             die("Application not found!");
         }
@@ -97,9 +97,9 @@ class RaysFramework
      */
     public static function initPath()
     {
-        static::$_includePaths[] = static::app()->controllerPath;
-        static::$_includePaths[] = static::app()->modelPath;
-        static::$_includePaths[] = static::app()->modulePath;
+        self::$_includePaths[] = self::app()->controllerPath;
+        self::$_includePaths[] = self::app()->modelPath;
+        self::$_includePaths[] = self::app()->modulePath;
     }
 
     /**
@@ -110,7 +110,7 @@ class RaysFramework
     public static function importModule($moduleId)
     {
         if (!isset(self::$moduleMap[$moduleId])) {
-            $path = static::app()->modulePath . "/" . $moduleId . "/" . $moduleId . RWebApplication::MODULE_FILE_EXTENSION;
+            $path = self::app()->modulePath . "/" . $moduleId . "/" . $moduleId . RWebApplication::MODULE_FILE_EXTENSION;
             if (is_file($path) && file_exists($path)) {
                 self::$moduleMap[$moduleId] = $path;
                 require($path);
@@ -126,7 +126,7 @@ class RaysFramework
     public static function autoImports($imports = array())
     {
         foreach ($imports as $import) {
-            static::import($import);
+            self::import($import);
         }
     }
 
@@ -144,7 +144,7 @@ class RaysFramework
         $files = str_replace('.', '/', $files);
         if ($files) {
             $arr = explode('/', $files);
-            $baseDir = ($arr[0] == "system") ? SYSTEM_PATH : static::app()->getBaseDir();
+            $baseDir = ($arr[0] == "system") ? SYSTEM_PATH : self::app()->getBaseDir();
             if ($arr[0] == "system")
                 $files = substr($files, 7);
             if ($arr[0] == "application")
@@ -153,10 +153,10 @@ class RaysFramework
             $fileName = end($arr);
             unset($arr);
             if ($fileName !== '*') {
-                if (!isset(static::$imports[$files])) {
+                if (!isset(self::$imports[$files])) {
                     $path = $baseDir . '/' . $files . '.php';
                     if (is_file($path)) {
-                        static::$imports[$files] = $path;
+                        self::$imports[$files] = $path;
                         require($path);
                     }
                 }
@@ -170,8 +170,8 @@ class RaysFramework
                             if (end(explode('.', $file)) === 'php') {
                                 $file_key = $files . '/' . $file;
                                 $path = $dir . '/' . $file;
-                                if (!isset(static::$imports[$file_key])) {
-                                    static::$imports[$file_key] = $path;
+                                if (!isset(self::$imports[$file_key])) {
+                                    self::$imports[$file_key] = $path;
                                     require($path);
                                 }
                             }
@@ -212,7 +212,7 @@ class RaysFramework
      */
     public static function log($message, $level = RLog::LEVEL_INFO, $category = 'system')
     {
-        static::$logger->log($message, $level, $category);
+        self::$logger->log($message, $level, $category);
     }
 
     /**
@@ -221,7 +221,7 @@ class RaysFramework
      */
     public static function logger()
     {
-        return static::$logger;
+        return self::$logger;
     }
 }
 

@@ -63,7 +63,7 @@ class RImageHelper
      */
     public static function updateStyle($src, $options = array())
     {
-        return static::styleSrc($src, $options, true);
+        return self::styleSrc($src, $options, true);
     }
 
     public static function getExtension($filename)
@@ -82,7 +82,7 @@ class RImageHelper
 
 class RImage
 {
-    private static $extensions = ['jpg', 'jpeg','png', 'gif', 'bmp'];
+    private static $extensions = array('jpg', 'jpeg','png', 'gif', 'bmp');
 
     public function __construct()
     {

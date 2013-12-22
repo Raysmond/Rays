@@ -21,7 +21,7 @@ class SiteController extends RController
         $posts = Post::find()->join("user")->order_desc("id")->range(($page - 1) * $pageSize, $pageSize);
 
         // user pager helper to generate pager HTML
-        $pager = new RPagerHelper("page", $count, $pageSize, RHtmlHelper::siteUrl("site/index"), $page, ['class'=>'pagin']);
+        $pager = new RPagerHelper("page", $count, $pageSize, RHtmlHelper::siteUrl("site/index"), $page, array('class'=>'pagin'));
 
         $data = array(
             'title' => Rays::app()->getName(),

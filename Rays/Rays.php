@@ -15,7 +15,7 @@ class Rays extends RaysFramework{
      */
     public static function user()
     {
-        return static::app()->getLoginUser();
+        return self::app()->getLoginUser();
     }
 
     /**
@@ -24,7 +24,7 @@ class Rays extends RaysFramework{
      */
     public static function isLogin()
     {
-        return static::app()->isUserLogin();
+        return self::app()->isUserLogin();
     }
 
     /**
@@ -33,7 +33,7 @@ class Rays extends RaysFramework{
      */
     public static function router()
     {
-        return static::app()->getRouter();
+        return self::app()->getRouter();
     }
 
     /**
@@ -42,7 +42,7 @@ class Rays extends RaysFramework{
      */
     public static function httpRequest()
     {
-        return static::app()->getHttpRequest();
+        return self::app()->getHttpRequest();
     }
 
     /**
@@ -51,7 +51,7 @@ class Rays extends RaysFramework{
      */
     public static function js($js)
     {
-        static::app()->getClientManager()->registerScript($js);
+        self::app()->getClientManager()->registerScript($js);
     }
 
     /**
@@ -60,7 +60,7 @@ class Rays extends RaysFramework{
      */
     public static function css($css)
     {
-        static::app()->getClientManager()->registerCss($css);
+        self::app()->getClientManager()->registerCss($css);
     }
 
     /**
@@ -69,7 +69,7 @@ class Rays extends RaysFramework{
      */
     public static function isPost()
     {
-        return static::app()->getHttpRequest()->isPostRequest();
+        return self::app()->getHttpRequest()->isPostRequest();
     }
 
     /**
@@ -78,7 +78,7 @@ class Rays extends RaysFramework{
      */
     public static function isAjax()
     {
-        return static::app()->getHttpRequest()->isAjaxRequest();
+        return self::app()->getHttpRequest()->isAjaxRequest();
     }
 
     /**
@@ -87,7 +87,7 @@ class Rays extends RaysFramework{
      */
     public static function baseUrl()
     {
-        return static::app()->getBaseUrl();
+        return self::app()->getBaseUrl();
     }
 
     /**
@@ -96,7 +96,7 @@ class Rays extends RaysFramework{
      */
     public static function uri()
     {
-        return static::app()->getHttpRequest()->getRequestUriInfo();
+        return self::app()->getHttpRequest()->getRequestUriInfo();
     }
 
     /**
@@ -105,7 +105,7 @@ class Rays extends RaysFramework{
      */
     public static function referrerUri()
     {
-        return static::app()->getHttpRequest()->getUrlReferrer();
+        return self::app()->getHttpRequest()->getUrlReferrer();
     }
 
     /**
@@ -116,7 +116,7 @@ class Rays extends RaysFramework{
      */
     public static function getParam($name,$default)
     {
-        return static::app()->getHttpRequest()->getParam($name,$default);
+        return self::app()->getHttpRequest()->getParam($name,$default);
     }
 
     /**
