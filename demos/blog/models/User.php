@@ -6,7 +6,7 @@
  * @created: 2013-12-19
  */
 
-class User extends Model implements RAuthProvider
+class User extends RModel implements RAuthProvider
 {
 
     public $id, $role, $name, $email, $password;

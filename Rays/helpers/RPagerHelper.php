@@ -25,7 +25,7 @@ class RPagerHelper
     private $curPage;
 
     // Attributes for pager
-    private $pagerAttributes = [];
+    private $pagerAttributes = array();
 
 
     public $pagerText = array(
@@ -44,7 +44,7 @@ class RPagerHelper
      * @param int $curPage current page
      * @param array $pagerAttributes
      */
-    public function __construct($pageId, $rowSum, $rowsInPage = 10, $url = '', $curPage = 1, $pagerAttributes = [])
+    public function __construct($pageId, $rowSum, $rowsInPage = 10, $url = '', $curPage = 1, $pagerAttributes = array())
     {
         $this->pageId = trim($pageId);
         $this->rowSum = $rowSum;

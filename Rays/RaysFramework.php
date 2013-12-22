@@ -229,4 +229,14 @@ spl_autoload_register(array('RaysFramework', 'autoload'));
 
 set_exception_handler(array("RExceptionHandler", "handleException"));
 
+if ( !function_exists( 'get_called_class' ) ) {
+    function get_called_class ()
+    {
+        $t = debug_backtrace(); $t = $t[0];
+        if ( isset( $t['object'] ) && $t['object'] instanceof $t['class'] )
+            return get_class( $t['object'] );
+        return false;
+    }
+}
+
 header('Content-Type: text/html; charset=UTF-8');

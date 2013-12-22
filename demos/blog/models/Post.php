@@ -6,7 +6,7 @@
  * @created: 2013-12-20
  */
 
-class Post extends Model
+class Post extends RModel
 {
     public $user;
     public $id, $uid, $title, $content, $createdTime;
