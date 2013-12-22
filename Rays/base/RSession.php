@@ -1,10 +1,10 @@
 <?php
 /**
- * Class RSessionManager
+ * Class RSession
  *
  * @author: Raysmond
  */
-class RSessionManager
+class RSession
 {
 
     public $prefix = "RAYS_SESSION";

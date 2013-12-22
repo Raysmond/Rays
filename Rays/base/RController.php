@@ -256,7 +256,7 @@ class RController
      */
     public function addCss($cssPath)
     {
-        Rays::app()->getClientManager()->registerCss($cssPath);
+        Rays::app()->client()->registerCss($cssPath);
     }
 
     /**
@@ -265,7 +265,7 @@ class RController
      */
     public function addJs($jsPath)
     {
-        Rays::app()->getClientManager()->registerScript($jsPath);
+        Rays::app()->client()->registerScript($jsPath);
     }
 
     /**
@@ -275,7 +275,7 @@ class RController
     public function setHeaderTitle($title)
     {
         $this->_headerTitle = $title;
-        Rays::app()->getClientManager()->setHeaderTitle($title);
+        Rays::app()->client()->setHeaderTitle($title);
     }
 
     public function getHeaderTitle()
@@ -391,7 +391,7 @@ class RController
      */
     public function getSession()
     {
-        return Rays::app()->getHttpSession();
+        return Rays::app()->session();
     }
 
     /**

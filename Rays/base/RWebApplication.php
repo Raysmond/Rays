@@ -70,12 +70,12 @@ class RWebApplication extends RBaseApplication
     /**
      * @var RClient client manager for CSS and JavaScript
      */
-    public $clientManager;
+    public $client;
 
     /**
-     * @var RSessionManager the session manager
+     * @var RSession the session manager
      */
-    public $httpSession;
+    public $session;
 
     /**
      * Current user who is accessing the web site
@@ -131,7 +131,7 @@ class RWebApplication extends RBaseApplication
     {
         parent::run();
 
-        $this->clientManager = new RClient();
+        $this->client = new RClient();
         $this->httpRequestHandler = new RHttpRequest();
         $this->router = new RRouter();
 
@@ -225,21 +225,21 @@ class RWebApplication extends RBaseApplication
      * Get client manager
      * @return RClient
      */
-    public function getClientManager()
+    public function client()
     {
-        return $this->clientManager;
+        return $this->client;
     }
 
     /**
      * Get session manager
-     * @return RSessionManager
+     * @return RSession
      */
-    public function getHttpSession()
+    public function session()
     {
-        if (!isset($this->httpSession)) {
-            $this->httpSession = new RSessionManager();
+        if (!isset($this->session)) {
+            $this->session = new RSession();
         }
-        return $this->httpSession;
+        return $this->session;
     }
 
     public function getAuth()
@@ -260,7 +260,7 @@ class RWebApplication extends RBaseApplication
      * Whether the user has login
      * @return bool
      */
-    public function isUserLogin()
+    public function isLogin()
     {
         return $this->_auth->isLogin();
     }

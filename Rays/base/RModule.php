@@ -139,7 +139,7 @@ class RModule
      */
     public function addCss($cssPath)
     {
-        Rays::app()->getClientManager()->registerCss($cssPath);
+        Rays::app()->client()->registerCss($cssPath);
     }
 
     /**
@@ -148,7 +148,7 @@ class RModule
      */
     public function addJs($jsPath)
     {
-        Rays::app()->getClientManager()->registerScript($jsPath);
+        Rays::app()->client()->registerScript($jsPath);
     }
 
     /**

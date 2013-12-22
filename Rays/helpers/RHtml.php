@@ -126,7 +126,7 @@ class RHtml
 
     public static function showFlashMessages($return = true)
     {
-        $session = Rays::app()->getHttpSession();
+        $session = Rays::app()->session();
         $messages = '';
         if (($message = $session->getFlash("message")) != false) {
             //print_r($message);

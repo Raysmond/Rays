@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title><?php echo RHtml::encode(Rays::app()->getClientManager()->getHeaderTitle()); ?></title>
+    <title><?php echo RHtml::encode(Rays::app()->client()->getHeaderTitle()); ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="language" content="en"/>
     <meta name="description" content=""/>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>/public/css/main.css"/>
     <?php
     // link custom css files
-    echo RHtml::linkCssArray(Rays::app()->getClientManager()->css);
+    echo RHtml::linkCssArray(Rays::app()->client()->css);
     ?>
     <script type="text/javascript" src="<?= $baseUrl ?>/public/js/main.js"></script>
 
@@ -77,7 +77,7 @@
 </div>
 <?php
 // link custom script files
-echo RHtml::linkScriptArray(Rays::app()->getClientManager()->script);
+echo RHtml::linkScriptArray(Rays::app()->client()->script);
 ?>
 </body>
 </html>

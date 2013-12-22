@@ -24,7 +24,7 @@ class Rays extends RaysFramework{
      */
     public static function isLogin()
     {
-        return self::app()->isUserLogin();
+        return self::app()->isLogin();
     }
 
     /**
@@ -51,7 +51,7 @@ class Rays extends RaysFramework{
      */
     public static function js($js)
     {
-        self::app()->getClientManager()->registerScript($js);
+        self::app()->client()->registerScript($js);
     }
 
     /**
@@ -60,7 +60,7 @@ class Rays extends RaysFramework{
      */
     public static function css($css)
     {
-        self::app()->getClientManager()->registerCss($css);
+        self::app()->client()->registerCss($css);
     }
 
     /**

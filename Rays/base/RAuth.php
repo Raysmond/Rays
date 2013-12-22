@@ -35,7 +35,7 @@ class RAuth
     public function getIdentifier()
     {
         if (!isset($this->_identifier)) {
-            $_id = Rays::app()->getHttpSession()->get(self::AUTH_KEY);
+            $_id = Rays::app()->session()->get(self::AUTH_KEY);
             if ($_id != false)
                 $this->_identifier = $_id;
         }
@@ -101,7 +101,7 @@ class RAuth
     {
         $identifier = $user->identifier();
         if (isset($identifier) && !empty($identifier)) {
-            Rays::app()->getHttpSession()->set(self::AUTH_KEY, $user->identifier());
+            Rays::app()->session()->set(self::AUTH_KEY, $user->identifier());
             $this->_identifier = $identifier;
         }
     }
@@ -112,7 +112,7 @@ class RAuth
     public function logout()
     {
         if ($this->isLogin()) {
-            Rays::app()->getHttpSession()->deleteSession(self::AUTH_KEY);
+            Rays::app()->session()->deleteSession(self::AUTH_KEY);
         }
     }
 
@@ -122,7 +122,7 @@ class RAuth
      */
     public function isLogin()
     {
-        return Rays::app()->getHttpSession()->get(self::AUTH_KEY) !== false;
+        return Rays::app()->session()->get(self::AUTH_KEY) !== false;
     }
 
     /**
