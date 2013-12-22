@@ -1,11 +1,11 @@
 <?php
 /**
- * RHtmlHelper class file.
+ * RHtml helper class file.
  *
  * @author: Raysmond
  */
 
-class RHtmlHelper
+class RHtml
 {
 
     public static function encode($content)
@@ -161,7 +161,7 @@ class RHtmlHelper
         $html = '';
         foreach ($defaults as $key => $val) {
             if (isset($defaults['_encode']) && $defaults['_encode'] != false)
-                $html .= $key . '="' . RHtmlHelper::encode($val) . '" ';
+                $html .= $key . '="' . RHtml::encode($val) . '" ';
             else $html .= $key . '="' . ($val) . '" ';
         }
         return $html;

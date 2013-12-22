@@ -25,7 +25,7 @@ class PostController extends RController
 
         $pager = null;
         if ($count > $pageSize) {
-            $pager = new RPagerHelper("page", $count, $pageSize, RHtmlHelper::siteUrl("post/index"), $page, array('class' => "pagin"));
+            $pager = new RPager("page", $count, $pageSize, RHtml::siteUrl("post/index"), $page, array('class' => "pagin"));
             $pager = $pager->showPager();
         }
 

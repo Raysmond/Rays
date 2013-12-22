@@ -4,32 +4,32 @@ $self->setHeaderTitle("Register"); ?>
 <?php
 if(isset($errors) && !empty($errors)){
     echo '<div>';
-    RHtmlHelper::showValidationErrors($errors);
+    RHtml::showValidationErrors($errors);
     echo '</div>';
 }
 ?>
-<?=RFormHelper::openForm("user/register",array('class'=>'vform'))?>
+<?=RForm::openForm("user/register",array('class'=>'vform'))?>
 
-<?=RFormHelper::label("Username","name")?>
-<?=RFormHelper::input("name",isset($form["name"])?$form["name"]:"")?>
-
-<br/>
-
-<?=RFormHelper::label("Email","email")?>
-<?=RFormHelper::input("email",isset($form["email"])?$form["email"]:"")?>
+<?=RForm::label("Username","name")?>
+<?=RForm::input("name",isset($form["name"])?$form["name"]:"")?>
 
 <br/>
 
-<?=RFormHelper::label("Password","password")?>
-<?=RFormHelper::input(array('type'=>"password","name"=>"password"),isset($form["password"])?$form["password"]:"")?>
+<?=RForm::label("Email","email")?>
+<?=RForm::input("email",isset($form["email"])?$form["email"]:"")?>
 
 <br/>
 
-<?=RFormHelper::label("Password confirm","password-confirm")?>
-<?=RFormHelper::input(array('type'=>"password","name"=>"password-confirm"),isset($form["password-confirm"])?$form["password-confirm"]:"")?>
+<?=RForm::label("Password","password")?>
+<?=RForm::input(array('type'=>"password","name"=>"password"),isset($form["password"])?$form["password"]:"")?>
+
+<br/>
+
+<?=RForm::label("Password confirm","password-confirm")?>
+<?=RForm::input(array('type'=>"password","name"=>"password-confirm"),isset($form["password-confirm"])?$form["password-confirm"]:"")?>
 
 <br/>
 
 <button type="submit">Register</button>
 
-<?=RFormHelper::endForm()?>
+<?=RForm::endForm()?>

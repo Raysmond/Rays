@@ -1,17 +1,17 @@
 <?php
 /**
- * RFormHelper class files
+ * RForm class files
  *
  * @author: Raysmond
  */
 
-class RFormHelper
+class RForm
 {
 
     public static function openForm($action = '', $attributes = '')
     {
         if ($action && strpos("://", $action) === false) {
-            $action = RHtmlHelper::siteUrl($action);
+            $action = RHtml::siteUrl($action);
         }
         $defaults = array('method' => 'post');
 
@@ -42,7 +42,7 @@ class RFormHelper
     public static function label($text = '', $forId = '', $attributes = '')
     {
         $html = '<label ' . (($forId != '') ? 'for="' . $forId . '" ' : '');
-        return $html . self::parseAttributes($attributes) . '>' . RHtmlHelper::encode($text) . '</label>';
+        return $html . self::parseAttributes($attributes) . '>' . RHtml::encode($text) . '</label>';
     }
 
     public static function button($data = '', $value = '')
@@ -89,7 +89,7 @@ class RFormHelper
         }
         $html = '';
         foreach ($defaults as $key => $val) {
-            $html .= $key . '="' . RHtmlHelper::encode($val) . '" ';
+            $html .= $key . '="' . RHtml::encode($val) . '" ';
         }
         return $html;
     }

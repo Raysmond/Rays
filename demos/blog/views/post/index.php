@@ -1,6 +1,6 @@
 <h1>My posts</h1>
 <div style="margin-bottom: 20px;">
-    <a href="<?= RHtmlHelper::siteUrl("post/new") ?>">
+    <a href="<?= RHtml::siteUrl("post/new") ?>">
         <button>New post</button>
     </a>
 </div>
@@ -10,7 +10,7 @@
         foreach ($posts as $post) {
             ?>
             <div class="post-item">
-                <h2 class="post-title"><?= RHtmlHelper::linkAction("post", $post->title, "view", $post->id) ?></h2>
+                <h2 class="post-title"><?= RHtml::linkAction("post", $post->title, "view", $post->id) ?></h2>
 
                 <div class="post-meta">Post at <?= $post->createdTime ?></div>
                 <div class="post-content"><?= $post->content ?></div>

@@ -597,7 +597,7 @@ abstract class RModel {
     {
         $rules = self::getRules($applyRule);
         if (!empty($rules)) {
-            $validation = new RFormValidationHelper($rules);
+            $validation = new RValidation($rules);
             if (!$validation->run($this->getDataArray())) {
                 $this->errors = $validation->getErrors();
                 return false;

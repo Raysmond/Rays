@@ -19,7 +19,7 @@
                 <?php
                 foreach ($posts as $post) {
                     echo '<tr>';
-                    echo '<td>' . RHtmlHelper::linkAction("post", $post->title, "view", $post->id) . '</td>';
+                    echo '<td>' . RHtml::linkAction("post", $post->title, "view", $post->id) . '</td>';
                     echo '<td>' . $post->createdTime . '</td>';
                     echo '</tr>';
                 }

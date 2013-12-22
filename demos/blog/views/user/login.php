@@ -4,21 +4,21 @@ $self->setHeaderTitle("Login"); ?>
 <?php
 if(isset($errors) && !empty($errors)){
     echo '<div>';
-    RHtmlHelper::showValidationErrors($errors);
+    RHtml::showValidationErrors($errors);
     echo '</div>';
 }
 ?>
-<?=RFormHelper::openForm("user/login",array('class'=>'vform'))?>
+<?=RForm::openForm("user/login",array('class'=>'vform'))?>
 
-<?=RFormHelper::label("Username","name")?>
-<?=RFormHelper::input("name",isset($form)?$form["name"]:"")?>
+<?=RForm::label("Username","name")?>
+<?=RForm::input("name",isset($form)?$form["name"]:"")?>
 
 <br/>
 
-<?=RFormHelper::label("Password","password")?>
-<?=RFormHelper::input(array('type'=>"password","name"=>"password"),isset($form)?$form["password"]:"")?>
+<?=RForm::label("Password","password")?>
+<?=RForm::input(array('type'=>"password","name"=>"password"),isset($form)?$form["password"]:"")?>
 
 <br/>
 <button type="submit">Login</button>
 
-<?=RFormHelper::endForm()?>
+<?=RForm::endForm()?>

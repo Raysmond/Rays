@@ -9,8 +9,8 @@
             <?php
             foreach ($posts as $post) {
                 echo '<li class="post-item">';
-                echo RHtmlHelper::linkAction("post",$post->title,"view",$post->id);
-                echo " by ".RHtmlHelper::linkAction("user",$post->user->name,"view",$post->user->id);
+                echo RHtml::linkAction("post",$post->title,"view",$post->id);
+                echo " by ".RHtml::linkAction("user",$post->user->name,"view",$post->user->id);
                 echo '</li>';
             }?>
         </ul>

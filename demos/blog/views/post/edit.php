@@ -1,22 +1,22 @@
 <h1>New post</h1>
 <?php
 if (isset($errors)) {
-    RHtmlHelper::showValidationErrors($errors);
+    RHtml::showValidationErrors($errors);
 }
 ?>
 
 <?php
 if (!isset($post)){
-    echo RFormHelper::openForm("post/new", array('class'=>'vform','style'=>'max-width: 600px;'));
+    echo RForm::openForm("post/new", array('class'=>'vform','style'=>'max-width: 600px;'));
 }
 else{
-    echo RFormHelper::openForm("post/edit/" . $post->id,array('class'=>'vform','style'=>'max-width: 600px;'));
+    echo RForm::openForm("post/edit/" . $post->id,array('class'=>'vform','style'=>'max-width: 600px;'));
 }
 ?>
 
-<?=(isset($post)? RFormHelper::hidden("id", $post->id) : "")?>
+<?=(isset($post)? RForm::hidden("id", $post->id) : "")?>
 
-<?= RFormHelper::input(array(
+<?= RForm::input(array(
     'name'=>'title',
     'value'=>isset($form['title']) ? $form["title"] : (isset($post) ? $post->title : ""),
     'placeholder'=>'Post title')
@@ -24,7 +24,7 @@ else{
 
 <br/>
 
-<?= RFormHelper::label("Content", "content") ?>
+<?= RForm::label("Content", "content") ?>
 <br/>
 
 <textarea style="height: 240px;" name="content" placeholder="Post content"><?= (isset($form["content"]) ? $form["content"] : (isset($post) ? $post->content : "")) ?></textarea>
@@ -32,4 +32,4 @@ else{
 <br/>
 <button type="submit">Save</button>
 
-<?= RFormHelper::endForm() ?>
+<?= RForm::endForm() ?>

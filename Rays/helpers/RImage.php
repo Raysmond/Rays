@@ -1,11 +1,11 @@
 <?php
 /**
- * RImageHelper class file.
+ * RImage helper class
  *
  * @author: Raysmond
  */
 
-class RImageHelper
+class RImage
 {
 
     /**
@@ -49,7 +49,7 @@ class RImageHelper
             if (file_exists($stylePath)) {
                 unlink($stylePath);
             }
-            $img = new RImage();
+            $img = new _RImage();
             return $img->crop($srcPath, $stylePath, $options) ? $targetSrc : $src;
         }
 
@@ -80,7 +80,7 @@ class RImageHelper
 
 }
 
-class RImage
+class _RImage
 {
     private static $extensions = array('jpg', 'jpeg','png', 'gif', 'bmp');
 

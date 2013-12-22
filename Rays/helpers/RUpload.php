@@ -1,11 +1,11 @@
 <?php
 /**
- * RUploadHelper class file
+ * RUpload class file
  *
  * @author: Raysmond
  */
 
-class RUploadHelper
+class RUpload
 {
 
     public $allowed_types = '';

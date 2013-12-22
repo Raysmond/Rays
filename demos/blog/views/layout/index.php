@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title><?php echo RHtmlHelper::encode(Rays::app()->getClientManager()->getHeaderTitle()); ?></title>
+    <title><?php echo RHtml::encode(Rays::app()->getClientManager()->getHeaderTitle()); ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="language" content="en"/>
     <meta name="description" content=""/>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>/public/css/main.css"/>
     <?php
     // link custom css files
-    echo RHtmlHelper::linkCssArray(Rays::app()->getClientManager()->css);
+    echo RHtml::linkCssArray(Rays::app()->getClientManager()->css);
     ?>
     <script type="text/javascript" src="<?= $baseUrl ?>/public/js/main.js"></script>
 
@@ -22,23 +22,23 @@
     <div id="header" class="container row">
         <div class="g960">
         <ul class="main-menu">
-            <li><?= RHtmlHelper::linkAction("site", "Rays Blog", "index", null, array("style" => 'font-weight:bold;')) ?></li>
+            <li><?= RHtml::linkAction("site", "Rays Blog", "index", null, array("style" => 'font-weight:bold;')) ?></li>
             <?php if (Rays::isLogin()) {
                 ?>
-                <li><?= RHtmlHelper::linkAction("post", "My posts") ?></li>
+                <li><?= RHtml::linkAction("post", "My posts") ?></li>
             <?php
             } ?>
-            <li><?= RHtmlHelper::linkAction("site", "About", "about") ?></li>
-            <li><?= RHtmlHelper::linkAction("site", "Contact", "contact") ?></li>
+            <li><?= RHtml::linkAction("site", "About", "about") ?></li>
+            <li><?= RHtml::linkAction("site", "Contact", "contact") ?></li>
             <?php
             if (!Rays::isLogin()) {
                 ?>
-                <li><?= RHtmlHelper::linkAction("user", "Login", "login") ?></li>
-                <li><?= RHtmlHelper::linkAction("user", "Register", "register") ?></li>
+                <li><?= RHtml::linkAction("user", "Login", "login") ?></li>
+                <li><?= RHtml::linkAction("user", "Register", "register") ?></li>
             <?php
             } else {
                 ?>
-                <li><?= RHtmlHelper::linkAction("user", "Logout", "logout") ?></li> <?php
+                <li><?= RHtml::linkAction("user", "Logout", "logout") ?></li> <?php
             }
             ?>
         </ul>
@@ -49,7 +49,7 @@
         <div id="main-content" class="container g960 space-bot">
             <div class="c9 first">
                 <div id="message">
-                    <?php RHtmlHelper::showFlashMessages(false); ?>
+                    <?php RHtml::showFlashMessages(false); ?>
                 </div>
                 <div class="clearfix"></div>
                 <div id="content">
@@ -77,7 +77,7 @@
 </div>
 <?php
 // link custom script files
-echo RHtmlHelper::linkScriptArray(Rays::app()->getClientManager()->script);
+echo RHtml::linkScriptArray(Rays::app()->getClientManager()->script);
 ?>
 </body>
 </html>

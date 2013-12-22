@@ -1,10 +1,10 @@
 <?php
 /**
- * Class RPagerHelper
+ * Class RPager
  *
  * @author: Raysmond, Xiangyan Sun
  */
-class RPagerHelper
+class RPager
 {
     // Pager id to differentiate pagers in a page
     private $pageId;
@@ -68,7 +68,7 @@ class RPagerHelper
      */
     public function showPager($showPrev = true, $showNext = true, $showFirst = true, $showLast = true, $pagesViewNum = 4)
     {
-        $pager = '<ul id="pager-' . $this->pageId . '" ' . RHtmlHelper::parseAttributes($this->pagerAttributes) . ' >';
+        $pager = '<ul id="pager-' . $this->pageId . '" ' . RHtml::parseAttributes($this->pagerAttributes) . ' >';
         $isOdd = $pagesViewNum % 2 > 0 ? true : false;
         $curPage = 1;
         if (isset($_GET[$this->pageId]))

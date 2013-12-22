@@ -1,11 +1,11 @@
 <?php
 /**
- * RICacheHelper interface
+ * RCacheInterface interface
  *
  * @author: Raysmond
  */
 
-interface RICacheHelper {
+interface RCacheInterface {
 
     public function get( $cacheId, $factor, $time );
 

@@ -1,11 +1,11 @@
 <?php
 /**
- * RStringHelper class
+ * RString class
  *
  * @author: Renchu Song
  */
 
-class RStringHelper {
+class RString {
 
     public static function utf8_substring($str,$start=0, $len = null){
         $len = $len===null? strlen($str): $len;

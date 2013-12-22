@@ -354,7 +354,7 @@ class RController
     public function redirectAction($controller = '', $action = '', $params = array())
     {
         if ($controller == '') $controller = $this->getId();
-        header('location: ' . RHtmlHelper::siteUrl($this->generateActionLink($controller, $action, $params)));
+        header('location: ' . RHtml::siteUrl($this->generateActionLink($controller, $action, $params)));
         exit;
     }
 
@@ -382,7 +382,7 @@ class RController
                 }
             }
         }
-        return RHtmlHelper::tryCleanLink($link);
+        return RHtml::tryCleanLink($link);
     }
 
     /**

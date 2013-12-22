@@ -1,11 +1,11 @@
 <?php
 /**
- * RFormValidation helper class file.
+ * RValidation helper class file.
  *
  * @author: Raysmond
  */
 
-class RFormValidationHelper
+class RValidation
 {
     /**
      * Fields array to be validated

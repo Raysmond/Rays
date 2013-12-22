@@ -1,11 +1,11 @@
 <?php
 /**
- * RFileCacheHelper helper class
+ * RCacheFile helper class
  *
  * @author: Raysmond
  */
 
-class RFileCacheHelper implements RICacheHelper
+class RCacheFile implements RCacheInterface
 {
     /**
      * The cache directory

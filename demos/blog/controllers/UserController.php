@@ -47,7 +47,7 @@ class UserController extends RController
         $data = array();
         if (Rays::isPost()) {
             $data["form"] = $_POST;
-            $validation = new RFormValidationHelper(User::getRegisterRules());
+            $validation = new RValidation(User::getRegisterRules());
             if ($validation->run($_POST)) {
                 $user = new User($_POST);
                 $user->assign(array("id" => null, "password" => md5($user->password), "role" => User::AUTHENTICATED));
