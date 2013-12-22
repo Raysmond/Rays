@@ -31,18 +31,6 @@ class User extends RModel implements RAuthProvider
     const AUTHENTICATED = "authenticated";
     const ANONYMOUS = "anonymous";
 
-    /**
-     * Override save() method
-     * @return Id
-     */
-    public function save()
-    {
-        if (!isset($this->role)) {
-            $this->role = self::AUTHENTICATED;
-            return parent::save();
-        }
-    }
-
     public static function getRegisterRules()
     {
         $rules = User::getRules("register");

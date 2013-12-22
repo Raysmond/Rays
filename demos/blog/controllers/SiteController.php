@@ -14,7 +14,7 @@ class SiteController extends RController
     public function actionIndex()
     {
         $page = Rays::getParam("page", 1);
-        $pageSize = Rays::getParam("pagesize", 4);
+        $pageSize = Rays::getParam("pagesize", 5);
 
         // get posts count and posts list in a page
         $count = Post::find()->count();

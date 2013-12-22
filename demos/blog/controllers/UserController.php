@@ -50,10 +50,8 @@ class UserController extends RController
             $validation = new RFormValidationHelper(User::getRegisterRules());
             if ($validation->run($_POST)) {
                 $user = new User($_POST);
-                $user->id = null;
-                $user->password = md5($user->password);
-                $user->save();
-                if (isset($user->id)) {
+                $user->assign(array("id" => null, "password" => md5($user->password), "role" => User::AUTHENTICATED));
+                if ($user->save()) {
                     $this->flash("message", "Register successfully. Your username is " . $user->name . ".");
                     $this->redirectAction("user", "login");
                 }

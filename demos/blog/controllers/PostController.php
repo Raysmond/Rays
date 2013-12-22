@@ -17,8 +17,20 @@ class PostController extends RController
 
     public function actionIndex()
     {
+        $page = Rays::getParam("page", 1);
+        $pageSize = Rays::getParam("pagesize", 5);
+
+        $count = Post::find("uid", Rays::user()->id)->count();
+        $posts = Post::find("uid", Rays::user()->id)->order_desc("id")->range(($page - 1) * $pageSize, $pageSize);
+
+        $pager = null;
+        if ($count > $pageSize) {
+            $pager = new RPagerHelper("page", $count, $pageSize, RHtmlHelper::siteUrl("post/index"), $page, array('class' => "pagin"));
+            $pager = $pager->showPager();
+        }
+
         $this->setHeaderTitle("My posts");
-        $this->render("index", array("posts" => Post::find("uid", Rays::user()->id)->order_desc("id")->all()));
+        $this->render("index", array("posts" => $posts, 'count' => $count, 'pager' => $pager));
     }
 
     public function actionView($pid)

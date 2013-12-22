@@ -1,6 +1,8 @@
 <h1>My posts</h1>
 <div style="margin-bottom: 20px;">
-    <a href="<?=RHtmlHelper::siteUrl("post/new")?>"><button>New post</button></a>
+    <a href="<?= RHtmlHelper::siteUrl("post/new") ?>">
+        <button>New post</button>
+    </a>
 </div>
 
 <div class="post-list">
@@ -21,5 +23,5 @@
         echo "You don't have any post yet!";
     }
     ?>
-
 </div>
+<?= isset($pager) ? $pager : "" ?>
