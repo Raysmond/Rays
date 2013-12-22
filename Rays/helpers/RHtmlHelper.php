@@ -10,7 +10,7 @@ class RHtmlHelper
 
     public static function encode($content)
     {
-        if ( get_magic_quotes_gpc() )
+        if (get_magic_quotes_gpc())
             return htmlspecialchars(stripslashes($content), ENT_QUOTES, (Rays::app()->charset));
         else return htmlspecialchars(($content), ENT_QUOTES, (Rays::app()->charset));
     }
@@ -20,7 +20,8 @@ class RHtmlHelper
         return htmlspecialchars_decode($content, ENT_QUOTES);
     }
 
-    public static function getPlainText($html){
+    public static function getPlainText($html)
+    {
         return strip_tags($html);
     }
 
@@ -39,17 +40,19 @@ class RHtmlHelper
      */
     public static function siteUrl($url)
     {
-        return self::tryCleanLink(Rays::app()->getBasePath().'/'. $url);
+        $url = strpos($url, "?q=") > 0 ? ('/' . $url) : ("/?q=" . $url);
+        return self::tryCleanLink(Rays::app()->getBasePath() . $url);
     }
 
-    public static function internalUrl($url){
-        if(strpos($url,"//")>0){
-            return str_replace(Rays::baseUrl().'/',"",$url);
+    public static function internalUrl($url)
+    {
+        if (strpos($url, "//") > 0) {
+            return str_replace(Rays::baseUrl() . '/', "", $url);
         }
         return $url;
     }
 
-    public static function linkAction($controller, $name, $action = null, $params = null,$attributes=array())
+    public static function linkAction($controller, $name, $action = null, $params = null, $attributes = array())
     {
         $link = "?q=" . $controller;
         if (isset($action) && $action != '')
@@ -63,15 +66,15 @@ class RHtmlHelper
                 }
             }
         }
-        return self::link($name, $name, Rays::app()->getBasePath() . "/" . $link,$attributes);
+        return self::link($name, $name, Rays::app()->getBasePath() . "/" . $link, $attributes);
     }
 
-    public static function link($title, $content, $href, $attributes=array())
+    public static function link($title, $content, $href, $attributes = array())
     {
-        if(isset($attributes['_encode'])&&$attributes['_encode']!=false){
+        if (isset($attributes['_encode']) && $attributes['_encode'] != false) {
             $content = self::encode($content);
         }
-        return '<a '.self::parseAttributes($attributes).' title="' . $title . '" href="' . self::tryCleanLink($href) . '" >' . $content . '</a>';
+        return '<a ' . self::parseAttributes($attributes) . ' title="' . $title . '" href="' . self::tryCleanLink($href) . '" >' . $content . '</a>';
     }
 
     public static function linkWithTarget($title, $content, $href, $target)
@@ -107,37 +110,38 @@ class RHtmlHelper
 
     public static function css($cssPath)
     {
-        if(!(strpos($cssPath,'//')>0)){
-            $cssPath = Rays::app()->getBaseUrl().$cssPath;
+        if (!(strpos($cssPath, '//') > 0)) {
+            $cssPath = Rays::app()->getBaseUrl() . $cssPath;
         }
         return '<link rel="stylesheet" type="text/css" href="' . $cssPath . '" />';
     }
 
     public static function script($scriptPath)
     {
-        if(!(strpos($scriptPath,'//')>0)){
-            $scriptPath = Rays::app()->getBaseUrl().$scriptPath;
+        if (!(strpos($scriptPath, '//') > 0)) {
+            $scriptPath = Rays::app()->getBaseUrl() . $scriptPath;
         }
-        return '<script type="text/javascript" src="'. $scriptPath . '"></script>';
+        return '<script type="text/javascript" src="' . $scriptPath . '"></script>';
     }
 
-    public static function showFlashMessages($return=true){
+    public static function showFlashMessages($return = true)
+    {
         $session = Rays::app()->getHttpSession();
         $messages = '';
-        if(($message = $session->getFlash("message"))!=false){
+        if (($message = $session->getFlash("message")) != false) {
             //print_r($message);
-            foreach($message as $m)
-                $messages.='<div class="alert alert-info">' .$m. '</div>';
+            foreach ($message as $m)
+                $messages .= '<div class="alert alert-info">' . $m . '</div>';
         }
-        if(($warnings = $session->getFlash("warning"))!=false){
-            foreach($warnings as $warning)
-                $messages.='<div class="alert alert-warning">' .$warning. '</div>';
+        if (($warnings = $session->getFlash("warning")) != false) {
+            foreach ($warnings as $warning)
+                $messages .= '<div class="alert alert-warning">' . $warning . '</div>';
         }
-        if(($errors = $session->getFlash("error"))!=false){
-            foreach($errors as $error)
-                $messages.='<div class="alert alert-danger">' .$error. '</div>';
+        if (($errors = $session->getFlash("error")) != false) {
+            foreach ($errors as $error)
+                $messages .= '<div class="alert alert-danger">' . $error . '</div>';
         }
-        if($return)
+        if ($return)
             return $messages;
         else
             echo $messages;
@@ -156,63 +160,64 @@ class RHtmlHelper
         }
         $html = '';
         foreach ($defaults as $key => $val) {
-            if(isset($defaults['_encode'])&&$defaults['_encode']!=false)
+            if (isset($defaults['_encode']) && $defaults['_encode'] != false)
                 $html .= $key . '="' . RHtmlHelper::encode($val) . '" ';
             else $html .= $key . '="' . ($val) . '" ';
         }
         return $html;
     }
 
-    public static function showValidationErrors($validation_errors){
-        if(isset($validation_errors)&&$validation_errors!=''&&!empty($validation_errors)){
+    public static function showValidationErrors($validation_errors)
+    {
+        if (isset($validation_errors) && $validation_errors != '' && !empty($validation_errors)) {
             echo '<div class="alert alert-danger">';
-            foreach($validation_errors as $error){
-                foreach($error as $e)
-                    foreach($e as $one){
-                        echo $one."<br/>";
+            foreach ($validation_errors as $error) {
+                foreach ($error as $e)
+                    foreach ($e as $one) {
+                        echo $one . "<br/>";
                     }
             }
             echo '</div>';
         }
     }
 
-    public static function showImage($src,$title='',$attributes = array()){
+    public static function showImage($src, $title = '', $attributes = array())
+    {
         $defaults = array();
-        if(strpos($src,'://')==false){
-            $src = Rays::app()->getBasePath()."/".$src;
+        if (strpos($src, '://') == false) {
+            $src = Rays::app()->getBasePath() . "/" . $src;
         }
         $defaults['src'] = $src;
         $defaults['title'] = $title;
-        return '<img '.self::parseAttributes($attributes,$defaults).' />';
+        return '<img ' . self::parseAttributes($attributes, $defaults) . ' />';
     }
 
-    public static function table($tableName='',$tableAttributes=array(),$header=array(),$data=array())
+    public static function table($tableName = '', $tableAttributes = array(), $header = array(), $data = array())
     {
         $html = '<div class="panel panel-default">';
-        if($tableName!='')
-        {
-            $html.='<div class="panel-heading">'.$tableName.'</div>';
+        if ($tableName != '') {
+            $html .= '<div class="panel-heading">' . $tableName . '</div>';
         }
-        $html.='<table '.self::parseAttributes($tableAttributes).'>';
+        $html .= '<table ' . self::parseAttributes($tableAttributes) . '>';
 
-        if(!empty($header)){
-            $html.='<tr>';
-            foreach($header as $th){
-                $html.='<th>'.$th.'</th>';
+        if (!empty($header)) {
+            $html .= '<tr>';
+            foreach ($header as $th) {
+                $html .= '<th>' . $th . '</th>';
             }
-            $html.='</tr>';
+            $html .= '</tr>';
         }
-        if(!empty($data)){
-            foreach($data as $tr){
-                $html.='<tr>';
-                foreach($tr as $td){
-                    $html.='<td>'.$td.'</td>';
+        if (!empty($data)) {
+            foreach ($data as $tr) {
+                $html .= '<tr>';
+                foreach ($tr as $td) {
+                    $html .= '<td>' . $td . '</td>';
                 }
-                $html.='</tr>';
+                $html .= '</tr>';
             }
         }
 
-        $html.='</table></div>';
+        $html .= '</table></div>';
 
         return $html;
     }

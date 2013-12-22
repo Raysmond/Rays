@@ -18,10 +18,10 @@ else{
 
 <?=(isset($post)? RFormHelper::hidden("id", $post->id) : "")?>
 
-<?= RFormHelper::input([
+<?= RFormHelper::input(array(
     'name'=>'title',
     'value'=>isset($form['title']) ? $form["title"] : (isset($post) ? $post->title : ""),
-    'placeholder'=>'Post title']
+    'placeholder'=>'Post title')
 ) ?>
 
 <br/>

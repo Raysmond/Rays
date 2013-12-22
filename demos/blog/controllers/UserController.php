@@ -76,6 +76,6 @@ class UserController extends RController
             Rays::app()->page404();
         }
 
-        $this->render("view", array("user" => $user, "posts" => Post::find("uid", $user->id)->range(0, 10)));
+        $this->render("view", array("user" => $user, "posts" => Post::find("uid", $user->id)->order_desc("id")->range(0, 10)));
     }
 } 

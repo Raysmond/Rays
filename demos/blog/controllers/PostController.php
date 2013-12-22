@@ -12,14 +12,14 @@ class PostController extends RController
      * @var array access array for actions
      */
     public $access = array(
-        User::AUTHENTICATED => ["index","new","edit","delete"]
+        User::AUTHENTICATED => array("index","new","edit","delete")
     );
 
     public function actionIndex()
     {
-        $posts = Post::find("uid", Rays::user()->id)->all();
+        $posts = Post::find("uid", Rays::user()->id)->order_desc("id")->all();
         $this->setHeaderTitle("My posts");
-        $this->render("index", ["posts" => $posts]);
+        $this->render("index", array("posts" => $posts));
     }
 
     public function actionView($pid)
@@ -64,7 +64,7 @@ class PostController extends RController
             $post->uid = Rays::user()->id;
             $post->createdTime = date("Y-m-d H:i:s");
             if ($post->validate_save("new") === false) {
-                $this->render("edit", ["isNew" => true, "form" => $_POST, "errors" => $post->getErrors()]);
+                $this->render("edit", array("isNew" => true, "form" => $_POST, "errors" => $post->getErrors()));
                 return;
             }
             $this->redirectAction("post", "view", $post->id);

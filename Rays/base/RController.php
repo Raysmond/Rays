@@ -370,7 +370,7 @@ class RController
     {
         if ($controller == null)
             $controller = $this->getId();
-        $link = "?q=" . $controller;
+        $link = $controller;
         if (isset($action) && $action != '')
             $link .= "/" . $action;
         if (isset($params)) {

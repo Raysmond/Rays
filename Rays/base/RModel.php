@@ -472,7 +472,7 @@ abstract class RModel {
     public function assign($assignments = array())
     {
         if (!empty($assignments)) {
-            $vars = get_class_vars(get_called_class());
+            $vars = get_class_vars(get_class($this));
             foreach ($vars['mapping'] as $objCol => $dbCol) {
                 if (isset($assignments[$objCol])) {
                     $this->$objCol = $assignments[$objCol];
@@ -487,7 +487,7 @@ abstract class RModel {
      */
     public function save()
     {
-        $model = get_class_vars(get_called_class());
+        $model = get_class_vars(get_class($this));
         /* Build SQL statement */
         $columns = "";
         $values = "";
@@ -525,7 +525,7 @@ abstract class RModel {
      */
     public function delete()
     {
-        $model = get_class_vars(get_called_class());
+        $model = get_class_vars(get_class($this));
         $primary_key = $model['primary_key'];
         $sql = "DELETE FROM ".Rays::app()->getDBPrefix().$model['table']." WHERE {$model['mapping'][$primary_key]} = {$this->$primary_key}";
         RModel::getConnection()->exec($sql);
@@ -597,7 +597,7 @@ abstract class RModel {
     public function getDataArray()
     {
         $data = array();
-        $vars = get_class_vars(get_called_class());
+        $vars = get_class_vars(get_class($this));
         foreach ($vars['rules'] as $objCol => $dbCol) {
             $data[$objCol] = $this->$objCol;
         }

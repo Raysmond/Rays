@@ -38,7 +38,7 @@ class RFormValidationHelper
      */
     private $_data = array();
 
-    public function __construct($rules = [])
+    public function __construct($rules = array())
     {
         foreach ($rules as $rule) {
             if (!isset($rule['field']))
@@ -110,7 +110,7 @@ class RFormValidationHelper
      * @param array $data the data to be validated
      * @return bool
      */
-    public function run($data=[])
+    public function run($data=array())
     {
         // TODO: validate $data instead of $_POST only, currently set data to _POST if it's empty
         if(empty($data))
@@ -257,7 +257,7 @@ class RFormValidationHelper
      * Set the data array to be validated
      * @param array $data
      */
-    public function setData($data=[])
+    public function setData($data=array())
     {
         $this->_data = $data;
     }
