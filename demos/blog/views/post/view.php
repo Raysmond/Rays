@@ -10,7 +10,7 @@
 <div class="clearfix"></div>
 <div class="post-actions">
     <?php
-    if (Rays::isLogin() && (Rays::user()->id == $post->id || Rays::user()->role == "admin")) {
+    if (Rays::isLogin() && (Rays::user()->id == $post->uid || Rays::user()->role == "admin")) {
 
         echo "Actions &nbsp;";
         echo RHtmlHelper::linkAction("post", "Edit", "edit", $post->id);

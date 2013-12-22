@@ -351,7 +351,7 @@ class RController
      * @param string $action the action id
      * @param $params parameters passed to the action
      */
-    public function redirectAction($controller = '', $action = '', $params)
+    public function redirectAction($controller = '', $action = '', $params = array())
     {
         if ($controller == '') $controller = $this->getId();
         header('location: ' . RHtmlHelper::siteUrl($this->generateActionLink($controller, $action, $params)));

@@ -78,6 +78,9 @@ class RRouter
         if (($pos = strpos($query, "?")))
             $query = substr($query, 0, $pos);
 
+        if (($pos = strpos($query, "&&")))
+            $query = substr($query, 0, $pos);
+
         $query = explode("/", $query);
         $route = array();
         $len = count($query);
