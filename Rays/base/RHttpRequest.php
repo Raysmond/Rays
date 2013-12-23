@@ -6,9 +6,8 @@
  */
 class RHttpRequest
 {
-    public function normalizeRequest()
+    public function initialize()
     {
-        // normalize request
         if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             if (isset($_GET))
                 $_GET = $this->stripSlashes($_GET);

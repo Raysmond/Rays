@@ -116,7 +116,7 @@ class RRouter
      */
     public function getControllerId()
     {
-        return isset($this->_controller) ? $this->_controller : $this->_defaultController;
+        return $this->_controller ? $this->_controller : $this->_defaultController;
     }
 
     /**
@@ -137,6 +137,10 @@ class RRouter
         return $this->_params;
     }
 
+    /**
+     * Add additional params
+     * @param $params
+     */
     public function addParams($params)
     {
         if (is_array($params))

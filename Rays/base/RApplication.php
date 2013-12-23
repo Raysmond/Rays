@@ -26,7 +26,7 @@ class RApplication extends RApplicationBase
     /**
      * @var RHttpRequest HTTP request handler
      */
-    public $httpRequestHandler;
+    public $requester;
 
     /**
      * @var RClient client manager for CSS and JavaScript
@@ -47,7 +47,7 @@ class RApplication extends RApplicationBase
     /**
      * @var RAuth the auth object
      */
-    private $_auth;
+    private $auth;
 
     /**
      * @var array the flash messages array
@@ -61,8 +61,7 @@ class RApplication extends RApplicationBase
     {
         parent::init();
 
-        $config = $this->getConfig();
-        if (($c = $config->getConfig("defaultController")))
+        if (($c = $this->getConfig()->getConfig("defaultController")))
             $this->defaultController = $c;
 
         Rays::setApp($this);
@@ -75,14 +74,13 @@ class RApplication extends RApplicationBase
     {
         parent::run();
 
-        $this->client = new RClient();
-        $this->_auth = new RAuth();
-        $config = $this->getConfig()->getConfig("authProvider");
-        if (isset($config))
-            $this->_auth->setAuthProviderClass($config);
+        $this->auth = new RAuth();
+        if ($config = $this->getConfig()->getConfig("authProvider"))
+            $this->auth->setAuthProviderClass($config);
 
-        $this->httpRequestHandler = new RHttpRequest();
-        $this->httpRequestHandler->normalizeRequest();
+        $this->client = new RClient();
+        $this->requester = new RHttpRequest();
+        $this->requester->initialize();
         $this->router = new RRouter();
         $this->router->getRouteUrl();
         $this->runController($this->router);
@@ -109,16 +107,17 @@ class RApplication extends RApplicationBase
     /**
      * Run a controller action
      *
-     * @param $controllerAction
+     * @param $action
      * for example:
+     * <pre>
      * runControllerAction('site/index',['arg1'])
      * </pre>
      *
      * @param array $params
      */
-    public function runControllerAction($controllerAction, $params = array())
+    public function runControllerAction($action, $params = array())
     {
-        $this->router->getRouteUrl($controllerAction);
+        $this->router->getRouteUrl($action);
         $this->router->addParams($params);
         self::runController($this->router);
     }
@@ -174,7 +173,7 @@ class RApplication extends RApplicationBase
      */
     public function getHttpRequest()
     {
-        return $this->httpRequestHandler;
+        return $this->requester;
     }
 
     /**
@@ -209,7 +208,7 @@ class RApplication extends RApplicationBase
 
     public function getAuth()
     {
-        return $this->_auth;
+        return $this->auth;
     }
 
     /**
@@ -218,7 +217,7 @@ class RApplication extends RApplicationBase
      */
     public function getLoginUser()
     {
-        return $this->_auth->getUser();
+        return $this->auth->getUser();
     }
 
     /**
@@ -227,7 +226,7 @@ class RApplication extends RApplicationBase
      */
     public function isLogin()
     {
-        return $this->_auth->isLogin();
+        return $this->auth->isLogin();
     }
 
     /**
@@ -236,7 +235,7 @@ class RApplication extends RApplicationBase
      */
     public function login(RAuthProvider $user)
     {
-        $this->_auth->login($user);
+        $this->auth->login($user);
     }
 
     /**
@@ -244,7 +243,7 @@ class RApplication extends RApplicationBase
      */
     public function logout()
     {
-        $this->_auth->logout();
+        $this->auth->logout();
     }
 
     /**

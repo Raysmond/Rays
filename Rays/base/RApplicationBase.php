@@ -11,6 +11,12 @@ class RApplicationBase
      */
     private $config;
 
+    /**
+     * Application constructor.
+     * Load default and custom configuration, then initialize the application.
+     * @param string|null $defaultConfig default configuration path
+     * @param string|null $config custom configuration path
+     */
     public function __construct($defaultConfig = null, $config = null)
     {
         $_config = new RConfig();
@@ -48,6 +54,15 @@ class RApplicationBase
     }
 
     /**
+     * Get the name of the application
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->config->getConfig("name");
+    }
+
+    /**
      * Get the base URL of the application site
      * @return string
      */
@@ -77,15 +92,6 @@ class RApplicationBase
     public function getBaseDir()
     {
         return $this->config->getConfig("baseDir");
-    }
-
-    /**
-     * Get the name of the application
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->config->getConfig("name");
     }
 
     /**
