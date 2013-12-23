@@ -80,15 +80,15 @@ class RPager
 
         $pageSize = "&&pagesize=" . $this->rowsInPage;
 
-        $prevStyle = ($curPage > 1) ? '' : ' disabled';
-        $nextStyle = ($curPage < $this->pageSum) ? '' : ' disabled';
+        $prevStyle = ($curPage > 1) ? '' : ' class="disabled" ';
+        $nextStyle = ($curPage < $this->pageSum) ? '' : ' class="disabled" ';
 
         if ($showFirst) {
-            $pager .= '<li' . $prevStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=1' . $pageSize . '">' . $this->pagerText['first'] . '</a></li>';
+            $pager .= '<li' . $prevStyle . '><a href="' . $this->url . $appendStr . $this->pageId . '=1' . $pageSize . '">' . $this->pagerText['first'] . '</a></li>';
         }
         if ($showPrev) {
             $num = $curPage == 1 ? 1 : ($curPage - 1);
-            $pager .= '<li' . $prevStyle . '"><a href="' . $this->url . $appendStr . $this->pageId . '=' . $num . $pageSize . '">' . $this->pagerText['prev'] . '</a></li>';
+            $pager .= '<li' . $prevStyle . '><a href="' . $this->url . $appendStr . $this->pageId . '=' . $num . $pageSize . '">' . $this->pagerText['prev'] . '</a></li>';
         }
 
         $current = $curPage;
@@ -112,12 +112,12 @@ class RPager
 
         if ($showNext) {
             $num = ($curPage == $this->pageSum ? $this->pageSum : ($curPage + 1));
-            $pager .= '<li' . $nextStyle . '"><a '.$nextStyle.' href="' . $this->url . $appendStr . $this->pageId . '=' . $num . $pageSize . '">' . $this->pagerText['next'] . '</a></li>';
+            $pager .= '<li' . $nextStyle . '><a '.$nextStyle.' href="' . $this->url . $appendStr . $this->pageId . '=' . $num . $pageSize . '">' . $this->pagerText['next'] . '</a></li>';
         }
 
 
         if ($showLast) {
-            $pager .= '<li' . $nextStyle . '"><a '.$nextStyle.' href="' . $this->url . $appendStr . $this->pageId . '=' . $this->pageSum . $pageSize . '">' . $this->pagerText['last'] . '</a></li>';
+            $pager .= '<li' . $nextStyle . '><a '.$nextStyle.' href="' . $this->url . $appendStr . $this->pageId . '=' . $this->pageSum . $pageSize . '">' . $this->pagerText['last'] . '</a></li>';
         }
         $pager .= "</ul>";
         return $pager;
