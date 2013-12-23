@@ -32,6 +32,9 @@ return array(
 
     'timeZone' => 'PRC',
 
+    // Default layout
+    'layout' => 'index',
+
     /**
      * Whether is clean URL or not.
      *

@@ -28,6 +28,8 @@ return array(
      */
     'basePath' => "/Rays/demos/blog",
 
+    'layout' => 'index',
+
     /**
      * Whether is clean URL or not.
      * default URL form: "http://localhost/Rays/demos/blog/index.php?q=site/index"

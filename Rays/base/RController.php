@@ -11,7 +11,7 @@ class RController
      * The layout used in the controller
      * @var string the layout view file in 'view/layout' directory
      */
-    public $layout = "index";
+    public $layout;
 
     /**
      * default action is provided if there's no action requested from the URL
@@ -63,9 +63,10 @@ class RController
         if ($id)
             $this->_id = $id;
 
-        $layout = Rays::app()->getConfig()->getConfig("layout");
-        if ($layout)
+        if (!isset($this->layout)) {
+            $layout = Rays::app()->getConfig()->getConfig("layout");
             $this->layout = $layout;
+        }
     }
 
     /**
