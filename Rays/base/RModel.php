@@ -24,7 +24,7 @@
  * and <var>$constraint</var> is the constraint used on JOIN clause.
  *
  * For example:
- * <code>
+ * <pre>
  * class Person {
  *     public $id, $name, $email, $roleId;
  *     public static $primary_key = "person";
@@ -39,7 +39,7 @@
  *         "role" => array("Role", "[roleId] == [Role.id]")
  *     );
  * }
- * </code>
+ * </pre>
  *
  * There are mainly three ways to obtain an instance in a data model.
  *
@@ -74,7 +74,7 @@
  *
  * For example:
  *
- * <code>
+ * <pre>
  * Person::find("id", 10)->first();
  * // Get the person whose id equals 10
  * Person::where("[id] = ?", 10)->first();
@@ -85,7 +85,7 @@
  * // Get all persons sorted using id, return first 10 results
  * Person::find()->join("role")->all();
  * // Get all persons, also joins related role object into role field
- * </code>
+ * </pre>
  *
  * @author Xiangyan Sun
  */
@@ -161,9 +161,9 @@ abstract class RModel {
     /**
      * Massive data assignment
      * For example:
-     * <code>
+     * <pre>
      * $user = new User(array("name"=>"Raysmond","email"=>"jiankunlei@126.com"));
-     * </code>
+     * </pre>
      * @param array $assignments
      */
     public function assign($assignments = array())

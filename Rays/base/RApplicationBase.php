@@ -98,7 +98,7 @@ class RApplicationBase
      * Get the database configuration array.
      * @return array
      * For example:
-     * <code>
+     * <pre>
      * array(
      *   'host' => '127.0.0.1',
      *   'user' => 'fdugroup',
@@ -107,7 +107,7 @@ class RApplicationBase
      *   'table_prefix' => '',
      *   'charset' => 'utf8',
      *   ),
-     * </code>
+     * </pre>
      */
     public function getDbConfig()
     {

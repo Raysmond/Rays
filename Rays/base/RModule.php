@@ -34,7 +34,7 @@ class RModule
     /**
      * @var array  The module shall appear in what pages
      * For example:
-     * <code>array('site/about','user/*') </code>
+     * <pre>array('site/about','user/*') </pre>
      * <front> for the front page
      */
     public $access = array();

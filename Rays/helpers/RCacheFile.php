@@ -27,13 +27,13 @@ class RCacheFile implements RCacheInterface
 
     /**
      * Constructor method. The args array should like the following:
-     * <code>
+     * <pre>
      * $_args = array(
      *     "cache_dir" = "/cache", // the '/' at the beginning means the base directory of the application
      *     "cache_time" = 3600, // seconds
      *     "cache_prefix" = "cache_"
      * );
-     * </code>
+     * </pre>
      * @param array $_args
      */
     public function __construct($_args = array())

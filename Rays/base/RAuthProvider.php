@@ -3,7 +3,7 @@
  * Interface IAuthProvider
  * Classes implemented the interface can provide authorization service for the application.
  * For example:
- * <code>
+ * <pre>
  *  class User extends RModel implements RAuthProvider
  *  {
  *  
@@ -41,7 +41,7 @@
  *         return User::get($identifier);
  *     }
  *  }
- * </code>
+ * </pre>
  *
  * @author: Raysmond
  * @created: 2013-12-21
