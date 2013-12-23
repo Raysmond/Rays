@@ -1,6 +1,7 @@
 <?php
 /**
- * Class RApplicationBase. This is the class for all application instance.
+ * Class RApplication.
+ * This is the class for all application instance.
  *
  * @author: Raysmond
  */
@@ -13,8 +14,7 @@ class RApplication extends RApplicationBase
     public $defaultController = 'site';
 
     /**
-     * Current controller object
-     * @var Object
+     * @var Object Current controller object
      */
     public $controller;
 
@@ -37,12 +37,6 @@ class RApplication extends RApplicationBase
      * @var RSession the session manager
      */
     public $session;
-
-    /**
-     * Current user who is accessing the web site
-     * @var User|null
-     */
-    public $user;
 
     /**
      * @var RAuth the auth object
@@ -123,48 +117,12 @@ class RApplication extends RApplicationBase
     }
 
     /**
-     * Get controllers path
-     * @return string
+     * Get the current controller who is handling the HTTP request
+     * @return Object
      */
-    public function getControllerPath()
+    public function getController()
     {
-        return $this->getBaseDir() . "/controllers";
-    }
-
-    /**
-     * Get modules path
-     * @return string
-     */
-    public function getModulePath()
-    {
-        return $this->getBaseDir() . "/modules";
-    }
-
-    /**
-     * Get view path
-     * @return string
-     */
-    public function getViewPath()
-    {
-        return $this->getBaseDir() . "/views";
-    }
-
-    /**
-     * Get layout path
-     * @return string
-     */
-    public function getLayoutPath()
-    {
-        return $this->getBaseDir() . "/views/layout";
-    }
-
-    /**
-     * Get models path
-     * @return string
-     */
-    public function getModelPath()
-    {
-        return $this->getBaseDir() . "/models";
+        return $this->controller;
     }
 
     /**
@@ -184,6 +142,7 @@ class RApplication extends RApplicationBase
     {
         return $this->router;
     }
+
 
     /**
      * Get client manager
@@ -267,12 +226,47 @@ class RApplication extends RApplicationBase
     }
 
     /**
-     * Get the current controller who is handling the HTTP request
-     * @return Object
+     * Get controllers path
+     * @return string
      */
-    public function getController()
+    public function getControllerPath()
     {
-        return $this->controller;
+        return $this->getBaseDir() . "/controllers";
     }
 
+    /**
+     * Get modules path
+     * @return string
+     */
+    public function getModulePath()
+    {
+        return $this->getBaseDir() . "/modules";
+    }
+
+    /**
+     * Get view path
+     * @return string
+     */
+    public function getViewPath()
+    {
+        return $this->getBaseDir() . "/views";
+    }
+
+    /**
+     * Get layout path
+     * @return string
+     */
+    public function getLayoutPath()
+    {
+        return $this->getBaseDir() . "/views/layout";
+    }
+
+    /**
+     * Get models path
+     * @return string
+     */
+    public function getModelPath()
+    {
+        return $this->getBaseDir() . "/models";
+    }
 }
