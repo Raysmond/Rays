@@ -52,7 +52,7 @@ class RaysFramework
 
     /**
      * Get the application object
-     * @return RWebApplication
+     * @return RApplicationBase
      */
     public static function app()
     {
@@ -62,7 +62,7 @@ class RaysFramework
     /**
      * Create a new web application
      * @param $config
-     * @return RWebApplication
+     * @return RApplicationBase
      */
     public static function newApp($config)
     {
@@ -70,7 +70,7 @@ class RaysFramework
         self::$logger = new RLog();
 
         $defaultConfig = SYSTEM_PATH."/AppConfig.php";
-        return new RWebApplication($defaultConfig, $config);
+        return new RApplication($defaultConfig, $config);
     }
 
     /**

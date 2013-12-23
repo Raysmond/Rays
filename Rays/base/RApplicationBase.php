@@ -1,10 +1,10 @@
 <?php
 /**
- * RBaseApplication class file
+ * RApplicationBase class file
  *
  * @author: Raysmond
  */
-class RBaseApplication
+class RApplicationBase
 {
     /**
      * @var RConfig

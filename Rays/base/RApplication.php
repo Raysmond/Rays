@@ -1,11 +1,11 @@
 <?php
 /**
- * Class RWebApplication. This is the class for all application instance.
+ * Class RApplicationBase. This is the class for all application instance.
  *
  * @author: Raysmond
  */
 
-class RWebApplication extends RBaseApplication
+class RApplication extends RApplicationBase
 {
     /**
      * @var string the default controller for the application
