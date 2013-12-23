@@ -30,6 +30,8 @@ return array(
         'charset' => 'utf8',
     ),
 
+    'timeZone' => 'PRC',
+
     /**
      * Whether is clean URL or not.
      *

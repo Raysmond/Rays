@@ -13,45 +13,6 @@ class RWebApplication extends RBaseApplication
     public $defaultController = 'site';
 
     /**
-     * @var string the default layout file name for controllers
-     */
-    public $layout = 'main';
-
-    /**
-     * Whether or not user clean uri
-     * For example:
-     *  not a clean uri: http://localhost/FDUGroup/?q=site/about
-     *  clean uri: http://localhost/FDUGroup/site/about
-     * @var bool
-     */
-    public $isCleanUri = false;
-
-    /**
-     * @var string the controllers directory path for the application
-     */
-    public $controllerPath;
-
-    /**
-     * @var string the models directory path for the application
-     */
-    public $modelPath;
-
-    /**
-     * @var string the modules directory path for the application
-     */
-    public $modulePath;
-
-    /**
-     * @var string the view directory path for the application
-     */
-    public $viewPath;
-
-    /**
-     * @var string the layout directory path for the application
-     */
-    public $layoutPath;
-
-    /**
      * Current controller object
      * @var Object
      */
@@ -95,31 +56,14 @@ class RWebApplication extends RBaseApplication
 
     /**
      * Initialization for the whole web application
-     *
-     * @param null $config
      */
-    public function init($config = null)
+    public function init()
     {
-        parent::init($config);
+        parent::init();
 
         $config = $this->getConfig();
-
-        // Initialize app directories
-        $dir = $this->getBaseDir();
-        $this->modelPath = $dir . '/models';
-        $this->controllerPath = $dir . '/controllers';
-        $this->viewPath = $dir . '/views';
-        $this->layoutPath = $dir . '/views/layout';
-        $this->modulePath = $dir . '/modules';
-
-        if (isset($config['defaultController']))
-            $this->defaultController = $config['defaultController'];
-
-        if (isset($config['layout']))
-            $this->layout = $config['layout'];
-
-        if (isset($config['isCleanUri']))
-            $this->isCleanUri = $config['isCleanUri'];
+        if (($c = $config->getConfig("defaultController")))
+            $this->defaultController = $c;
 
         Rays::setApp($this);
     }
@@ -136,9 +80,9 @@ class RWebApplication extends RBaseApplication
         $this->router = new RRouter();
 
         $this->_auth = new RAuth();
-        $config = $this->getConfig();
-        if (isset($config["authProvider"]))
-            $this->_auth->setAuthProviderClass($config["authProvider"]);
+        $config = $this->getConfig()->getConfig("authProvider");
+        if (isset($config))
+            $this->_auth->setAuthProviderClass($config);
 
         $this->httpRequestHandler->normalizeRequest();
         $this->runController($this->router->getRouteUrl());
@@ -196,11 +140,48 @@ class RWebApplication extends RBaseApplication
     }
 
     /**
-     * Show 404 page.
+     * Get controllers path
+     * @return string
      */
-    public function page404($message = "")
+    public function getControllerPath()
     {
-        throw new RPageNotFoundException($message);
+        return $this->getBaseDir() . "/controllers";
+    }
+
+    /**
+     * Get modules path
+     * @return string
+     */
+    public function getModulePath()
+    {
+        return $this->getBaseDir() . "/modules";
+    }
+
+    /**
+     * Get view path
+     * @return string
+     */
+    public function getViewPath()
+    {
+        return $this->getBaseDir() . "/views";
+    }
+
+    /**
+     * Get layout path
+     * @return string
+     */
+    public function getLayoutPath()
+    {
+        return $this->getBaseDir() . "/views/layout";
+    }
+
+    /**
+     * Get models path
+     * @return string
+     */
+    public function getModelPath()
+    {
+        return $this->getBaseDir() . "/models";
     }
 
     /**
@@ -283,12 +264,23 @@ class RWebApplication extends RBaseApplication
     }
 
     /**
+     * Show 404 page.
+     */
+    public function page404($message = "")
+    {
+        throw new RPageNotFoundException($message);
+    }
+
+    /**
      * Whether is clean URI
+     *  For example:
+     *  not a clean uri: http://localhost/FDUGroup/?q=site/about
+     *  clean uri: http://localhost/FDUGroup/site/about
      * @return bool
      */
     public function isCleanUri()
     {
-        return $this->isCleanUri != false;
+        return $this->getConfig()->getConfig("isCleanUrl") === true;
     }
 
     /**

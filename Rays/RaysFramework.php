@@ -92,9 +92,9 @@ class RaysFramework
      */
     public static function initPath()
     {
-        self::$_includePaths[] = self::app()->controllerPath;
-        self::$_includePaths[] = self::app()->modelPath;
-        self::$_includePaths[] = self::app()->modulePath;
+        self::$_includePaths[] = self::app()->getControllerPath();
+        self::$_includePaths[] = self::app()->getModelPath();
+        self::$_includePaths[] = self::app()->getModulePath();
     }
 
     /**
@@ -105,7 +105,7 @@ class RaysFramework
     public static function importModule($moduleId)
     {
         if (!class_exists(RModule::moduleClass($moduleId))) {
-            $path = self::app()->modulePath . "/$moduleId/$moduleId" . RModule::MODULE_FILE_EXTENSION;
+            $path = self::app()->getModulePath() . "/$moduleId/$moduleId" . RModule::MODULE_FILE_EXTENSION;
             if (is_file($path) && file_exists($path)) {
                 require($path);
             } else

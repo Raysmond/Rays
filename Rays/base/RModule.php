@@ -61,8 +61,8 @@ class RModule
     {
         if (self::$moduleBaseUri === null) {
             $basePath = substr(Rays::app()->getBasePath(), 1);
-            $pos = strpos(Rays::app()->modulePath, $basePath) + strlen($basePath) + 1;
-            self::$moduleBaseUri = Rays::app()->getBaseUrl() . '/' . substr(Rays::app()->modulePath, $pos);
+            $pos = strpos(Rays::app()->getModulePath(), $basePath) + strlen($basePath) + 1;
+            self::$moduleBaseUri = Rays::app()->getBaseUrl() . '/' . substr(Rays::app()->getModulePath(), $pos);
         }
         return self::$moduleBaseUri;
     }
@@ -107,7 +107,7 @@ class RModule
     public function getModuleDir()
     {
         if (!isset($this->_path)) {
-            $this->_path = Rays::app()->modulePath . "/" . $this->getId();
+            $this->_path = Rays::app()->getModulePath() . "/" . $this->getId();
         }
         return $this->_path;
     }

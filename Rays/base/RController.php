@@ -62,6 +62,10 @@ class RController
     {
         if ($id != null)
             $this->_id = $id;
+
+        $layout = Rays::app()->getConfig()->getConfig("layout");
+        if ($layout)
+            $this->layout = $layout;
     }
 
     /**
@@ -105,7 +109,7 @@ class RController
     public function renderContent($content = '', $return = false)
     {
         $layout = $this->getLayoutFile($this->layout);
-        return RView::renderFile($this, $layout, array('content'=> $content), $return);
+        return RView::renderFile($this, $layout, array('content' => $content), $return);
     }
 
     /**
@@ -127,7 +131,7 @@ class RController
      */
     public function getLayoutFile($layoutName)
     {
-        return Rays::app()->viewPath . "/layout/$layoutName.php";
+        return Rays::app()->getLayoutPath() . "/$layoutName.php";
     }
 
     /**
@@ -139,7 +143,7 @@ class RController
      */
     public function getViewFile($viewName)
     {
-        $viewFile = Rays::app()->viewPath . "/";
+        $viewFile = Rays::app()->getViewPath() . "/";
         if (strpos($viewName, ".") > 0)
             $viewFile .= str_replace(".", "/", $viewName) . ".php";
         else

@@ -11,8 +11,8 @@ class RHtml
     public static function encode($content)
     {
         if (get_magic_quotes_gpc())
-            return htmlspecialchars(stripslashes($content), ENT_QUOTES, (Rays::app()->charset));
-        else return htmlspecialchars(($content), ENT_QUOTES, (Rays::app()->charset));
+            return htmlspecialchars(stripslashes($content), ENT_QUOTES, (Rays::app()->getCharset()));
+        else return htmlspecialchars(($content), ENT_QUOTES, (Rays::app()->getCharset()));
     }
 
     public static function decode($content)
