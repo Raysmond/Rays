@@ -60,7 +60,7 @@ class RController
      */
     public function __construct($id = '')
     {
-        if ($id != null)
+        if ($id)
             $this->_id = $id;
 
         $layout = Rays::app()->getConfig()->getConfig("layout");

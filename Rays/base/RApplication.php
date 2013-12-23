@@ -76,42 +76,32 @@ class RApplication extends RApplicationBase
         parent::run();
 
         $this->client = new RClient();
-        $this->httpRequestHandler = new RHttpRequest();
-        $this->router = new RRouter();
-
         $this->_auth = new RAuth();
         $config = $this->getConfig()->getConfig("authProvider");
         if (isset($config))
             $this->_auth->setAuthProviderClass($config);
 
+        $this->httpRequestHandler = new RHttpRequest();
         $this->httpRequestHandler->normalizeRequest();
-        $this->runController($this->router->getRouteUrl());
+        $this->router = new RRouter();
+        $this->router->getRouteUrl();
+        $this->runController($this->router);
     }
 
 
     /**
      * Create and run the requested controller
-     * @param array $route array router information
+     * @param RRouter $router router information
      * @throws RPageNotFoundException
      */
-    public function runController($route = array())
+    public function runController(RRouter $router)
     {
-        $_controller = '';
-        if (isset($route['controller']) && $route['controller'] != '') {
-            $_controller = $route['controller'] . "Controller";
-        } else {
-            $_controller = $this->defaultController . "Controller";
-            $route['controller'] = $this->defaultController;
-        }
-        $_controller = ucfirst($_controller);
+        $controller = ucfirst($router->getControllerId()) . "Controller";
 
-        if (class_exists($_controller)) {
-            $_controller = new $_controller;
-            $_controller->setId($route['controller']);
-            $this->controller = $_controller;
-            $action = isset($route['action']) ? $route['action'] : '';
-            $params = isset($route['params']) ? $route['params'] : array();
-            $_controller->runAction($action, $params);
+        if (class_exists($controller)) {
+            $controller = new $controller($router->getControllerId());
+            $this->controller = $controller;
+            $controller->runAction($router->getActionId(), $router->getParams());
         } else
             throw new RPageNotFoundException("No controllers found!");
     }
@@ -128,15 +118,9 @@ class RApplication extends RApplicationBase
      */
     public function runControllerAction($controllerAction, $params = array())
     {
-        $route = $this->router->getRouteUrl($controllerAction);
-        if (!is_array($params)) {
-            $params = array($params);
-        }
-        if (isset($route['params'])) {
-            $route['params'] = array_merge($route['params'], $params);
-        } else
-            $route['params'] = $params;
-        self::runController($route);
+        $this->router->getRouteUrl($controllerAction);
+        $this->router->addParams($params);
+        self::runController($this->router);
     }
 
     /**

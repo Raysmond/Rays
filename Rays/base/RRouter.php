@@ -41,6 +41,15 @@ class RRouter
      */
     private $_params;
 
+    private $_defaultController = 'site';
+
+    public function __construct()
+    {
+        $controller = Rays::app()->getConfig()->getConfig("defaultController");
+        if ($controller)
+            $this->_defaultController = $controller;
+    }
+
     /**
      * Get router information from URI
      * @param string $uri URI string (like: 'site/index', the corresponding HTTP URL may be 'http://www.example.com/site/index')
@@ -107,7 +116,7 @@ class RRouter
      */
     public function getControllerId()
     {
-        return isset($this->_controller) ? $this->_controller : null;
+        return isset($this->_controller) ? $this->_controller : $this->_defaultController;
     }
 
     /**
@@ -126,5 +135,14 @@ class RRouter
     public function getParams()
     {
         return $this->_params;
+    }
+
+    public function addParams($params)
+    {
+        if (is_array($params))
+            foreach ($params as $p)
+                $this->_params[] = $p;
+        else
+            $this->_params[] = $params;
     }
 }
