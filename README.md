@@ -1,6 +1,6 @@
 # Rays
 Rays is a light-weight MVC framework implemented PHP language.
-* Class API documentation: [http://raysmond.com/project/Rays/docs/api](http://raysmond.com/project/Rays/docs/api)
+* Classes API documentation: [http://raysmond.com/project/Rays/docs/api](http://raysmond.com/project/Rays/docs/api)
 * A simple blog demo: [http://raysmond.com/project/Rays/demos/blog](http://raysmond.com/project/Rays/demos/blog).
 
 ## Acknowledgements
