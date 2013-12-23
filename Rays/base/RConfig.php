@@ -23,10 +23,10 @@ class RConfig
 
     /**
      * Load configuration
-     * @param null $customConfig
+     * @param string|null $custom custom configuration file path
      * @throws RException
      */
-    public function load($customConfig = null)
+    public function load($custom = null)
     {
         $default = $this->defaultConfigFile;
         if (!$default) {
@@ -35,10 +35,10 @@ class RConfig
 
         $this->config = require $default;
 
-        if (null !== $customConfig) {
-            if (is_file($customConfig) && is_readable($customConfig)) {
-                $customConfig = require $customConfig;
-                $this->config = array_replace_recursive($this->config, $customConfig);
+        if (null !== $custom) {
+            if (is_file($custom) && is_readable($custom)) {
+                $custom = require $custom;
+                $this->config = array_replace_recursive($this->config, $custom);
             }
         }
     }

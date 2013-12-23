@@ -7,11 +7,12 @@
 class RSession
 {
 
-    public $prefix = "RAYS_SESSION";
+    public $prefix = "RAYS_SESSION_";
     public $cookieDuration = 86400; // 3600*24
 
     public function __construct()
     {
+        $this->prefix .= Rays::app()->getName();
         session_start();
     }
 

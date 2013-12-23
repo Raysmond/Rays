@@ -17,37 +17,34 @@ class UserController extends RController
 
     public function actionLogin()
     {
-        if (Rays::isLogin()) {
-            $this->redirect(Rays::baseUrl());
-        }
+        RAssert::is_true(!Rays::isLogin());
 
         if (Rays::isPost()) {
             $user = new User($_POST);
             if ($user->validate("login")) {
-                $login = User::find("name", $user->name)->first();
-                if ($login != null && $login->password == md5($_POST["password"])) {
-                    Rays::app()->login($login);
-                    $this->redirect(Rays::baseUrl());
-                } else {
-                    $this->flash("error", "User name and password aren't matched.");
+                if (($login = User::find("name", $user->name)->first()) !== null) {
+                    if ($login->password == md5($_POST["password"])) {
+                        Rays::app()->login($login);
+                        $this->redirect(Rays::baseUrl());
+                    }
+                    $this->flash("error", "User name and password are not matched!");
                 }
+                $this->flash("error", "No such user.");
             }
-            $this->render("login", array("errors" => $user->getErrors(), "form" => $_POST));
-            return;
+            $data = array("errors" => $user->getErrors(), "form" => $_POST);
         }
-        $this->render("login");
+        $this->render("login", isset($data) ? $data : null);
     }
 
     public function actionRegister()
     {
-        if (Rays::isLogin()) {
-            $this->redirect(Rays::baseUrl());
-        }
+        RAssert::is_true(!Rays::isLogin());
 
         $data = array();
         if (Rays::isPost()) {
             $data["form"] = $_POST;
             $validation = new RValidation(User::getRegisterRules());
+
             if ($validation->run($_POST)) {
                 $user = new User($_POST);
                 $user->assign(array("id" => null, "password" => md5($user->password), "role" => User::AUTHENTICATED));
@@ -56,6 +53,7 @@ class UserController extends RController
                     $this->redirectAction("user", "login");
                 }
             }
+
             $data["errors"] = $validation->getErrors();
         }
         $this->render("register", $data);
@@ -70,9 +68,7 @@ class UserController extends RController
     public function actionView($uid)
     {
         $user = User::get($uid);
-        if ($user === null) {
-            Rays::app()->page404();
-        }
+        RAssert::not_null($user);
 
         $this->render("view", array("user" => $user, "posts" => Post::find("uid", $user->id)->order_desc("id")->range(0, 10)));
     }

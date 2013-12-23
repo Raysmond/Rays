@@ -42,6 +42,7 @@ class SiteController extends RController
     {
         if (Rays::isPost()) {
             // do some thing
+
             $this->flash("message", "Thanks for your contact!");
         }
         $this->setHeaderTitle("Contact");
@@ -54,15 +55,15 @@ class SiteController extends RController
      */
     public function actionException(Exception $e)
     {
-        if ($e instanceof RPageNotFoundException) {
+        if ($e instanceof RPageNotFoundException || $e->getCode() === 404) {
             $this->setHeaderTitle("404");
             $this->renderContent("<h1>404, page not found!</h1>");
             return;
         }
-        if (Rays::app()->isDebug()) {
+
+        if (Rays::app()->isDebug())
             print $e;
-        } else {
-            $this->renderContent($e->getCode() + "<br/>" + $e->getMessage());
-        }
+        else
+            $this->renderContent($e->getCode() . '<br/>' . $e->getMessage());
     }
 }

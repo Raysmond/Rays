@@ -18,14 +18,14 @@ class PostController extends RController
     public function actionIndex()
     {
         $page = Rays::getParam("page", 1);
-        $pageSize = Rays::getParam("pagesize", 5);
+        $size = Rays::getParam("pagesize", 5);
 
         $count = Post::find("uid", Rays::user()->id)->count();
-        $posts = Post::find("uid", Rays::user()->id)->order_desc("id")->range(($page - 1) * $pageSize, $pageSize);
+        $posts = Post::find("uid", Rays::user()->id)->order_desc("id")->range(($page - 1) * $size, $size);
 
         $pager = null;
-        if ($count > $pageSize) {
-            $pager = new RPager("page", $count, $pageSize, RHtml::siteUrl("post/index"), $page, array('class' => "pagin"));
+        if ($count > $size) {
+            $pager = new RPager("page", $count, $size, RHtml::siteUrl("post/index"), $page, array('class' => "pagin"));
             $pager = $pager->showPager();
         }
 
@@ -46,11 +46,11 @@ class PostController extends RController
 
     public function actionEdit($pid)
     {
-        $post = null;
-        if (($post = Post::get($pid)) === null) {
-            Rays::app()->page404("Post not found!");
-        }
-        if (!Rays::user()->id == $post->id || !Rays::user()->role == User::ADMIN) {
+        $post = Post::get($pid);
+        RAssert::not_null($post);
+
+        $user = Rays::user();
+        if (!$user->id == $post->id || !$user->role == User::ADMIN) {
             $this->flash("error", "Permission denied! You don't have the permission to edit the post!");
             $this->redirectAction("post", "view", $post->id);
         }
@@ -62,13 +62,14 @@ class PostController extends RController
                 if (in_array($key, $protected))
                     unset($_POST[$key]);
             }
+
             $post->assign($_POST);
             if ($post->validate_save("edit") !== false) {
                 $this->flash("message", "Post edit successfully.");
                 $this->redirectAction("post", "view", $post->id);
-            } else {
-                $data['errors'] = $post->getErrors();
             }
+
+            $data['errors'] = $post->getErrors();
         }
 
         $this->setHeaderTitle("Edit " . $post->title);

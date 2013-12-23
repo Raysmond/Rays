@@ -41,6 +41,9 @@ class RRouter
      */
     private $_params;
 
+    /**
+     * @var string default controller
+     */
     private $_defaultController = 'site';
 
     public function __construct()
