@@ -195,10 +195,10 @@ class RHttpRequest
      */
     public function urlMatch($urlRules = array(), $url = '')
     {
-        if (!is_array($urlRules)) {
+        if (!is_array($urlRules))
             $urlRules = array($urlRules);
-        }
-        if(empty($urlRules)){
+
+        if (empty($urlRules)) {
             return true;
         }
         // like : user/view/1
@@ -207,21 +207,20 @@ class RHttpRequest
         // The front page
         if ($currentUrl == '')
             $currentUrl = '<front>';
-        foreach ($urlRules as $url)
-        {
+
+        if (($pos = strpos($currentUrl, "?")))
+            $currentUrl = substr($currentUrl, 0, $pos);
+
+        foreach ($urlRules as $url) {
             if ($url == $currentUrl)
                 return true;
-            else
-            {
-                if (($pos = strpos($url, '*')) > 0)
-                {
+            else {
+                if (($pos = strpos($url, '*')) > 0) {
                     $arr = explode('*', $url);
                     $match = true;
-                    foreach ($arr as $part)
-                    {
+                    foreach ($arr as $part) {
                         if ($part == '') continue;
-                        if (($apartPos = strpos($currentUrl, $part)) == false)
-                        {
+                        if (($apartPos = strpos($currentUrl, $part)) == false) {
                             $sub = substr($currentUrl, 0, strlen($part));
                             if ($sub != $part) { // current pattern not matched
                                 $match = false;

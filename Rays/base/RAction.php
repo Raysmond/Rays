@@ -8,7 +8,6 @@
 
 abstract class RAction
 {
-
     /**
      * The reference to the controller
      * @var object

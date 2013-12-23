@@ -1,6 +1,26 @@
 <?php
 /**
- * RModule class file.
+ * RModule class
+ * A module is a widget to provide some additional functions or do partial content rendering.
+ * To declare a module like the following way:
+ * Files:
+ * app/modules/new_users/new_users.module
+ * app/modules/new_users/new_users.view.php
+ * <pre>
+ * class new_users_module{
+ *     //public $access = array();
+ *     //public $denyAccess = array();
+ *
+ *     public function __construct($params=array()){
+ *          // do initialization things
+ *     }
+ *
+ *     public function module_content(){
+ *         // render() method will use the "new_users.view.php" under the module directory to render the content
+ *         return $this->render("new_users", array("users"=>User::find()->order_des("id")->range(0, 10)));
+ *     }
+ * }
+ * </pre>
  *
  * @author: Raysmond
  */
@@ -46,6 +66,10 @@ class RModule
 
     const MODULE_FILE_EXTENSION = ".module";
 
+    /**
+     * Module constructor
+     * @param array $params parameters used to initialize the module
+     */
     public function __construct($params = array())
     {
         if (isset($params['id']))
@@ -57,6 +81,10 @@ class RModule
         $this->init($params);
     }
 
+    /**
+     * Get module base URI path
+     * @return null|string
+     */
     public static function getModuleBasePath()
     {
         if (self::$moduleBaseUri === null) {

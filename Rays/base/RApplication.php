@@ -9,11 +9,6 @@
 class RApplication extends RApplicationBase
 {
     /**
-     * @var string the default controller for the application
-     */
-    public $defaultController = 'site';
-
-    /**
      * @var Object Current controller object
      */
     public $controller;
@@ -54,9 +49,6 @@ class RApplication extends RApplicationBase
     public function init()
     {
         parent::init();
-
-        if (($c = $this->getConfig()->getConfig("defaultController")))
-            $this->defaultController = $c;
 
         Rays::setApp($this);
     }
