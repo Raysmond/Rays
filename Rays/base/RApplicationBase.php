@@ -59,7 +59,7 @@ class RApplicationBase
      */
     public function getName()
     {
-        return $this->config->getConfig("name");
+        return $this->getConfig("name");
     }
 
     /**
@@ -68,12 +68,12 @@ class RApplicationBase
      */
     public function getBaseUrl()
     {
-        $baseUrl = $this->config->getConfig("baseUrl");
-        if (!isset($baseUrl)) {
+        $url = $this->getConfig("baseUrl");
+        if (!isset($url)) {
             $path = $this->getBasePath();
-            $baseUrl = 'http://' . $_SERVER['SERVER_NAME'] . (isset($path) ? $path : "");
+            $url = 'http://' . $_SERVER['SERVER_NAME'] . (isset($path) ? $path : "");
         }
-        return $baseUrl;
+        return $url;
     }
 
     /**
@@ -82,7 +82,7 @@ class RApplicationBase
      */
     public function getBasePath()
     {
-        return $this->config->getConfig("basePath");
+        return $this->getConfig("basePath");
     }
 
     /**
@@ -91,7 +91,7 @@ class RApplicationBase
      */
     public function getBaseDir()
     {
-        return $this->config->getConfig("baseDir");
+        return $this->getConfig("baseDir");
     }
 
     /**
@@ -111,16 +111,17 @@ class RApplicationBase
      */
     public function getDbConfig()
     {
-        return $this->config->getConfig("db");
+        return $this->getConfig("db");
     }
 
     /**
      * Get the whole configuration array of the application
-     * @return array
+     * @param string|null $key
+     * @return RConfig|mixed the config object if $key=null, otherwise return the configuration value
      */
-    public function getConfig()
+    public function getConfig($key=null)
     {
-        return $this->config;
+        return $key===null ? $this->config : $this->config->getConfig($key);
     }
 
     /**
@@ -129,7 +130,7 @@ class RApplicationBase
      */
     public function getTimeZone()
     {
-        return $this->config->getConfig("timeZone");
+        return $this->getConfig("timeZone");
     }
 
     /**
@@ -138,7 +139,7 @@ class RApplicationBase
      */
     public function getCharset()
     {
-        return $this->config->getConfig("charset");
+        return $this->getConfig("charset");
     }
 
 
@@ -157,7 +158,7 @@ class RApplicationBase
      */
     public function getCacheConfig()
     {
-        return $this->config->getConfig("cache");
+        return $this->getConfig("cache");
     }
 
     /**
@@ -167,7 +168,7 @@ class RApplicationBase
      */
     public function getExceptionAction()
     {
-        return $this->config->getConfig("exceptionAction");
+        return $this->getConfig("exceptionAction");
     }
 
     /**
@@ -176,6 +177,6 @@ class RApplicationBase
      */
     public function isDebug()
     {
-        return $this->config->getConfig("debug") === true;
+        return $this->getConfig("debug") === true;
     }
 }

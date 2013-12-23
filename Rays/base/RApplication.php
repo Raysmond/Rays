@@ -21,7 +21,7 @@ class RApplication extends RApplicationBase
     /**
      * @var RHttpRequest HTTP request handler
      */
-    public $requester;
+    public $request;
 
     /**
      * @var RClient client manager for CSS and JavaScript
@@ -65,8 +65,8 @@ class RApplication extends RApplicationBase
             $this->auth->setAuthProviderClass($config);
 
         $this->client = new RClient();
-        $this->requester = new RHttpRequest();
-        $this->requester->initialize();
+        $this->request = new RHttpRequest();
+        $this->request->initialize();
         $this->router = new RRouter();
         $this->router->getRouteUrl();
         $this->runController($this->router);
@@ -83,8 +83,7 @@ class RApplication extends RApplicationBase
         $controller = ucfirst($router->getControllerId()) . "Controller";
 
         if (class_exists($controller)) {
-            $controller = new $controller($router->getControllerId());
-            $this->controller = $controller;
+            $this->controller = $controller = new $controller($router->getControllerId());
             $controller->runAction($router->getActionId(), $router->getParams());
         } else
             throw new RPageNotFoundException("No controllers found!");
@@ -121,9 +120,9 @@ class RApplication extends RApplicationBase
      * Get http request handler
      * @return mixed
      */
-    public function getHttpRequest()
+    public function request()
     {
-        return $this->requester;
+        return $this->request;
     }
 
     /**
@@ -214,7 +213,7 @@ class RApplication extends RApplicationBase
      */
     public function isCleanUri()
     {
-        return $this->getConfig()->getConfig("isCleanUrl") === true;
+        return $this->getConfig("isCleanUrl") === true;
     }
 
     /**

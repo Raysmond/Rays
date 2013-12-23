@@ -13,8 +13,7 @@ class RExceptionHandler
      */
     public static function handleException(Exception $e)
     {
-        $action = Rays::app()->getExceptionAction();
-        if ($action) {
+        if ($action = Rays::app()->getExceptionAction()) {
             Rays::app()->runControllerAction($action, $e);
             return;
         }

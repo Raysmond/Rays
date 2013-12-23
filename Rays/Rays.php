@@ -40,9 +40,9 @@ class Rays extends RaysFramework{
      * Get http request handler
      * @return mixed
      */
-    public static function httpRequest()
+    public static function request()
     {
-        return self::app()->getHttpRequest();
+        return self::app()->request();
     }
 
     /**
@@ -69,7 +69,7 @@ class Rays extends RaysFramework{
      */
     public static function isPost()
     {
-        return self::app()->getHttpRequest()->isPostRequest();
+        return self::app()->request()->isPostRequest();
     }
 
     /**
@@ -78,7 +78,7 @@ class Rays extends RaysFramework{
      */
     public static function isAjax()
     {
-        return self::app()->getHttpRequest()->isAjaxRequest();
+        return self::app()->request()->isAjaxRequest();
     }
 
     /**
@@ -96,7 +96,7 @@ class Rays extends RaysFramework{
      */
     public static function uri()
     {
-        return self::app()->getHttpRequest()->getRequestUriInfo();
+        return self::app()->request()->getRequestUriInfo();
     }
 
     /**
@@ -105,7 +105,7 @@ class Rays extends RaysFramework{
      */
     public static function referrerUri()
     {
-        return self::app()->getHttpRequest()->getUrlReferrer();
+        return self::app()->request()->getUrlReferrer();
     }
 
     /**
@@ -116,7 +116,7 @@ class Rays extends RaysFramework{
      */
     public static function getParam($name,$default)
     {
-        return self::app()->getHttpRequest()->getParam($name,$default);
+        return self::app()->request()->getParam($name,$default);
     }
 
     /**

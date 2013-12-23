@@ -4,13 +4,16 @@
  *
  * @author: Raysmond
  */
-class RException extends Exception{
+class RException extends Exception
+{
 
 }
 
-class RPageNotFoundException extends RException{
+class RPageNotFoundException extends RException
+{
 
-    public function __construct($message=''){
+    public function __construct($message = '')
+    {
         $this->code = 404;
     }
 }

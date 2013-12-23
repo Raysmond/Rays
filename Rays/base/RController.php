@@ -64,7 +64,7 @@ class RController
             $this->_id = $id;
 
         if (!isset($this->layout)) {
-            $layout = Rays::app()->getConfig()->getConfig("layout");
+            $layout = Rays::app()->getConfig("layout");
             $this->layout = $layout;
         }
     }
@@ -148,7 +148,7 @@ class RController
         if (strpos($viewName, ".") > 0)
             $viewFile .= str_replace(".", "/", $viewName) . ".php";
         else
-            $viewFile .= $this->getId() . "/" . $viewName . ".php";
+            $viewFile .= $this->getId() . "/{$viewName}.php";
 
         return $viewFile;
     }
@@ -174,6 +174,7 @@ class RController
     /**
      * Whether the current user has the right to view the page
      * @return bool
+     * todo remove from controller
      */
     public function userCanAccessAction()
     {
@@ -220,10 +221,10 @@ class RController
             throw new RPageNotFoundException("Sorry, you're not authorized to view the requested page.");
         }
 
-        $methodName = $this->generateActionMethod();
+        $method = $this->actionMethod();
 
-        if (method_exists($this, $methodName))
-            call_user_func_array(array($this, $methodName), $this->_params);
+        if (method_exists($this, $method))
+            call_user_func_array(array($this, $method), $this->_params);
         else
             throw new RPageNotFoundException("No actions match the HTTP request!");
         $this->afterAction();
@@ -335,7 +336,7 @@ class RController
      * action ID = 'view', generated method name = 'actionView'
      * @return string
      */
-    public function generateActionMethod()
+    public function actionMethod()
     {
         return "action" . ucfirst($this->_action);
     }

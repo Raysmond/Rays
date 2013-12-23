@@ -35,9 +35,8 @@ class RAuth
     public function getIdentifier()
     {
         if (!isset($this->_identifier)) {
-            $_id = Rays::app()->session()->get(self::AUTH_KEY);
-            if ($_id != false)
-                $this->_identifier = $_id;
+            if (($id = Rays::app()->session()->get(self::AUTH_KEY)) !== false)
+                $this->_identifier = $id;
         }
         return $this->_identifier;
     }

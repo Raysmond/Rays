@@ -184,7 +184,7 @@ class RModule
      */
     public function canAccess()
     {
-        return Rays::app()->getHttpRequest()->urlMatch($this->access);
+        return Rays::app()->request()->urlMatch($this->access);
     }
 
     /**
@@ -193,7 +193,7 @@ class RModule
      */
     public function denyAccess()
     {
-        return empty($this->denyAccess)? false : Rays::app()->getHttpRequest()->urlMatch($this->denyAccess);
+        return empty($this->denyAccess)? false : Rays::app()->request()->urlMatch($this->denyAccess);
     }
 
     /**

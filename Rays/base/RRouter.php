@@ -22,11 +22,6 @@
 class RRouter
 {
     /**
-     * @var array normalized route uri array
-     */
-    private $_routeUrl = array();
-
-    /**
      * @var string controller ID
      */
     private $_controller;
@@ -39,7 +34,7 @@ class RRouter
     /**
      * @var array parameters array for the action
      */
-    private $_params;
+    private $_params = array();
 
     /**
      * @var string default controller
@@ -48,9 +43,8 @@ class RRouter
 
     public function __construct()
     {
-        $controller = Rays::app()->getConfig()->getConfig("defaultController");
-        if ($controller)
-            $this->_defaultController = $controller;
+        if ($c = Rays::app()->getConfig("defaultController"))
+            $this->_defaultController = $c;
     }
 
     /**
@@ -60,57 +54,28 @@ class RRouter
      */
     public function getRouteUrl($uri = '')
     {
-        $uri = ($uri === '') ? Rays::app()->getHttpRequest()->getRequestUriInfo() : $uri;
-
-        $this->processUrl($uri);
-        return $this->_routeUrl;
-    }
-
-    /**
-     * Process the URI string
-     * @param $uri
-     */
-    public function processUrl($uri)
-    {
-        $route = $this->processQueryUrl($uri);
-
-        $this->_routeUrl = $route;
-        $this->_controller = isset($route['controller']) ? $route['controller'] : null;
-        $this->_action = isset($route['action']) ? $route['action'] : null;
-        $this->_params = isset($route['params']) ? $route['params'] : null;
+        $uri = ($uri === '') ? Rays::app()->request()->getRequestUriInfo() : $uri;
+        $this->proccessUri($uri);
+        return $this;
     }
 
     /**
      * Processes the query uri and transforms the params into route
-     * @param string $query like 'user/view/1'
+     * @param string $uri like 'user/view/1'
      * @return array $route
      */
-    public function processQueryUrl($query)
+    public function proccessUri($uri)
     {
-        if (($pos = strpos($query, "?")))
-            $query = substr($query, 0, $pos);
+        if (($pos = strpos($uri, "?")))
+            $uri = substr($uri, 0, $pos);
 
-        if (($pos = strpos($query, "&&")))
-            $query = substr($query, 0, $pos);
+        if (($pos = strpos($uri, "&&")))
+            $uri = substr($uri, 0, $pos);
 
-        $query = explode("/", $query);
-        $route = array();
-        $len = count($query);
-
-        if ($len > 0)
-            $route['controller'] = $query[0];
-
-        if ($len > 1)
-            $route['action'] = $query[1];
-
-        if ($len > 2) {
-            $route['params'] = array();
-            for ($i = 2; $i < $len; $i++) {
-                if ($query[$i])
-                    $route['params'][] = $query[$i];
-            }
-        }
-        return $route;
+        $uri = explode("/", $uri);
+        $this->_controller = isset($uri[0]) ? $uri[0] : null;
+        $this->_action = isset($uri[1]) ? $uri[1] : null;
+        $this->_params = array_slice($uri, 2);
     }
 
     /**
@@ -128,7 +93,7 @@ class RRouter
      */
     public function getActionId()
     {
-        return isset($this->_action) ? $this->_action : null;
+        return $this->_action;
     }
 
     /**
@@ -146,10 +111,6 @@ class RRouter
      */
     public function addParams($params)
     {
-        if (is_array($params))
-            foreach ($params as $p)
-                $this->_params[] = $p;
-        else
-            $this->_params[] = $params;
+        $this->_params = array_merge($this->_params, is_array($params) ? $params : array($params));
     }
 }
