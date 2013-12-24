@@ -166,4 +166,4 @@ Thanks for the work of [Xiangyan Sun](https://github.com/wishstudio) and [Renchu
 
 ## License
 Copyright © 2013 Jiankun Lei (Raysmond) <br/>
-Under BSD license, read the [LICENSE](https://github.com/Raysmond/Rays/blob/master/LICENSE) file
+Under BSD license, read the [LICENSE](https://github.com/Raysmond/Rays/blob/master/LICENSE) file.
