@@ -1,4 +1,5 @@
 <h1>My posts</h1>
+<?php $self->setHeaderTitle("My posts"); ?>
 <div style="margin-bottom: 20px;">
     <a href="<?= RHtml::siteUrl("post/new") ?>">
         <button>New post</button>

@@ -8,9 +8,11 @@ if (isset($errors)) {
 <?php
 if (!isset($post)){
     echo RForm::openForm("post/new", array('class'=>'vform','style'=>'max-width: 600px;'));
+    $self->setHeaderTitle("New post");
 }
 else{
     echo RForm::openForm("post/edit/" . $post->id,array('class'=>'vform','style'=>'max-width: 600px;'));
+    $self->setHeaderTitle("Edit " . $post->title);
 }
 ?>
 

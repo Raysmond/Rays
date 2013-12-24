@@ -40,8 +40,8 @@ class RHtml
      */
     public static function siteUrl($url)
     {
-        $url = strpos($url, "?q=") > 0 ? ('/' . $url) : ("/?q=" . $url);
-        return self::tryCleanLink(Rays::app()->getBasePath() . $url);
+        $prefix = strpos($url, "?q=") !== false ? "/" : "/?q=";
+        return self::tryCleanLink(Rays::app()->getBasePath() . $prefix . $url);
     }
 
     public static function internalUrl($url)

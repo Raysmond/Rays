@@ -8,13 +8,12 @@
 
 class PostController extends RController
 {
-    /**
-     * @var array access array for actions
-     */
+    // Access rules
     public $access = array(
         User::AUTHENTICATED => array("index", "new", "edit", "delete")
     );
 
+    // My posts
     public function actionIndex()
     {
         $page = Rays::getParam("page", 1);
@@ -29,28 +28,27 @@ class PostController extends RController
             $pager = $pager->showPager();
         }
 
-        $this->setHeaderTitle("My posts");
         $this->render("index", array("posts" => $posts, 'count' => $count, 'pager' => $pager));
     }
 
+    // Read
     public function actionView($pid)
     {
-        $post = null;
-        if (!is_numeric($pid) || ($post = Post::find("id", $pid)->join("user")->first()) === null) {
-            Rays::app()->page404("Post not found!");
-        }
+        $post = Post::find("id", $pid)->join("user")->first();
+        RAssert::not_null($post);
 
         $this->render("view", array('post' => $post));
     }
 
+    // Update
     public function actionEdit($pid)
     {
         $post = Post::get($pid);
         RAssert::not_null($post);
 
         $user = Rays::user();
-        if (!$user->id == $post->id || !$user->role == User::ADMIN) {
-            $this->flash("error", "Permission denied! You don't have the permission to edit the post!");
+        if (!$user->id === $post->id || !$user->role === User::ADMIN) {
+            $this->flash("error", "Permission denied!");
             $this->redirectAction("post", "view", $post->id);
         }
 
@@ -65,10 +63,10 @@ class PostController extends RController
             $data['errors'] = $post->getErrors();
         }
 
-        $this->setHeaderTitle("Edit " . $post->title);
         $this->render("edit", $data);
     }
 
+    // Create
     public function actionNew()
     {
         if (Rays::isPost()) {
@@ -82,19 +80,19 @@ class PostController extends RController
             $this->redirectAction("post", "view", $post->id);
         }
 
-        $this->setHeaderTitle("New post");
         $this->render("edit", array('isNew' => true));
     }
 
+    // Delete
     public function actionDelete($postId)
     {
         if (($post = Post::get($postId)) !== null) {
-            if ((Rays::user()->id == $postId || Rays::user()->role == User::ADMIN)) {
+            if ((Rays::user()->id === $post->uid || Rays::user()->role === User::ADMIN)) {
                 $post->delete();
                 $this->flash("message", "Post " . $post->title . " was deleted successfully!");
                 $this->redirectAction("post", "index");
             } else {
-                $this->flash("warning", "Permission denied! You cannot delete the post!");
+                $this->flash("warning", "Permission denied!");
                 $this->redirectAction("post", "view", $post->id);
             }
         }
