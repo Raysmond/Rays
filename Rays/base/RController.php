@@ -372,21 +372,24 @@ class RController
      * @param $params action parameters
      * @return string action link
      */
-    public function generateActionLink($controller, $action, $params)
+    public function generateActionLink($controller = '', $action = '', $params = '')
     {
-        if ($controller == null)
-            $controller = $this->getId();
-        $link = $controller;
-        if (isset($action) && $action != '')
-            $link .= "/" . $action;
-        if (isset($params)) {
-            if (!is_array($params)) {
-                $link .= "/" . $params;
-            } else {
-                foreach ($params as $param) {
-                    $link .= "/" . $param;
-                }
-            }
+        $link = "?q=" . ($controller ? $controller : $this->getId());
+        if ($action)
+            $link .= "/{$action}";
+        else {
+            $id = $controller ? $controller : $this->getId();
+            $class = ucfirst($id) . "Controller";
+            if (class_exists($class)) {
+                $instance = new $class($id);
+                $action = isset($instance->defaultAction) ? $instance->defaultAction : Rays::app()->getConfig("defaultAction");
+                $link .= "/{$action}";
+            } else
+                throw new RException("Controller class not found!");
+        }
+        if(!empty($params)){
+            $params = is_array($params) ? $params : array($params);
+            $link .= "/" . implode("/", $params);
         }
         return RHtml::tryCleanLink($link);
     }

@@ -61,9 +61,7 @@ class RHtml
             if (!is_array($params)) {
                 $link .= "/" . $params;
             } else {
-                foreach ($params as $param) {
-                    $link .= "/" . $param;
-                }
+                $link = "/" . implode("/", $params);
             }
         }
         return self::link($name, $name, Rays::app()->getBasePath() . "/" . $link, $attributes);

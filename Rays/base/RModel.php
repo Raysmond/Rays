@@ -87,7 +87,7 @@
  * // Get all persons, also joins related role object into role field
  * </pre>
  *
- * @author Xiangyan Sun
+ * @author Xiangyan Sun, Raysmond
  */
 abstract class RModel
 {
