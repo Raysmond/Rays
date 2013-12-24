@@ -89,7 +89,8 @@
  *
  * @author Xiangyan Sun
  */
-abstract class RModel {
+abstract class RModel
+{
     /**
      * Database connection
      */
@@ -99,6 +100,11 @@ abstract class RModel {
     public static $table = '';
     public static $relation = array();
     public static $mapping = array();
+
+    /**
+     * @var array protected data cannot be set in massive way
+     */
+    public static $protected = array();
 
     /**
      * @var array validation rules
@@ -155,23 +161,24 @@ abstract class RModel {
      */
     public function __construct($assignments = array())
     {
-        $this->assign($assignments);
+        $this->set($assignments);
     }
 
     /**
      * Massive data assignment
+     * Protected data cannot be set in this way
      * For example:
      * <pre>
      * $user = new User(array("name"=>"Raysmond","email"=>"jiankunlei@126.com"));
      * </pre>
      * @param array $assignments
      */
-    public function assign($assignments = array())
+    public function set($assignments = array())
     {
         if (!empty($assignments)) {
             $vars = get_class_vars(get_class($this));
             foreach ($vars['mapping'] as $objCol => $dbCol) {
-                if (isset($assignments[$objCol])) {
+                if (!in_array($objCol, $vars["protected"]) && isset($assignments[$objCol])) {
                     $this->$objCol = $assignments[$objCol];
                 }
             }
@@ -200,7 +207,7 @@ abstract class RModel {
                 $delim = ", ";
             }
         }
-        $sql = (isset($this->{$model['primary_key']})?"REPLACE":"INSERT")." INTO ".Rays::app()->getDBPrefix().$model['table']." ($columns) VALUES ($values)";
+        $sql = (isset($this->{$model['primary_key']}) ? "REPLACE" : "INSERT") . " INTO " . Rays::app()->getDBPrefix() . $model['table'] . " ($columns) VALUES ($values)";
         /* Now prepare SQL statement */
         $stmt = RModel::getConnection()->prepare($sql);
         $args = array();
@@ -224,7 +231,7 @@ abstract class RModel {
     {
         $model = get_class_vars(get_class($this));
         $primary_key = $model['primary_key'];
-        $sql = "DELETE FROM ".Rays::app()->getDBPrefix().$model['table']." WHERE {$model['mapping'][$primary_key]} = {$this->$primary_key}";
+        $sql = "DELETE FROM " . Rays::app()->getDBPrefix() . $model['table'] . " WHERE {$model['mapping'][$primary_key]} = {$this->$primary_key}";
         RModel::getConnection()->exec($sql);
     }
 
@@ -326,7 +333,8 @@ abstract class RModel {
  * _RModelQueryer
  * Continuous-passing style SQL query builder.
  */
-class _RModelQueryer {
+class _RModelQueryer
+{
     private $model;
     private $query_where = "", $query_order = "", $query_join = array();
     private $args_where;
@@ -350,14 +358,14 @@ class _RModelQueryer {
         $fields = "";
         /* Add fields from self */
         foreach ($model['mapping'] as $member => $db_member) {
-            $fields .= Rays::app()->getDBPrefix().$model['table'].".{$model['mapping'][$member]},";
+            $fields .= Rays::app()->getDBPrefix() . $model['table'] . ".{$model['mapping'][$member]},";
         }
         /* Add fields from joined members */
         foreach ($this->query_join as $rel_member) {
             list($m, $constraint) = $model['relation'][$rel_member];
             $mVars = get_class_vars($m);
             foreach ($mVars['mapping'] as $member => $db_member) {
-                $fields .= Rays::app()->getDBPrefix().$mVars['table'].".{$mVars['mapping'][$member]},";
+                $fields .= Rays::app()->getDBPrefix() . $mVars['table'] . ".{$mVars['mapping'][$member]},";
             }
         }
         return rtrim($fields, ",");
@@ -369,9 +377,8 @@ class _RModelQueryer {
         $clause = "";
         foreach ($this->query_join as $member) {
             list($m, $constraint) = $model['relation'][$member];
-            $modeltable = Rays::app()->getDBPrefix().$model['table'];
             $mVars = get_class_vars($m);
-            $mtable = Rays::app()->getDBPrefix().$mVars['table'];
+            $mtable = Rays::app()->getDBPrefix() . $mVars['table'];
             $clause = "$clause LEFT JOIN $mtable ON " . $this->_substitute($constraint);
         }
         return $clause;
@@ -380,7 +387,7 @@ class _RModelQueryer {
     private function _select($suffix = "")
     {
         $model = get_class_vars($this->model);
-        $modeltable = Rays::app()->getDBPrefix().$model['table'];
+        $modeltable = Rays::app()->getDBPrefix() . $model['table'];
         $fields = $this->_select_fields();
         $join = $this->_join_clause();
         $sql = "SELECT $fields FROM $modeltable $join $this->query_where $this->query_order $suffix";
@@ -424,7 +431,7 @@ class _RModelQueryer {
     public function count()
     {
         $model = get_class_vars($this->model);
-        $stmt = RModel::getConnection()->prepare("SELECT COUNT(*) FROM ".Rays::app()->getDBPrefix().$model['table']." $this->query_where");
+        $stmt = RModel::getConnection()->prepare("SELECT COUNT(*) FROM " . Rays::app()->getDBPrefix() . $model['table'] . " $this->query_where");
         $stmt->execute($this->_args());
         $row = $stmt->fetch();
         return $row[0];
@@ -467,7 +474,7 @@ class _RModelQueryer {
     public function delete()
     {
         $model = get_class_vars($this->model);
-        $stmt = RModel::getConnection()->prepare("DELETE FROM ".Rays::app()->getDBPrefix().$model['table']." $this->query_where $this->query_order");
+        $stmt = RModel::getConnection()->prepare("DELETE FROM " . Rays::app()->getDBPrefix() . $model['table'] . " $this->query_where $this->query_order");
         $stmt->execute($this->_args());
     }
 
@@ -478,7 +485,7 @@ class _RModelQueryer {
     {
         $model = get_class_vars($this->model);
         $update = $this->_substitute($update);
-        $stmt = RModel::getConnection()->prepare("UPDATE ".Rays::app()->getDBPrefix().$model['table']." SET $update $this->query_where");
+        $stmt = RModel::getConnection()->prepare("UPDATE " . Rays::app()->getDBPrefix() . $model['table'] . " SET $update $this->query_where");
         $stmt->execute(array_merge($args, $this->_args()));
     }
 
@@ -499,8 +506,7 @@ class _RModelQueryer {
         if (count($s) == 1) {
             $model = get_class_vars($this->model);
             $member = $s[0];
-        }
-        else {
+        } else {
             $model = get_class_vars($s[0]);
             $member = $s[1];
         }
@@ -517,15 +523,13 @@ class _RModelQueryer {
     {
         if ($this->query_where == "") {
             $this->query_where = "WHERE ";
-        }
-        else {
+        } else {
             $this->query_where .= " AND ";
         }
         $this->query_where .= $this->_substitute("($constraint)");
         if (is_array($args)) {
             $this->args_where = array_merge($this->args_where, $args);
-        }
-        else {
+        } else {
             $this->args_where[] = $args;
         }
         return $this;
@@ -558,13 +562,11 @@ class _RModelQueryer {
         if ($memberValue == null) {
             if (is_array($memberName)) {
                 return $this->_find($memberName);
-            }
-            else {
+            } else {
                 $model = get_class_vars($this->model);
                 return $this->_find(array($model['primary_key'], $memberName));
             }
-        }
-        else {
+        } else {
             return $this->_find(array($memberName, $memberValue));
         }
     }
@@ -600,8 +602,7 @@ class _RModelQueryer {
     {
         if ($this->query_order == "") {
             $this->query_order = "ORDER BY ";
-        }
-        else {
+        } else {
             $this->query_order .= ", ";
         }
         $expression = $this->_substitute($expression);

@@ -72,27 +72,10 @@ class RModule
      */
     public function __construct($params = array())
     {
-        if (isset($params['id']))
-            $this->setId($params['id']);
-
-        if (isset($params['name']))
-            $this->setName($params['name']);
+        $this->_id = isset($params['id']) ? $params['id'] : null;
+        $this->name = isset($params['name']) ? $params['name'] : null;
 
         $this->init($params);
-    }
-
-    /**
-     * Get module base URI path
-     * @return null|string
-     */
-    public static function getModuleBasePath()
-    {
-        if (self::$moduleBaseUri === null) {
-            $basePath = substr(Rays::app()->getBasePath(), 1);
-            $pos = strpos(Rays::app()->getModulePath(), $basePath) + strlen($basePath) + 1;
-            self::$moduleBaseUri = Rays::app()->getBaseUrl() . '/' . substr(Rays::app()->getModulePath(), $pos);
-        }
-        return self::$moduleBaseUri;
     }
 
     /**
@@ -106,16 +89,30 @@ class RModule
     }
 
     /**
+     * Get module base URI path
+     * @return null|string
+     */
+    public static function getModuleBasePath()
+    {
+        if (self::$moduleBaseUri === null) {
+            $path = substr(Rays::app()->getBasePath(), 1);
+            $mpath = Rays::app()->getModulePath();
+            $pos = strpos($mpath, $path) + strlen($path) + 1;
+            self::$moduleBaseUri = Rays::app()->getBaseUrl() . '/' . substr($mpath, $pos);
+        }
+        return self::$moduleBaseUri;
+    }
+
+    /**
      * Run the module
      * This is the place where the module output it's content
      */
     public function run()
     {
         if (!$this->denyAccess() && $this->canAccess()) {
-            $content = $this->module_content();
-            echo $content;
-        } else
-            return false;
+            echo $this->module_content();
+        }
+        return false;
     }
 
     /**
@@ -157,7 +154,7 @@ class RModule
      */
     public function render($viewFileName = '', $data = '')
     {
-        $viewFile = $this->getModuleDir() . "/" . $viewFileName . ".view.php";
+        $viewFile = $this->getModuleDir() . "/{$viewFileName}.view.php";
         RView::renderFile($this, $viewFile, $data, false);
     }
 
@@ -193,7 +190,7 @@ class RModule
      */
     public function denyAccess()
     {
-        return empty($this->denyAccess)? false : Rays::app()->request()->urlMatch($this->denyAccess);
+        return empty($this->denyAccess) ? false : Rays::app()->request()->urlMatch($this->denyAccess);
     }
 
     /**
@@ -234,7 +231,7 @@ class RModule
 
     public static function moduleClass($id)
     {
-        return $id."_module";
+        return $id . "_module";
     }
 
 }

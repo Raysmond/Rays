@@ -47,7 +47,8 @@ class UserController extends RController
 
             if ($validation->run($_POST)) {
                 $user = new User($_POST);
-                $user->assign(array("id" => null, "password" => md5($user->password), "role" => User::AUTHENTICATED));
+                $user->password = md5($_POST["password"]);
+                $user->role = User::AUTHENTICATED;
                 if ($user->save()) {
                     $this->flash("message", "Register successfully. Your username is " . $user->name . ".");
                     $this->redirectAction("user", "login");

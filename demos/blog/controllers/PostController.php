@@ -57,13 +57,7 @@ class PostController extends RController
 
         $data = array('post' => $post, 'form' => $_POST);
         if (Rays::isPost()) {
-            $protected = array("id", "uid");
-            foreach ($_POST as $key => $value) {
-                if (in_array($key, $protected))
-                    unset($_POST[$key]);
-            }
-
-            $post->assign($_POST);
+            $post->set($_POST);
             if ($post->validate_save("edit") !== false) {
                 $this->flash("message", "Post edit successfully.");
                 $this->redirectAction("post", "view", $post->id);
@@ -79,7 +73,9 @@ class PostController extends RController
     public function actionNew()
     {
         if (Rays::isPost()) {
-            $post = new Post(array_merge($_POST, array("uid" => Rays::user()->id, "createdTime" => date("Y-m-d H:i:s"))));
+            $post = new Post($_POST);
+            $post->uid = Rays::user()->id;
+            $post->createdTime = date("Y-m-d H:i:s");
             if ($post->validate_save("new") === false) {
                 $this->render("edit", array("isNew" => true, "form" => $_POST, "errors" => $post->getErrors()));
                 return;

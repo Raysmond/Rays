@@ -14,6 +14,8 @@ class Post extends RModel
     public static $table = "post";
     public static $primary_key = "id";
 
+    public static $protected = array("id","uid","createdTime");
+
     public static $mapping = array(
         'id' => 'pid',
         'uid' => 'uid',

@@ -181,7 +181,7 @@ class RHtml
         }
     }
 
-    public static function showImage($src, $title = '', $attributes = array())
+    public static function image($src, $title = '', $attributes = array())
     {
         $defaults = array();
         if (strpos($src, '://') == false) {
@@ -190,35 +190,5 @@ class RHtml
         $defaults['src'] = $src;
         $defaults['title'] = $title;
         return '<img ' . self::parseAttributes($attributes, $defaults) . ' />';
-    }
-
-    public static function table($tableName = '', $tableAttributes = array(), $header = array(), $data = array())
-    {
-        $html = '<div class="panel panel-default">';
-        if ($tableName != '') {
-            $html .= '<div class="panel-heading">' . $tableName . '</div>';
-        }
-        $html .= '<table ' . self::parseAttributes($tableAttributes) . '>';
-
-        if (!empty($header)) {
-            $html .= '<tr>';
-            foreach ($header as $th) {
-                $html .= '<th>' . $th . '</th>';
-            }
-            $html .= '</tr>';
-        }
-        if (!empty($data)) {
-            foreach ($data as $tr) {
-                $html .= '<tr>';
-                foreach ($tr as $td) {
-                    $html .= '<td>' . $td . '</td>';
-                }
-                $html .= '</tr>';
-            }
-        }
-
-        $html .= '</table></div>';
-
-        return $html;
     }
 }

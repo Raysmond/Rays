@@ -21,6 +21,8 @@ class User extends RModel implements RAuthProvider
         "password" => "password",
     );
 
+    public static $protected = array("uid","role");
+
     public static $rules = array(
         "name" => array("label" => "User name", "rules" => "trim|required|min_length[4]|max_length[255]"),
         "email" => array("apply" => "register", "label" => "Email", "rules" => "trim|required|is_email|max_length[255]"),
