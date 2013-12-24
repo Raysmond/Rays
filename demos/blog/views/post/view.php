@@ -1,3 +1,4 @@
+<?php $self->setHeaderTitle($post->title); ?>
 <h1><?= $post->title ?></h1>
 <div class="post-meta">
     <?= RHtml::linkAction("user", $post->user->name, "view", $post->user->id) ?> post at <?= $post->createdTime ?>

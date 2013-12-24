@@ -40,7 +40,6 @@ class PostController extends RController
             Rays::app()->page404("Post not found!");
         }
 
-        $this->setHeaderTitle($post->title);
         $this->render("view", array('post' => $post));
     }
 

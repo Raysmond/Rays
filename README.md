@@ -14,10 +14,10 @@ git clone https://github.com/Raysmond/Rays.git
 * Classes API documentation: [http://raysmond.com/project/Rays/docs/api](http://raysmond.com/project/Rays/docs/api)
 
 ### Examples
-Rays framework is very easy to use and it follows the simple MVC coding style much like [Yii](http://www.yiiframework.com/) framework. Compared with Yii, Rays is much lighter, and easier, but it's not that powerful of course.The following codes are extracted from the [demos/blog](https://github.com/Raysmond/Rays/tree/master/demos/blog). application
+Rays framework is very easy to use and it follows the simple MVC coding style much like [Yii](http://www.yiiframework.com/) framework. Compared with Yii, Rays is much lighter, and simpler, but it's not that powerful of course.The following codes are extracted from the [demos/blog](https://github.com/Raysmond/Rays/tree/master/demos/blog). application
 
 
-* Create an application
+* **Create an application**
 
 ```php
 // demos/blog/index.php
@@ -28,7 +28,7 @@ require_once($rays);
 
 Rays::newApp($config)->run();
 ```
-* Create a post model
+* **Create a post model**
 
 ```php
 // demos/blog/models/Post.php
@@ -64,10 +64,11 @@ class Post extends RModel
     );
 }
 ```
-* Create a controller
+* **Create a controller**
 
 ```php
 // demos/blog/controllers/PostController.php
+// Basic CRUD functions for post
 class PostController extends RController
 {
     // Access rules
@@ -79,6 +80,7 @@ class PostController extends RController
         $this->render("index", array("posts" => $Post::find("uid", Rays::user()->id)->order_desc("id")->all()));
     }
 
+    // Read
     public function actionView($pid)
     {
         $post = Post::find("id", $pid)->join("user")->first();
@@ -87,6 +89,7 @@ class PostController extends RController
         $this->render("view", array('post' => $post));
     }
 
+    // Create
     public function actionNew()
     {
         if (Rays::isPost()) {
@@ -103,6 +106,7 @@ class PostController extends RController
         $this->render("edit", array('isNew' => true));
     }
 
+    // Update
     public function actionEdit($pid)
     {
         $post = Post::get($pid);
@@ -128,6 +132,7 @@ class PostController extends RController
         $this->render("edit", $data);
     }
 
+    // Delete
     public function actionDelete($postId)
     {
         if (($post = Post::get($postId)) !== null) {
@@ -144,19 +149,17 @@ class PostController extends RController
 } 
 ```
 
-* Create a view file
+* **Create a view file**
 
 ```php
-<!-- demos/blog/views/site/index.php -->
-<h1><?=$title?></h1>
-<?php
-// $self references to the Object who's calling the rendering functions. 
-// It may be a controller or a module(widget actually)
-$self->setHeaderTitle($title); 
-foreach ($newPosts as $post) {
-    echo RHtml::linkAction('post', $post->title, 'view', $post->id);
-    echo 'by '. RHtml::linkAction('user', $post->user->name, 'view', $post->user->id);
-}
+<!-- demos/blog/views/post/view.php -->
+<?php $self->setHeaderTitle($post->title); ?>
+<h1><?= $post->title ?></h1>
+<div>
+    <?= RHtml::linkAction("user", $post->user->name, "view", $post->user->id) ?>
+    posts at <?= $post->createdTime ?>
+</div>
+<div><?= $post->content ?></div>
 ```
 ## Acknowledgements
 Thanks for the work of [Xiangyan Sun](https://github.com/wishstudio) and [Renchu Song](https://github.com/RenchuSong).
