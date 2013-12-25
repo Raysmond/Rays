@@ -61,9 +61,9 @@ class User extends RModel implements RAuthProvider
      */
     public function isAuthorized($requiredAuthority = null)
     {
-        if ($requiredAuthority == null || $requiredAuthority == self::ANONYMOUS || $requiredAuthority == $this->authority())
+        if ($requiredAuthority === null || $requiredAuthority === self::ANONYMOUS || $requiredAuthority === $this->authority())
             return true;
-        if ($this->authority() == self::ADMIN)
+        if ($this->authority() === self::ADMIN)
             return true;
         return false;
     }

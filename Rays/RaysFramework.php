@@ -140,13 +140,10 @@ class RaysFramework
         if ($files) {
             $arr = explode('/', $files);
             $baseDir = ($arr[0] == "system") ? SYSTEM_PATH : self::app()->getBaseDir();
-            if ($arr[0] == "system")
-                $files = substr($files, 7);
-            if ($arr[0] == "application")
-                $files = substr($files, 12);
+            $files = $arr[0] === "system" ? substr($files, 7) : $files;
+            $files = $arr[0] === "application" ? substr($files, 12) : $files;
 
             $fileName = end($arr);
-            unset($arr);
             if ($fileName !== '*') {
                 if (!isset(self::$imports[$files])) {
                     $path = $baseDir . '/' . $files . '.php';

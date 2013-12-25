@@ -195,49 +195,23 @@ class RHttpRequest
      */
     public function urlMatch($urlRules = array(), $url = '')
     {
-        if (!is_array($urlRules))
-            $urlRules = array($urlRules);
-
-        if (empty($urlRules)) {
+        $urlRules = is_array($urlRules) ? $urlRules : array($urlRules);
+        if (empty($urlRules))
             return true;
-        }
-        // like : user/view/1
-        $currentUrl = $url != '' ? $url : $this->getRequestUriInfo();
 
-        // The front page
-        if ($currentUrl == '')
-            $currentUrl = '<front>';
+        // like : user/view/1
+        $currentUrl = ($url != '' ? $url : $this->getRequestUriInfo());
+        $currentUrl = $currentUrl === '' ? '<front>' : $currentUrl;
 
         if (($pos = strpos($currentUrl, "?")))
             $currentUrl = substr($currentUrl, 0, $pos);
 
         foreach ($urlRules as $url) {
-            if ($url == $currentUrl)
+            $url = str_replace("*", '(\w+(-\w+)*)', $url);
+            $url = str_replace("/", '\/', $url);
+            $url = '/^' . $url . '$/';
+            if (preg_match($url, $currentUrl))
                 return true;
-            else {
-                if (($pos = strpos($url, '*')) > 0) {
-                    $arr = explode('*', $url);
-                    $match = true;
-                    foreach ($arr as $part) {
-                        if ($part == '') continue;
-                        if (($apartPos = strpos($currentUrl, $part)) == false) {
-                            $sub = substr($currentUrl, 0, strlen($part));
-                            if ($sub != $part) { // current pattern not matched
-                                $match = false;
-                                break;
-                            } else {
-                                $currentUrl = substr($currentUrl, strlen($part));
-                            }
-                        } else {
-                            $currentUrl = substr($currentUrl, $apartPos + strlen($part));
-                        }
-                    }
-                    // one pattern matched
-                    if ($match) return true;
-                } else {
-                    // do some thing
-                }
-            }
         }
         return false;
     }
