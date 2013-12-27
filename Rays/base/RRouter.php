@@ -66,10 +66,10 @@ class RRouter
      */
     public function proccessUri($uri)
     {
-        if (($pos = strpos($uri, "?")))
+        if (($pos = strpos($uri, "?")) !== false)
             $uri = substr($uri, 0, $pos);
 
-        if (($pos = strpos($uri, "&&")))
+        if (($pos = strpos($uri, "&&")) !== false)
             $uri = substr($uri, 0, $pos);
 
         $uri = explode("/", $uri);
