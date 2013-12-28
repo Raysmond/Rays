@@ -13,6 +13,7 @@ Options +FollowSymLinks
 
   RewriteRule "(^|/)\." - [F]
 
+
   # Pass all requests not referring directly to files in the filesystem to
   # index.php. Clean URLs are handled in drupal_environment_initialize().
   RewriteCond %{REQUEST_FILENAME} !-f
@@ -21,12 +22,3 @@ Options +FollowSymLinks
   RewriteRule ^ index.php [L]
 
 </IfModule>
-
-
-<FilesMatch "^(R|Rays)\.php$|\.(module)$|(Controller|\.view)\.php$|^#.*#$|\.php(~|\.sw[op]|\.bak|\.orig\.save)$">
-   deny from all
-</FilesMatch>
-
-<Files "config.php|^Rays\w+\.php$">
-    deny from all
-</Files>

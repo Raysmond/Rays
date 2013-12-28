@@ -61,7 +61,7 @@ class RApplication extends RApplicationBase
         parent::run();
 
         $this->auth = new RAuth();
-        if ($config = $this->getConfig()->getConfig("authProvider"))
+        if ($config = $this->getConfig("authProvider"))
             $this->auth->setAuthProviderClass($config);
 
         $this->client = new RClient();
