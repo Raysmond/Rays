@@ -1,6 +1,6 @@
 # Rays
 Rays is a light-weight MVC framework. Easy and fast! <br/>
-Please see the simple blog demo [http://raysmond.com/rays/demos/blog](http://raysmond.com/rays/demos/blog)
+Please see the simple demos [Rays Blog](http://raysmond.com/rays/demos/blog) and [HelloWorld](http://raysmond.com/rays/demos/helloworld).
 
 ## Installation
 ```bash
