@@ -31,7 +31,7 @@ Rays::newApp($config)->run();
 * **Create a post model**
 
 ```php
-// demos/blog/models/Post.php
+// demos/blog/app/models/Post.php
 class Post extends RModel
 {
     public $user; // post author
@@ -67,7 +67,7 @@ class Post extends RModel
 * **Create a controller**
 
 ```php
-// demos/blog/controllers/PostController.php
+// demos/blog/app/controllers/PostController.php
 // Basic CRUD functions for post
 class PostController extends RController
 {
@@ -152,7 +152,7 @@ class PostController extends RController
 * **Create a view file**
 
 ```php
-<!-- demos/blog/views/post/view.php -->
+<!-- demos/blog/app/views/post/view.php -->
 <?php $self->setHeaderTitle($post->title); ?>
 <h1><?= $post->title ?></h1>
 <div>
