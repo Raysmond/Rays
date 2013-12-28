@@ -22,11 +22,6 @@ Options +FollowSymLinks
 
 </IfModule>
 
-
 <FilesMatch "^(R|Rays)\.php$|\.(module)$|(Controller|\.view)\.php$|^#.*#$|\.php(~|\.sw[op]|\.bak|\.orig\.save)$">
    deny from all
 </FilesMatch>
-
-<Files "config.php|^Rays\w+\.php$">
-    deny from all
-</Files>

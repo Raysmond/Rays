@@ -6,7 +6,7 @@
  */
 
 $Rays = dirname(__FILE__).'/../../Rays/Rays.php';
-$config = dirname(__FILE__).'/config.php';
+$config = dirname(__FILE__).'/app/config.php';
 
 require_once($Rays);
 

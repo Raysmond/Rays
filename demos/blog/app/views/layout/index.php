@@ -7,13 +7,11 @@
     <meta name="language" content="en"/>
     <meta name="description" content=""/>
     <?php $baseUrl = Rays::baseUrl(); ?>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>/public/css/ivory.css"/>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>/public/css/main.css"/>
-    <?php
-    // link custom css files
-    echo RHtml::linkCssArray(Rays::app()->client()->css);
-    ?>
-    <script type="text/javascript" src="<?= $baseUrl ?>/public/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>/assets/css/ivory.css"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>/assets/css/main.css"/>
+    <?=RHtml::linkCssArray(Rays::app()->client()->css);?>
+
+    <script type="text/javascript" src="<?= $baseUrl ?>/assets/js/main.js"></script>
 
 </head>
 
@@ -41,6 +39,7 @@
                 <li><?= RHtml::linkAction("user", "Logout", "logout") ?></li> <?php
             }
             ?>
+            <li style="float: right;"><a href="https://github.com/Raysmond/Rays">Rays Github</a></li>
         </ul>
         </div>
     </div>
