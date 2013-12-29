@@ -101,7 +101,7 @@ class RClient
         if (!isset($this->_headerTitle)) {
             $this->_headerTitle = Rays::app()->getName();
         }
-        return $this->_headerTitle . " | " . $this->_headerTitle = Rays::app()->getName();
+        return ($this->_headerTitle ? (($this->_headerTitle) . " | ") : "") . Rays::app()->getName();
     }
 
     public function setHeaderTitle($title)
