@@ -12,6 +12,24 @@ git clone https://github.com/Raysmond/Rays.git
 
 ## Documentation
 * Classes API documentation: [http://raysmond.com/rays/docs/api](http://raysmond.com/rays/docs/api)
+* **A typical MVC request workflow in Rays, very similar to [Yii](http://www.yiiframework.com/)**.
+
+![MVC](https://github-camo.global.ssl.fastly.net/381e26b0594a4891f1c549f21fdbb1abae867662/687474703a2f2f726179736d6f6e642e636f6d2f7075626c69632f612532307479706963616c2532304d564325323072657175657374253230776f726b666c6f77253230636f70792e504e47)
+
+***
+
+1. A client user type the URL `http://localhost/FDUGroup/site/welcome/Raysmond`(`http://localhost/FDUGroup` is the base path of the application) in the browser. Then, index.php will be the first bootstrap file to handle the request.
+2. An application instance will be created and initialize the web application.
+3. The application will invoke the request handler to normalize the process the HTTP request based on the URL.
+4. The application will invoke the router to resolve the URI information. In this example, the result should  be: controller ID = `“site”`, action ID = `“welcome”` and the parameters array = `[“Raysmond”]`.
+5. The `SiteController` will be created to handle the current request. An extract action named `“actionWelcome”` will be invoked automatically and “Raysmond” will the first arg passed to the method.
+6. The controller may obtain data from database via a `model(RModel)`. 
+7. The action renders the data via view file named “welcome.php” as main content
+8. Some `modules(widgets)` may be rendered in the layout file(HTML template)
+9. The main content will be inserted into the `layout`.
+10. Finally, the rendered HTML will be printed, so the user can view the result page
+
+***
 
 ### Examples
 Rays framework is very easy to use and it follows the simple MVC coding style much like [Yii](http://www.yiiframework.com/) framework. Compared with Yii, Rays is much lighter, and simpler, but it's not that powerful of course.The following codes are extracted from the [demos/blog](https://github.com/Raysmond/Rays/tree/master/demos/blog). application
