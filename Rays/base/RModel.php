@@ -216,12 +216,15 @@ abstract class RModel
                 $args[] = $this->$member;
             }
         }
-        $stmt->execute($args);
+        $result = $stmt->execute($args);
         $primary_key = $model['primary_key'];
-        if (!isset($this->$primary_key)) {
-            $this->$primary_key = RModel::getConnection()->lastInsertId();
+        if ($result !== false) {
+            if (!isset($this->$primary_key)) {
+                $this->$primary_key = RModel::getConnection()->lastInsertId();
+            }
+            return $this->$primary_key;
         }
-        return $this->$primary_key;
+        return false;
     }
 
     /**
