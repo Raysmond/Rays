@@ -41,10 +41,19 @@ class RRouter
      */
     private $_defaultController = 'site';
 
+    /**
+     * TODO 
+     * @var array Custom route, currently it's one-to-one map routing
+     */
+    private $_route = array();
+
     public function __construct()
     {
         if ($c = Rays::app()->getConfig("defaultController"))
             $this->_defaultController = $c;
+
+        if ($route = Rays::app()->getConfig("route"))
+            $this->_route = $route;
     }
 
     /**
@@ -55,8 +64,14 @@ class RRouter
     public function getRouteUrl($uri = '')
     {
         $uri = ($uri === '') ? Rays::app()->request()->getRequestUriInfo() : $uri;
+        $uri = $this->checkRoute($uri);
         $this->proccessUri($uri);
         return $this;
+    }
+
+    public function checkRoute($uri)
+    {
+        return isset($this->_route[$uri]) ? $this->_route[$uri] : $uri;
     }
 
     /**
