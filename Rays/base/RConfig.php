@@ -98,4 +98,17 @@ class RConfig
         } else
             return (null !== $key) ? null : $this->config;
     }
-} 
+
+    /**
+     * The only way to add or set custom configuration during runtime
+     * @param string $key
+     * @param string $value
+     */
+    public function setConfig($key = '', $value = '')
+    {
+        if (is_array($key)) {
+            $this->config = array_merge_recursive($this->config, $key);
+        } else
+            $this->config[$key] = $value;
+    }
+}

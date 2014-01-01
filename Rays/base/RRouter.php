@@ -42,7 +42,6 @@ class RRouter
     private $_defaultController = 'site';
 
     /**
-     * TODO 
      * @var array Custom route, currently it's one-to-one map routing
      */
     private $_route = array();
@@ -54,6 +53,19 @@ class RRouter
 
         if ($route = Rays::app()->getConfig("route"))
             $this->_route = $route;
+    }
+
+    /**
+     * Add custom route
+     * @param array $route
+     * For example:
+     * <pre>
+     * $route = array("about"=>"site/about");
+     * </pre>
+     */
+    public function addRoute($route = array())
+    {
+        $this->_route = array_merge_recursive($this->_route, $route);
     }
 
     /**
