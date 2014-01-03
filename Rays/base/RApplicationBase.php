@@ -71,7 +71,7 @@ class RApplicationBase
         $url = $this->getConfig("baseUrl");
         if (!isset($url)) {
             $path = $this->getBasePath();
-            $url = 'http://' . $_SERVER['SERVER_NAME'] . (isset($path) ? $path : "");
+            $url = 'http://' . $_SERVER['SERVER_NAME'] . (isset($path) && $path !== "/" ? $path : "");
         }
         return $url;
     }
@@ -119,9 +119,9 @@ class RApplicationBase
      * @param string|null $key
      * @return RConfig|mixed the config object if $key=null, otherwise return the configuration value
      */
-    public function getConfig($key=null)
+    public function getConfig($key = null)
     {
-        return $key===null ? $this->config : $this->config->getConfig($key);
+        return $key === null ? $this->config : $this->config->getConfig($key);
     }
 
     /**
