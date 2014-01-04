@@ -82,7 +82,8 @@ class RApplicationBase
      */
     public function getBasePath()
     {
-        return $this->getConfig("basePath");
+        $path = $this->getConfig("basePath");
+        return substr($path, strlen($path) - 1) === "/" ? substr($path, 0, strlen($path) - 1) : $path;
     }
 
     /**

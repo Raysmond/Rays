@@ -40,7 +40,7 @@ class RCacheFile implements RCacheInterface
     {
         if ($_args != null) {
             if (isset($_args['cache_dir']))
-                $this->cacheDir = Rays::app()->getBaseDir().'/..'.$_args['cache_dir'].'/';
+                $this->cacheDir = Rays::app()->getBaseDir().$_args['cache_dir'].'/';
             if(isset($_args['cache_time']))
                 $this->cacheTime = $_args['cache_time'];
             if(isset($_args['cache_prefix']))
