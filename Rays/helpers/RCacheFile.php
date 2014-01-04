@@ -105,11 +105,9 @@ class RCacheFile implements RCacheInterface
 
             for ($i = count($names) - 1; $i >= 0; $i--) {
                 $dir = $dir . '/' . $names[$i];
-                //mkdir($_dir, 0x777);
-                mkdir($dir);
+                mkdir($dir, 0777);
             }
-            //mkdir($path, 0x777);
-            mkdir($path);
+            mkdir($path, 0777);
         }
 
         return file_put_contents($cachedFile, $_content);
