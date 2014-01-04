@@ -184,6 +184,7 @@ class RHtml
         $defaults = array();
         if (strpos($src, '://') == false) {
             $src = Rays::app()->getBasePath() . "/" . $src;
+            $src = str_replace("//", "/", $src);
         }
         $defaults['src'] = $src;
         $defaults['title'] = $title;
