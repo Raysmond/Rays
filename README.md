@@ -1,6 +1,6 @@
 # Rays
 Rays is a light-weight MVC framework. Easy and fast! <br/>
-Please see the simple demos [Rays Blog](http://raysmond.com/rays/demos/blog) and [HelloWorld](http://raysmond.com/rays/demos/helloworld).
+Please see the simple demos [Rays Blog](http://rays.raysmond.com/demos/blog) and [HelloWorld](http://rays.raysmond.com/demos/helloworld).
 
 ## Installation
 ```bash
@@ -11,7 +11,7 @@ git clone https://github.com/Raysmond/Rays.git
 * PHP version requirement: >=5.2
 
 ## Documentation
-* Classes API documentation: [http://raysmond.com/rays/docs/api](http://raysmond.com/rays/docs/api)
+* Classes API documentation: [http://rays.raysmond.com/docs/api](http://rays.raysmond.com/docs/api)
 * **A typical MVC request workflow in Rays, very similar to [Yii](http://www.yiiframework.com/)**.
 
 ![MVC](https://github-camo.global.ssl.fastly.net/381e26b0594a4891f1c549f21fdbb1abae867662/687474703a2f2f726179736d6f6e642e636f6d2f7075626c69632f612532307479706963616c2532304d564325323072657175657374253230776f726b666c6f77253230636f70792e504e47)
