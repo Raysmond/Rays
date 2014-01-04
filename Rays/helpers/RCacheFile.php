@@ -5,7 +5,8 @@
  * @author: Raysmond
  */
 
-class RCacheFile implements RCacheInterface
+//class RCacheFile implements RCacheInterface
+class RCacheFile
 {
     /**
      * The cache directory
@@ -38,14 +39,12 @@ class RCacheFile implements RCacheInterface
      */
     public function __construct($_args = array())
     {
-        if ($_args != null) {
-            if (isset($_args['cache_dir']))
-                $this->cacheDir = Rays::app()->getBaseDir().$_args['cache_dir'].'/';
-            if(isset($_args['cache_time']))
-                $this->cacheTime = $_args['cache_time'];
-            if(isset($_args['cache_prefix']))
-                $this->cachePrefix = $_args['cache_prefix'];
-        }
+        if (isset($_args['cache_dir']))
+            $this->cacheDir = Rays::app()->getBaseDir() . $_args['cache_dir'] . '/';
+        if (isset($_args['cache_time']))
+            $this->cacheTime = $_args['cache_time'];
+        if (isset($_args['cache_prefix']))
+            $this->cachePrefix = $_args['cache_prefix'];
     }
 
     /**
@@ -57,7 +56,7 @@ class RCacheFile implements RCacheInterface
     private function getCacheFile($cacheId, $name)
     {
         $path = $this->cacheDir . str_replace('.', '/', $cacheId);
-        return $path . '/' . ($name !== null ? $this->cachePrefix . $name . '.html' : $this->cachePrefix.'untitled.html');
+        return $path . '/' . ($name !== null ? $this->cachePrefix . $name . '.html' : $this->cachePrefix . 'untitled.html');
     }
 
     /**
@@ -67,17 +66,17 @@ class RCacheFile implements RCacheInterface
      * @param null $expireTime max cache time for the content
      * @return bool|string the cache content or false for not existed or expired cache
      */
-    public function get($cacheId, $name, $expireTime=null)
+    public function get($cacheId, $name, $expireTime = null)
     {
         $cachedFile = $this->getCacheFile($cacheId, $name);
         $time = $this->cacheTime;
-        if($expireTime!=null){
+        if ($expireTime != null) {
             $time = $expireTime;
         }
 
-        if (!file_exists($cachedFile)) return FALSE;
+        if (!file_exists($cachedFile)) return false;
         if ($time < 0) return file_get_contents($cachedFile);
-        if (filemtime($cachedFile) + $time < time()) return FALSE;
+        if (filemtime($cachedFile) + $time < time()) return false;
         return file_get_contents($cachedFile);
     }
 
