@@ -197,9 +197,6 @@ abstract class RModel
         $values = "";
         $delim = "";
         $primary_key = $model['primary_key'];
-        if (isset($this->$primary_key)) {
-            $primary_key = "";
-        }
         foreach ($model['mapping'] as $member => $column) {
             if ($member != $primary_key) {
                 $columns = "$columns$delim$column";
@@ -207,15 +204,30 @@ abstract class RModel
                 $delim = ", ";
             }
         }
-        $sql = (isset($this->{$model['primary_key']}) ? "REPLACE" : "INSERT") . " INTO " . Rays::app()->getDBPrefix() . $model['table'] . " ($columns) VALUES ($values)";
-        /* Now prepare SQL statement */
-        $stmt = RModel::getConnection()->prepare($sql);
+        $table = Rays::app()->getDBPrefix() . $model['table'];
+        $sql = "";
         $args = array();
         foreach ($model['mapping'] as $member => $column) {
             if ($member != $primary_key) {
                 $args[] = $this->$member;
             }
         }
+        if (isset($this->{$model['primary_key']})) {
+            $sql = "UPDATE " . $table . " SET ";
+            $delim = "";
+            foreach ($model['mapping'] as $member => $column) {
+                if ($member != $primary_key) {
+                    $sql .= "$delim$column=?";
+                    $delim = ", ";
+                }
+            }
+            $sql .= " WHERE {$model['mapping'][$primary_key]}=?";
+            $args[] = $this->{$model['primary_key']};
+        } else {
+            $sql = "INSERT INTO " . $table . " ($columns) VALUES ($values)";
+        }
+        /* Now prepare SQL statement */
+        $stmt = RModel::getConnection()->prepare($sql);
         $result = $stmt->execute($args);
         $primary_key = $model['primary_key'];
         if ($result !== false) {
