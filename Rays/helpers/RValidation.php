@@ -49,13 +49,7 @@ class RValidation
             if (!isset($rule['rules'])) {
                 $rule['rules'] = '';
             }
-            $_field = $rule['field'];
-            $_label = $rule['label'];
-            $_rule = $rule['rules'];
-            unset($rule['field']);
-            unset($rule['label']);
-            unset($rule['rules']);
-            $this->setRules($_field, $_label, $_rule, $rule);
+            $this->setRules($rule['field'], $rule['label'], $rule['rules'], $rule);
         }
     }
 
