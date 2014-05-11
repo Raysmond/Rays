@@ -10,6 +10,22 @@ git clone https://github.com/Raysmond/Rays.git
 * [Change log](https://github.com/Raysmond/Rays/blob/master/CHANGELOG.md)
 * PHP version requirement: >=5.2
 
+
+## Features
+
+* MVC framework
+* OOP programming styles
+* ActiveRecord (AR) ORM pattern
+* Unified request/routes handling
+* Widgets development support
+* Session management
+* Security(user authentication) support for actions
+* Form validation
+* Dynamic content cache, file cache
+* Exception handling
+* Log system
+* Lots of helpers for html, form, images, pagination, validation, file uploading and etc.
+
 ## Documentation
 * Classes API documentation: [http://rays.raysmond.com/docs/api](http://rays.raysmond.com/docs/api)
 * **A typical MVC request workflow in Rays, very similar to [Yii](http://www.yiiframework.com/)**.
